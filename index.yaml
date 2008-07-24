@@ -10,7 +10,7 @@ indexes:
 # automatically uploaded to the admin console when you next deploy
 # your application using appcfg.py.
 
-# Used 11 times in query history.
+# Used 22 times in query history.
 - kind: Membership
   properties:
   - name: group
@@ -22,6 +22,12 @@ indexes:
   properties:
   - name: group
   - name: user
+
+# Used 4 times in query history.
+- kind: Membership
+  properties:
+  - name: user
+  - name: balance
 
 # Used once in query history.
 - kind: Transaction

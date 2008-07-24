@@ -43,15 +43,18 @@ class UnsubscriptionHandler(webapp.RequestHandler):
 
 	def post(self):
     		registered = authenticatedUser(self)
+    		
 		if registered:
-                        self.response.out.write('<html><body><pre>')
+			registered = users.get_current_user()
+			
+			self.response.out.write('<html><body><pre>')
 			groupKey = self.request.get('group')
 			
 			if groupKey == "":
 				self.response.out.write("Group is required")
 			else:
                                 group = Group.get(groupKey)
-                                memberships = Membership.gql("WHERE group = :1", group)
+                                memberships = Membership.gql("WHERE group = :1 AND user = :2", group, registered)
 
                                 if memberships.count() <> 1:
 					self.response.out.write("You are not registered in this group")
