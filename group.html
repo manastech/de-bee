@@ -1,0 +1,23 @@
+<html>
+	<body>
+		<h3>Your balance</h3>
+	
+		{% if balancePositive %}
+			{% include "groupDetailPositive.html" %}
+		{% else %}
+			{% include "groupDetailNegative.html" %}
+		{% endif %}
+		
+		<h3>Actions</h3>
+	
+		{% include "enterTransaction.html" %}
+		
+		<h3>Invite</h3>
+		
+		{% include "enterInvite.html" %}
+		
+		<h3>History</h3>
+		
+		{% include "transactionHistory.html" %}
+	</body>
+</html>

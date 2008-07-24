@@ -26,6 +26,7 @@ def main():
                     ('/transactionHistory', TransactionHistory),
                     ('/groupDetail', GroupDetail),
 					('/groupCreation', GroupCreationHandler),
+					('/group',GroupHandler),
 					('/enterGroupCreation', EnterGroupCreationHandler),
                                         ('/enterUnsubscription', EnterUnsubscriptionHandler),
                                         ('/groupUnsubscription', UnsubscriptionHandler),
