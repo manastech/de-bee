@@ -11,6 +11,7 @@ class MainHandler(webapp.RequestHandler):
   def get(self):
     user = users.get_current_user()
     reg = registration.Registration()
+
     if user:
         groups = self.getGroups(user)
         path = os.path.join(os.path.dirname(__file__), 'dashboard.html')
@@ -20,7 +21,8 @@ class MainHandler(webapp.RequestHandler):
 			'debts' : self.getDebts(user),
 			'groups' : groups,
 			'isregistered' : reg.IsRegistered(user),
-            'hasgroups' : groups.count > 0
+            'hasgroups' : len(groups) > 0,
+            'group' : groups[0]
 			}
         self.response.out.write(template.render(path, model))
             
