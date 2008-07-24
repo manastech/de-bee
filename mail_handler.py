@@ -48,12 +48,12 @@ class RejectTransactionHandler(webapp.RequestHandler):
 			fromMembership = Membership.gql("WHERE user = :1 AND group = :2", new_transaction.fromUser, new_transaction.group).get()
 			toMembership = Membership.gql("WHERE user = :1 AND group = :2", new_transaction.toUser, new_transaction.group).get()
 			
-			#if new_transaction.type == 'rejectedPayment':
-			#	fromMembership.balance += amount
-			#	toMembership.balance -= amount
-			#elif new_transaction.type == 'rejectedDebt': 
-			#	fromMembership.balance -= amount
-			#	toMembership.balance += amount
+			if new_transaction.type == 'rejectedPayment':
+				fromMembership.balance += new_transaction.amount
+				toMembership.balance -= new_transaction.amount
+			elif new_transaction.type == 'rejectedDebt': 
+				fromMembership.balance -= new_transaction.amount
+				toMembership.balance += new_transaction.amount
 			
 			fromMembership.put()
 			toMembership.put()
@@ -70,10 +70,11 @@ class RejectTransactionHandler(webapp.RequestHandler):
 		
 		if transaction.type == "payment":
 			comp_type = "rejectedPayment"
-		elif transaction.type == "debt":
-			comp_type = "rejectedDebt"
 			fromVar = transaction.toUser
 			toVar = transaction.fromUser
+		elif transaction.type == "debt":
+			comp_type = "rejectedDebt"
+			
 		
 		new_transaction = Transaction(creator = creatorVar,
 									fromUser = fromVar, toUser = toVar,
