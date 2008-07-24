@@ -117,7 +117,8 @@ class GroupHandler(webapp.RequestHandler):
 			'transactions': transactions,
 			'validationError': validationError,
 			'validationMessage': validationMessage,
-            'groups': self.getGroups(user)
+            'groups': self.getGroups(user),
+            'message': self.request.get("msg")
 			 }
 		
 		path = os.path.join(os.path.dirname(__file__), 'group.html')

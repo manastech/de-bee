@@ -19,4 +19,4 @@ class RegisterInviteHandler(webapp.RequestHandler):
 		for email in emails:
 			email = email.strip()
 			sender.sendInvitationMail(email, group, invitationText)
-		self.response.out.write("Your invite has been sent!")
+		self.redirect("/group?group=" + self.request.get('group') + "&msg=" + cgi.escape("Your invite has been sent!"))
