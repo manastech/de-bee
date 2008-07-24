@@ -14,6 +14,11 @@ class MainHandler(webapp.RequestHandler):
 
     if user:
         groups = self.getGroups(user)
+        hasGroup = len(groups) > 0
+        if hasGroup:
+            group = groups[0]
+        else:
+            group = 0
         path = os.path.join(os.path.dirname(__file__), 'dashboard.html')
         model = { 
 			'username' : user.nickname(),
@@ -21,8 +26,8 @@ class MainHandler(webapp.RequestHandler):
 			'debts' : self.getDebts(user),
 			'groups' : groups,
 			'isregistered' : reg.IsRegistered(user),
-            'hasgroups' : len(groups) > 0,
-            'group' : groups[0]
+            'hasgroups' : hasGroup,
+            'group' : group
 			}
         self.response.out.write(template.render(path, model))
             
