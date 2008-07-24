@@ -3,6 +3,8 @@
 
 from google.appengine.ext import webapp
 from handlers import *
+from enterTransactionHandler import *
+from registerTransactionHandler import *
 from model import *
 import wsgiref.handlers
 

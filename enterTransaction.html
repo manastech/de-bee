@@ -1,0 +1,14 @@
+<html>
+   <body>
+     <form action="/registerTransaction" method="post">
+     	<div>To: <select name="toUser">
+     		{% for member in members %}
+     			<option value="{{member.user}}">{{member.user}}</option>
+     		{% endfor %}     		
+     	</select></div>
+     	<div>Amount: <input type="text" value="$15.000" name="amount"/></div>
+     	<div>Reason: <input type="text" value="Trola francesa" name="reason"/></div>
+       <div><input type="submit" value="Register"></div>
+     </form>
+   </body>
+ </html>

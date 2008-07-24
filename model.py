@@ -16,4 +16,4 @@ class Transaction(db.Model):
 	amount = db.FloatProperty(required=True)
 	reason = db.StringProperty()
 	isRejected = db.BooleanProperty()
-	date = db.DateTimeProperty(auto_now=True)
+	date = db.DateTimeProperty(auto_now=True)  
