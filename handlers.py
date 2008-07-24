@@ -1,7 +1,6 @@
 from google.appengine.api import users
 from google.appengine.ext import webapp
 from google.appengine.ext.webapp import template
-from mail_sender import *
 from model import *
 import cgi
 import os
@@ -40,15 +39,3 @@ class TransactionHistory(webapp.RequestHandler):
     path = os.path.join(os.path.dirname(__file__), 'transactionHistory.html')
     self.response.out.write(template.render(path, template_values))
 
-class MailHandler(webapp.RequestHandler):
-
-	def get(self):
-		mail_sender = MailSender()
-		mail_sender.sendInvitationMail("jorge@manas.com.ar", "el nombre del grupo", "estas invitado che!")
-		mail_sender.sendNoticeTransaction("jonat@manas.com.ar", "jorge@manas.com.ar", "un grupo", None)
-		self.response.out.write("""
-			<html>
-			<body>
-			Ya lo mande
-			</body>
-			</html>""")
