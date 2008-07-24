@@ -13,9 +13,17 @@ class RegisterTransactionHandler(webapp.RequestHandler):
 		creator = users.get_current_user();
 		fromUser = users.User(self.request.get('fromUser'))
 		toUser = users.User(self.request.get('toUser'));
-		amount = float(self.request.get('amount'))
+		try:
+		  amount = float(self.request.get('amount'))
+		except BaseException, e:
+			self.response.out.write("Invalid amount: %s" % self.request.get('amount'))
+			return
 		reason = self.request.get('reason')
 		type = self.request.get('type')
+		
+		if amount <= 0:
+			self.response.out.write("Invalid amount: %s" % amount)
+			return
 		
 		tr = Transaction(
 			group = group,
