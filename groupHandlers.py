@@ -52,8 +52,16 @@ class GroupHandler(webapp.RequestHandler):
 		# TODO filtrar por grupo y por mi!
 		try:
 			transactionCount = int(self.request.get('transactionCount', default_value=10))
-			transactions_query = Transaction.gql("WHERE group = :1 ORDER BY date DESC", group)
-			transactions = transactions_query.fetch(transactionCount)
+			
+			transactions_query_from = Transaction.gql("WHERE group = :1 AND fromUser = :2", group, user)
+			transactions_from = transactions_query_from.fetch(transactionCount)
+			
+			transactions_query_to = Transaction.gql("WHERE group = :1 AND toUser = :2", group, user)
+			transactions_to = transactions_query_to.fetch(transactionCount)
+			
+			transactions = transactions_from + transactions_to
+			transactions.sort(cmp = compareTransactionsByDate)
+			
 			validationError = False
 			validationMessage = ''
 			
@@ -82,6 +90,14 @@ class GroupHandler(webapp.RequestHandler):
 		
 		path = os.path.join(os.path.dirname(__file__), 'group.html')
 		self.response.out.write(template.render(path, template_values))
+		
+def compareTransactionsByDate(x, y):
+	if x.date > y.date:
+		return 1
+	elif x.date < y.date:
+	 	return -1
+	else:
+		return 0
 
 class GroupCreationHandler(webapp.RequestHandler):
 
