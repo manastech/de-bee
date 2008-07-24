@@ -28,9 +28,9 @@ class MainHandler(webapp.RequestHandler):
 				}
 			self.response.out.write(template.render(path, model))
     else:
-        greeting = ("<a href=\"%s\">Sign in or register</a>." %
-                      users.create_login_url("/"))
-	self.response.out.write("<html><body>%s</body></html>" % greeting)
+        model = {}
+        path = os.path.join(os.path.dirname(__file__), 'login.html')
+        self.response.out.write(template.render(path, model))
 	
   def getDebts(self, user):	
 	total = 0

@@ -13,7 +13,7 @@ import wsgiref.handlers
 
 def main():
   application = webapp.WSGIApplication([('/', MainHandler),
-									('/mail', MailHandler),
+                                    ('/mail', MailHandler),
 									('/registerTransaction', RegisterTransactionHandler),
                                     ('/enterTransaction', EnterTransactionHandler),
                                     ('/transactionHistory', TransactionHistory),
