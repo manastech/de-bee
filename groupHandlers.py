@@ -5,6 +5,8 @@ from google.appengine.api import users
 import registration as registration
 import os
 from google.appengine.ext.webapp import template
+import time
+import datetime
 
 def authenticatedUser(req):
 	user = users.get_current_user()
@@ -62,10 +64,40 @@ class GroupHandler(webapp.RequestHandler):
 			transactions = transactions_from + transactions_to
 			transactions.sort(cmp = compareTransactionsByDate)
 			
+			messages = []
+			for tr in transactions:
+				if (tr.type == "debt"):
+			 		if (tr.fromUser == user):
+			 			message = "I owed " + tr.toUser.email() + " $" + str(tr.amount) + " due to " + tr.reason
+			 		else:
+			 			message = tr.fromUser.email() + " owed me $" + str(tr.amount) + " due to " + tr.reason
+			 	if (tr.type == "payment"):
+			 		if (tr.fromUser == user):
+			 			message = "I payed " + tr.toUser.email() + " $" + str(tr.amount) + " due to " + tr.reason
+			 		else:
+			 			message = tr.fromUser.email() + " payed me $" + str(tr.amount) + " due to " + tr.reason
+			 	if (tr.type == "rejectedDebt"):
+			 		if (tr.fromUser == user):
+			 			message = "I rejected from " + tr.toUser.email() + " a debt of $" + str(tr.amount) + " due to " + tr.reason
+			 		else:
+			 			message = tr.fromUser.email() + " rejected you a debt of $" + str(tr.amount) + " due to " + tr.reason
+			 	if (tr.type == "rejectedPayment"):
+			 		if (tr.fromUser == user):
+			 			message = "I rejected from " + tr.toUser.email() + " a payment of $" + str(tr.amount) + " due to " + tr.reason
+			 		else:
+			 			message = tr.fromUser.email() + " rejected you a payment of $" + str(tr.amount) + " due to " + tr.reason
+			 	message = niceDate(tr.date) + " " + message
+			 	messages.append(message)
+			 	
+			transactions = messages
+			
 			validationError = False
 			validationMessage = ''
 			
 		except BaseException, e:
+			print "1"
+			return
+			
 			transactionCount = 0
 			transactions = []
 			validationError = True
@@ -104,6 +136,15 @@ def compareTransactionsByDate(x, y):
 	 	return -1
 	else:
 		return 0
+	
+def niceDate(t):
+	now = datetime.datetime.now()
+	if now.year == t.year:
+		if now.month == t.month and now.day == t.day:
+			return t.strftime("At %H:%S")
+		return t.strftime("On %b %d")
+	else:
+		return t.strftime("On %D")
 
 class GroupCreationHandler(webapp.RequestHandler):
 
