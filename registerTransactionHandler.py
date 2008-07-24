@@ -9,12 +9,42 @@ from google.appengine.ext.webapp import template
 class RegisterTransactionHandler(webapp.RequestHandler):
 	
 	def post(self):
-		self.response.out.write('<html><body><pre>')
-		self.response.out.write(cgi.escape(self.request.get('fromUser')))
-		self.response.out.write(' owes ')
-		self.response.out.write(cgi.escape(self.request.get('amount')))
-		self.response.out.write(' to ')
-		self.response.out.write(cgi.escape(self.request.get('toUser')))
-		self.response.out.write(' because of ')
-		self.response.out.write(cgi.escape(self.request.get('reason')))
-		self.response.out.write('</pre></body></html>')
+		group = Group.get(self.request.get('group'))
+		creator = users.get_current_user();
+		fromUser = users.User(self.request.get('fromUser'))
+		toUser = users.User(self.request.get('toUser'));
+		amount = float(self.request.get('amount'))
+		reason = self.request.get('reason')
+		type = self.request.get('type')
+		
+		tr = Transaction(
+			group = group,
+			creator = creator, fromUser = fromUser, toUser = toUser,
+			type = type,
+			amount = amount, reason = reason,
+			isRejected = False
+			)
+		tr.put()
+		
+		fromMembership = db.Query(Membership)
+		fromMembership.filter('user = ', fromUser) 
+		fromMembership.filter('group = ', group)
+		fromMembership = fromMembership.get()
+		
+		toMembership = db.Query(Membership)
+		toMembership.filter('user = ', toUser) 
+		toMembership.filter('group = ', group)
+		toMembership = toMembership.get()
+		
+		if type == 'debt' or type == 'rejectedPayment':
+			fromMembership.balance -= amount
+			toMembership.balance += amount
+		elif type == 'payment' or type == 'rejectedDebt': 
+			fromMembership.balance += amount
+			toMembership.balance -= amount
+			
+		fromMembership.put()
+		toMembership.put()
+		
+		self.response.out.write("Todo bien!")
+		 

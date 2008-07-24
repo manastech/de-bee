@@ -9,6 +9,7 @@ class Membership(db.Model):
 	balance = db.FloatProperty(required=True)
     
 class Transaction(db.Model):
+	group = db.ReferenceProperty(Group)
 	creator = db.UserProperty(required=True)
 	fromUser = db.UserProperty(required=True)
 	toUser = db.UserProperty(required=True)

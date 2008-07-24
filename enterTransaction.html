@@ -1,14 +1,17 @@
 <html>
    <body>
      <form action="/registerTransaction" method="post">
+     	<input type="hidden" name="group" value="{{group.key}}" />
+     	<input type="hidden" name="type" value="debt" />
+     	<input type="hidden" name="fromUser" value="{{currentUser}}" />
      	<div>To: <select name="toUser">
      		{% for member in members %}
      			<option value="{{member.user}}">{{member.user}}</option>
-     		{% endfor %}     		
+     		{% endfor %}
      	</select></div>
-     	<div>Amount: <input type="text" value="$15.000" name="amount"/></div>
-     	<div>Reason: <input type="text" value="Trola francesa" name="reason"/></div>
-       <div><input type="submit" value="Register"></div>
+     	<div>Amount: <input type="text" value="" name="amount"/></div>
+     	<div>Reason: <input type="text" value="" name="reason"/></div>
+       <div><input type="submit" value="Do it!"></div>
      </form>
    </body>
  </html>
