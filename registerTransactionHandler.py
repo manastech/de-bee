@@ -55,7 +55,6 @@ class RegisterTransactionHandler(webapp.RequestHandler):
 				
 		fromMembership.put()
 		toMembership.put()
-
 		
 		self.redirect("/group?group=%s" % group.key())
 		 

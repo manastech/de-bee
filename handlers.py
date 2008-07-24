@@ -31,8 +31,8 @@ class MainHandler(webapp.RequestHandler):
 	items = []
 	for m in self.getRelevantMemberships(user):
 		total += m.balance
-		items.append({'isOweToSelf' : m.balance > 0, 'amount' : abs(m.balance), 'group' : m.group })
-	return { 'isOweToSelf' : total > 0, 'total' : abs(total), 'items' : items }
+		items.append({'isZero': m.balance == 0.0, 'isOweToSelf' : m.balance > 0, 'amount' : abs(m.balance), 'group' : m.group })
+	return { 'isZero': total == 0.0, 'isOweToSelf' : total > 0, 'total' : abs(total), 'items' : items }
 
   def getGroups(self, user):
 	memberships = Membership.gql("WHERE user = :1", user)

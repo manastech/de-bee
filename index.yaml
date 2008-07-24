@@ -16,20 +16,20 @@ indexes:
   - name: group
   - name: balance
 
-# Used 110 times in query history.
+# Used 121 times in query history.
 - kind: Membership
   properties:
   - name: group
   - name: balance
     direction: desc
 
-# Used 258 times in query history.
+# Used 330 times in query history.
 - kind: Membership
   properties:
   - name: group
   - name: user
 
-# Used 24 times in query history.
+# Used 30 times in query history.
 - kind: Membership
   properties:
   - name: user

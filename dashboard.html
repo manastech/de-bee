@@ -8,10 +8,14 @@
 
 		{% if isregistered %}
 		<div class="debts_summary">
-			{% if debts.isOweToSelf %}
-				They owe you a total of ${{debts.total}}.
+			{% if debts.isZero %}
+				You owe nobody, and nobody owes you. Hurray!
 			{% else %}
-				You owe a total of ${{debts.total}}.
+				{% if debts.isOweToSelf %}
+					They owe you a total of ${{debts.total}}.
+				{% else %}
+					You owe a total of ${{debts.total}}.
+				{% endif %}
 			{% endif %}
 			<ul>
     		{% for debt in debts.items %}

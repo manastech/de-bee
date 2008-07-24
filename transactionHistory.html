@@ -1,6 +1,4 @@
-<html>
-<body>
-Transaction History
+{% if hasMembers %}
 
 <form action="/group" method="get">
 <input type="hidden" name="group" value="{{group.key}}"/>
@@ -19,5 +17,8 @@ transactions. <input type="submit" value="Refresh">
 	{% endfor %}
 </ul>
 
-</body>
-</html>
+{% else %}
+
+You are the only member in this group. Go invite someone!
+
+{% endif %}
