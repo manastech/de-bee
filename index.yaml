@@ -23,13 +23,13 @@ indexes:
   - name: balance
     direction: desc
 
-# Used 430 times in query history.
+# Used 452 times in query history.
 - kind: Membership
   properties:
   - name: group
   - name: user
 
-# Used 44 times in query history.
+# Used 46 times in query history.
 - kind: Membership
   properties:
   - name: user
