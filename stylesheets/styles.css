@@ -1,12 +1,61 @@
 body
 {
-	background-color:blue;
+   	margin:0px;
+   	padding:0px;
+   
 }
+
 #container
 {
-	width: 1000px;
-	background-color:red;
-	margin: 0pt 0pt auto;
-	margin-top:30px;
 
+}
+#header
+{
+	margin:0 auto;
+	height:200px;
+	width:1000px;
+	padding:0px;
+	
+}
+#content
+{
+	background-color:#FFF41D;
+}
+#footer
+{
+	height:100px;
+	width:1000px;
+	margin: 0 auto;
+}
+#mainContent
+{
+	width:1000px;
+	margin: 0 auto;
+	font-family:Arial;
+	color:#4F4C10;
+	font-size:20px;
+	padding-top:20px;
+	padding-bottom:20px;
+}
+
+#mainContent p
+{
+	margin-left: 100px;
+	margin-top:40px;
+}
+	
+#logo
+{
+	float:left;
+	margin-top:30px;
+}
+#welcome
+{
+	float:right;
+	margin-top:125px;
+	vertical-align:top;
+}
+#welcome img
+{
+	margin-right:30px;
 }
