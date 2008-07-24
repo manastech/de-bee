@@ -13,7 +13,8 @@ def main():
 									('/mail', MailHandler),
 									('/registerTransaction', RegisterTransactionHandler),
                                     ('/enterTransaction', EnterTransactionHandler),
-                                    ('/transactionHistory', TransactionHistory)],
+                                    ('/transactionHistory', TransactionHistory),
+					('/groupCreation', GroupCreationHandler)],
                                        debug=True)
   wsgiref.handlers.CGIHandler().run(application)
 
