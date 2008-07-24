@@ -14,9 +14,9 @@
 			<ul>
     		{% for debt in debts.items %}
 				{% if debt.isOweToSelf %}
-					<li>in <a href="/groupDetail?group={{debt.group.key}}">{{debt.group.name}}</a> they owe you ${{debt.amount}}</li>
+					<li>in <a href="/group?group={{debt.group.key}}">{{debt.group.name}}</a> they owe you ${{debt.amount}}</li>
 				{% else %}					
-					<li>you owe ${{debt.amount}} in <a href="/groupDetail?group={{debt.group.key}}">{{debt.group.name}}</a></li>
+					<li>you owe ${{debt.amount}} in <a href="/group?group={{debt.group.key}}">{{debt.group.name}}</a></li>
 				{% endif %}
 			{% endfor %}
 			</ul>
