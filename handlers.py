@@ -28,36 +28,6 @@ class MainHandler(webapp.RequestHandler):
                       users.create_login_url("/"))
 	self.response.out.write("<html><body>%s</body></html>" % greeting)
 
-class EnterTransactionHandler(webapp.RequestHandler):
-	
-	def get(self):
-		self.response.out.write("""
-      <html>
-        <body>
-          <form action="/registerTransaction" method="post">
-          	<div>From: <input type="text" value="Ary" name="fromUser"/></div>
-          	<div>To: <input type="text" value="Nico" name="toUser"/></div>
-          	<div>Amount: <input type="text" value="$15.000" name="amount"/></div>
-          	<div>Reason: <input type="text" value="Trola francesa" name="reason"/></div>
-            <div><input type="submit" value="Register"></div>
-          </form>
-        </body>
-      </html>""")
-
-		
-class RegisterTransactionHandler(webapp.RequestHandler):
-	
-	def post(self):
-		self.response.out.write('<html><body><pre>')
-		self.response.out.write(cgi.escape(self.request.get('fromUser')))
-		self.response.out.write(' owes ')
-		self.response.out.write(cgi.escape(self.request.get('amount')))
-		self.response.out.write(' to ')
-		self.response.out.write(cgi.escape(self.request.get('toUser')))
-		self.response.out.write(' because of ')
-		self.response.out.write(cgi.escape(self.request.get('reason')))
-		self.response.out.write('</pre></body></html>')
-
 class TransactionHistory(webapp.RequestHandler):
   def get(self):
   	
