@@ -29,7 +29,7 @@ class GroupInvitationHandler(webapp.RequestHandler):
 			self.response.out.write("You are already a member of %s group" % group.name)
 		else:
 			Membership(user=user,group=group,balance=0.0).put()
-			self.response.out.write("You have been added to %s group" % group.name)
+			self.response.out.write("You have been added to <a href='/group?group=%s'>%s</a> group" % (group.key(), group.name))
 	
 class GroupInvitation:
 	
