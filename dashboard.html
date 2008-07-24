@@ -3,11 +3,13 @@
 	<font size="6">{{username}}</font>  (<a href="{{signout_url}}">sign out</a>)
 {% endblock %}
 {% block navigation %}
+	{% if hasgroups %}
 	<div id="menuGroups">
 		<a href="/group">
 			<span/>
 		</a>
 	</div>
+	{% endif %}
 	<div id="menuHomeActive">
 		<a href="/">
 			<span/>

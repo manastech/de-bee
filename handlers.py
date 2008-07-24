@@ -12,15 +12,18 @@ class MainHandler(webapp.RequestHandler):
     user = users.get_current_user()
     reg = registration.Registration()
     if user:
-		path = os.path.join(os.path.dirname(__file__), 'dashboard.html')
-		model = { 
+        groups = self.getGroups(user)
+        path = os.path.join(os.path.dirname(__file__), 'dashboard.html')
+        model = { 
 			'username' : user.nickname(),
 			'signout_url' : users.create_logout_url("/"),
 			'debts' : self.getDebts(user),
-			'groups' : self.getGroups(user),
-			'isregistered' : reg.IsRegistered(user)
+			'groups' : groups,
+			'isregistered' : reg.IsRegistered(user),
+            'hasgroups' : groups.count > 0
 			}
-		self.response.out.write(template.render(path, model))
+        self.response.out.write(template.render(path, model))
+            
     else:
 		model = {'loginurl': users.create_login_url("/")}
   		path = os.path.join(os.path.dirname(__file__), 'introduction.html')
