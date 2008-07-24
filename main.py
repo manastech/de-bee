@@ -1,13 +1,14 @@
 #!/usr/bin/env python
 
 
-import wsgiref.handlers
 from google.appengine.ext import webapp
 from handlers import *
 from model import *
+import wsgiref.handlers
 
 def main():
-  application = webapp.WSGIApplication([('/', MainHandler), 
+  application = webapp.WSGIApplication([('/', MainHandler),
+									('/mail', MailHandler),
 									('/registerTransaction', RegisterTransactionHandler),
                                     ('/enterTransaction', EnterTransactionHandler),
                                     ('/transactionHistory', TransactionHistory)],

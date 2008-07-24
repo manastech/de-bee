@@ -1,10 +1,11 @@
-import cgi
-from google.appengine.ext import webapp
-from model import *
 from google.appengine.api import users
-import registration as registration
-import os
+from google.appengine.ext import webapp
 from google.appengine.ext.webapp import template
+from mail_sender import *
+from model import *
+import cgi
+import os
+import registration as registration
 
 class MainHandler(webapp.RequestHandler):
 
@@ -65,3 +66,15 @@ class TransactionHistory(webapp.RequestHandler):
     
     path = os.path.join(os.path.dirname(__file__), 'transactionHistory.html')
     self.response.out.write(template.render(path, template_values))
+
+class MailHandler(webapp.RequestHandler):
+
+	def get(self):
+		mail_sender = MailSender()
+		mail_sender.sendMail("", "", "")
+		self.response.out.write("""
+			<html>
+			<body>
+			Ya lo mande
+			</body>
+			</html>""")
