@@ -20,6 +20,7 @@ class MailHandler(webapp.RequestHandler):
 
 
 class RejectTransactionHandler(webapp.RequestHandler):
+
 	def get(self):
 		key = self.request.get('key')
 		hash = self.request.get('h')
@@ -40,7 +41,7 @@ class RejectTransactionHandler(webapp.RequestHandler):
 		
 		if valid :
 			transaction.is_rejected = True
-			new_transaction = createCompensateTransaction(transaction)
+			new_transaction = self.createCompensateTransaction(transaction)
 			new_transaction.put()
 			transaction.put()
 			self.response.out.write("ok!")
@@ -59,8 +60,9 @@ class RejectTransactionHandler(webapp.RequestHandler):
 									type = comp_type, amount = transaction.amount,
 									isRejected = False)
 		return new_transaction
-		
 
+
+# TODO codigo duplicado
 class TransactionHash:
 	def validate(self, transaction, hash):
 		realHash = self.makeHash(transaction)

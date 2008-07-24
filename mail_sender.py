@@ -2,6 +2,7 @@ from google.appengine.api import mail
 from groupInvitationHandler import GroupInvitation
 from mail_handler import *
 
+# TODO codigo duplicado
 class TransactionHash:
 	def validate(self, transaction, hash):
 		realHash = self.makeHash(transaction)
@@ -35,7 +36,7 @@ class MailSender:
 			 	   % (transaction.toUser, transaction.amount, transaction.reason,\
 			 	   (uri_reject_mail + "?key=" + str(transaction.key()) +"&h=" +hash))
 		elif transaction.type == 'payment':
-			body = "%s payed you $%s because of %s. If you want to reject the payment you can click <a href='%s' > here </a>." \
+			body = "%s payed you $%s because of %s. If you want to reject the payment you can click %s ." \
 			 	   % (transaction.fromUser, transaction.amount, transaction.reason,\
 			 	   (uri_reject_mail + "?key=" + str(transaction.key()) +"&h=" +hash))
 			 	   
