@@ -82,7 +82,7 @@ class GroupHandler(webapp.RequestHandler):
 			 		if (tr.fromUser == user):
 			 			message = "I rejected from " + tr.toUser.email() + " a debt of $" + str(tr.amount) + " due to " + tr.reason
 			 		else:
-			 			message = tr.fromUser.email() + " rejected you a debt of $" + str(tr.amount) + " due to " + tr.reason
+			 			message = tr.fromUseremail() + " rejected you a debt of $" + str(tr.amount) + " due to " + tr.reason
 			 	if (tr.type == "rejectedPayment"):
 			 		if (tr.fromUser == user):
 			 			message = "I rejected from " + tr.toUser.email() + " a payment of $" + str(tr.amount) + " due to " + tr.reason

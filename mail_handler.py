@@ -27,26 +27,26 @@ class RejectTransactionHandler(webapp.RequestHandler):
 		
 		#parameter reception validation
 		if(key is None or hash is None):
-			self.response.out.write("Something goes wrong")
+			self.response.out.write("Something goes wrong 1")
 			return
 		
 		transaction = Transaction.get(key)
 		#transaction exists ?
 		if(transaction is None):
-			self.response.out.write("Something goes wrong")
+			self.response.out.write("Something goes wrong 2")
 			return
 		
 		#validate hash
 		valid = TransactionHash().validate(transaction, hash)
 		
 		if valid :
-			transaction.is_rejected = True
+			transaction.isRejected = True
 			new_transaction = self.createCompensateTransaction(transaction)
 			new_transaction.put()
 			transaction.put()
 			self.response.out.write("ok!")
 		else:
-			self.response.out.write("Something goes wrong")
+			self.response.out.write("Something goes wrong 3")
 
 	def createCompensateTransaction(self, transaction):
 		comp_type = None
