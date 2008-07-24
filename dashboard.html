@@ -61,9 +61,15 @@
 		{% endif %}
 
 		<div>
+			<br /><br /><br /><br />
+			<img src="/images/NewGroup.gif" /> 
+			<br />
 			<form action="/groupCreation" method="post">
-				Create group: <input type="text" value="" name="name"/>
-				<input type="submit" value="Create">
+				<label style="font-size:12">Name:</label> 
+				<br />
+				<input type="text" value="" name="name"/>
+				<input style="vertical-align:middle" type="image" src="/images/Button_CreateGroup.gif" alt="CreateGroup" title="CreateGroup">
+				
 			</form>
 		</div>
 {% endblock %}
