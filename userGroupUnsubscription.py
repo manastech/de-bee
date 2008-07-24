@@ -63,6 +63,8 @@ class UnsubscriptionHandler(webapp.RequestHandler):
                                         if not membership.balance == 0.0:
                                                 self.response.out.write("You cannot leave this group")
                                         else:
-                                                membership.delete()
-                                                self.response.out.write("You have been unsubscribed from the group " + cgi.escape(group.name))
+											membership.delete()
+											if Membership.gql("WHERE group = :1", group).count() == 0:
+												group.delete()
+											self.response.out.write("You have been unsubscribed from the group " + cgi.escape(group.name))
 			self.response.out.write('</pre></body></html>')
