@@ -13,8 +13,21 @@ class MainHandler(webapp.RequestHandler):
     reg = registration.Registration()
     if user:
         if reg.IsRegistered(user):
-            greeting = ("Welcome, %s!  (<a href=\"%s\">sign out</a>)" %
-                      (user.nickname(), users.create_logout_url("/")))
+			path = os.path.join(os.path.dirname(__file__), 'dashboard.html')
+			model = {
+				'username' : user.nickname(),
+				'signout_url' : users.create_logout_url("/"),
+				'debts' : {
+						'isOweToSelf' : True,
+						'total' : 35,
+						'items' : [ 
+							{ 'isOweToSelf' : True, 'amount' : 34 },
+							{ 'isOweToSelf' : False, 'amount' : 4 },
+							{ 'isOweToSelf' : True, 'amount' : 5 },
+						],
+					},
+				}
+			self.response.out.write(template.render(path, model))
         else:
 			path = os.path.join(os.path.dirname(__file__), 'introduction.html')
 			model = { 
