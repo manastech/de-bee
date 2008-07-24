@@ -139,3 +139,28 @@ body
 	height:48px;
 	display:block;
 }
+
+#groupInviteImage a
+{
+	background:url(/images/s_InvitePeople_OFF.gif) no-repeat;
+	width:224px;		
+	height:49px;
+	display:block;
+	margin-top:11px;
+}
+#groupInviteImage a:hover
+{
+	background:url(/images/s_InvitePeople_OVER.gif) no-repeat;
+	width:224px;
+	height:49px;
+	display:block;
+	margin-top:11px;
+}
+	
+#groupInviteImageSelected 
+{
+	background:url(/images/s_InvitePeople_ON.gif) no-repeat;
+	width:224px;
+	height:49px;
+	display:block;
+}
