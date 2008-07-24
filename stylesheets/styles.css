@@ -75,3 +75,65 @@ body
 	float:right;
 	font-size:11px;
 }
+
+#navigation
+{
+	margin:0 auto;
+	height:48px;
+	width:1000px;
+	padding:0px;
+}
+
+#menuHome, #menuHomeActive, #menuGroups, #menuGroupsActive
+{
+	float:right;
+	vertical-align:bottom;
+}
+
+#menuHome a{
+	background:url(/images/s_home_OFF.gif) no-repeat;
+	width:118px;
+	height:38px;
+	display:block;
+	margin-top:10px;
+	}
+#menuHome a:hover{
+	background:url(/images/s_home_OVER.gif) no-repeat;
+	width:118px;
+	height:38px;
+	display:block;
+	margin-top:10px;
+}	
+
+#menuHomeActive	
+{
+	background:url(/images/s_home_ON.gif) no-repeat;
+	width:183px;
+	height:48px;
+	display:block;
+}	
+
+#menuGroups a
+{
+	background:url(/images/s_mygroups_OFF.gif) no-repeat;
+	width:275px;		
+	height:37px;
+	display:block;
+	margin-top:11px;
+}
+#menuGroups a:hover
+{
+	background:url(/images/s_mygroups_OVER.gif) no-repeat;
+	width:275px;
+	height:37px;
+	display:block;
+	margin-top:11px;
+}
+	
+#menuGroupsActive 
+{
+	background:url(/images/s_mygroups_ON.gif) no-repeat;
+	width:381px;
+	height:48px;
+	display:block;
+}
