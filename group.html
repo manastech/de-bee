@@ -1,6 +1,9 @@
 {% extends "master.html" %}
 {% block top %} 
-	<h2>{{group.name}}</h2><font size="6">{{username}}</font>  (<a href="{{signout_url}}">sign out</a>)
+	<div style="text-align: right"> 
+	<font size="5">{{group.name}}</font><br>  
+	(<a href="{{signout_url}}">sign out</a>)
+	</div>
 {% endblock %}
 {% block navigation %}
 	<a href="/">Home</a>
