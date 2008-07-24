@@ -6,7 +6,7 @@
      
      	I owe &nbsp;<select name="toUser">
      	{% for member in members %}
-     	<option value="{{member.user}}">{{member.user}}</option>
+     	<option value="{{member.user.email}}">{{member.user}}</option>
      	{% endfor %}
      	</select>
      	&nbsp; $<input type="text" value="" name="amount"/>
@@ -22,7 +22,7 @@
      
      	I payed &nbsp;<select name="toUser">
      		{% for member in members %}
-     			<option value="{{member.user}}">{{member.user}}</option>
+     			<option value="{{member.user.email}}">{{member.user}}</option>
      		{% endfor %}
      	</select>
      	&nbsp; $<input type="text" value="" name="amount"/>
@@ -38,7 +38,7 @@
      
      	<select name="fromUser">
      		{% for member in members %}
-     			<option value="{{member.user}}">{{member.user}}</option>
+     			<option value="{{member.user.email}}">{{member.user}}</option>
      		{% endfor %}
      	</select>
      	&nbsp; owes me
@@ -55,7 +55,7 @@
      
      	<select name="fromUser">
      		{% for member in members %}
-     			<option value="{{member.user}}">{{member.user}}</option>
+     			<option value="{{member.user.email}}">{{member.user}}</option>
      		{% endfor %}
      	</select>
      	&nbsp; payed me

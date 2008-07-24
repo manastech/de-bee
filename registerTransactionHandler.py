@@ -11,8 +11,8 @@ from mail_sender import *
 class RegisterTransactionHandler(webapp.RequestHandler):
 	
 	def post(self):
-		
-		rejectPath = os.path.join(os.path.dirname(__file__), 'reject')
+		# TODO HACK Server base url
+		rejectPath = 'http://localhost:8080/reject'
 		
 		group = Group.get(self.request.get('group'))
 		creator = users.get_current_user();
@@ -38,27 +38,20 @@ class RegisterTransactionHandler(webapp.RequestHandler):
 			isRejected = False
 			)
 		tr.put()
-		
-		fromMembership = db.Query(Membership)
-		fromMembership.filter('user = ', fromUser) 
-		fromMembership.filter('group = ', group)
-		fromMembership = fromMembership.get()
-		
-		toMembership = db.Query(Membership)
-		toMembership.filter('user = ', toUser) 
-		toMembership.filter('group = ', group)
-		toMembership = toMembership.get()
-		
+				
+		fromMembership = Membership.gql("WHERE user = :1 AND group = :2", fromUser, group).get()
+		toMembership = Membership.gql("WHERE user = :1 AND group = :2", toUser, group).get()
+				
 		if type == 'debt' or type == 'rejectedPayment':
 			fromMembership.balance -= amount
 			toMembership.balance += amount
 			if(fromUser != creator):
-				MailSender().sendTransactionNotice(fromUser, group.name, tr, rejectPath)
+				MailSender().sendTransactionNotice(fromUser.email(), group.name, tr, rejectPath)
 		elif type == 'payment' or type == 'rejectedDebt': 
 			fromMembership.balance += amount
 			toMembership.balance -= amount
 			if(toUser != creator):
-				MailSender().sendTransactionNotice(toUser, group.name, tr, rejectPath)
+				MailSender().sendTransactionNotice(toUser.email(), group.name, tr, rejectPath)
 				
 		fromMembership.put()
 		toMembership.put()

@@ -10,11 +10,12 @@ class TransactionHash:
 		
 	def makeHash(self, transaction):
 		m = sha224()
-		m.update(transaction.creator.nickname())
-		m.update(transaction.fromUser.nickname())
-		m.update(transaction.toUser.nickname())
+		m.update(str(transaction.key()))
+		m.update(transaction.creator.email())
+		m.update(transaction.fromUser.email())
+		m.update(transaction.toUser.email())
 		m.update(transaction.type)
-		m.update(transaction.date)
+		m.update(str(transaction.date))
 		return m.hexdigest()
 		
 		
@@ -31,12 +32,12 @@ class MailSender:
 		
 		if transaction.type == 'debt':
 			body = "You owe %s $%s because of %s. If you want to reject the debt you can click <a href='%s' > here </a>." \
-			 	   % transaction.toUser, transaction.amount, transaction.reason,\
-			 	   (uri_reject_mail + "?key=" + transaction.key() +"&h=" +hash)
+			 	   % (transaction.toUser, transaction.amount, transaction.reason,\
+			 	   (uri_reject_mail + "?key=" + str(transaction.key()) +"&h=" +hash))
 		elif transaction.type == 'payment':
 			body = "%s payed you $%s because of %s. If you want to reject the payment you can click <a href='%s' > here </a>." \
-			 	   % transaction.fromUser, transaction.amount, transaction.reason,\
-			 	   (uri_reject_mail + "?key=" + transaction.key() +"&h=" +hash)
+			 	   % (transaction.fromUser, transaction.amount, transaction.reason,\
+			 	   (uri_reject_mail + "?key=" + str(transaction.key()) +"&h=" +hash))
 			 	   
 		mail.send_mail("info@de-bee.com", user_recipient, subject, body)
         

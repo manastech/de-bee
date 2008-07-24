@@ -69,11 +69,11 @@ class TransactionHash:
 		
 	def makeHash(self, transaction):
 		m = sha224()
-		m.update(transaction.key())
-		m.update(transaction.creator)
-		m.update(transaction.fromUser)
-		m.update(transaction.toUser)
+		m.update(str(transaction.key()))
+		m.update(transaction.creator.email())
+		m.update(transaction.fromUser.email())
+		m.update(transaction.toUser.email())
 		m.update(transaction.type)
-		m.update(transaction.date)
+		m.update(str(transaction.date))
 		return m.hexdigest()
-		
+	
