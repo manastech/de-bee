@@ -15,7 +15,7 @@ class Transaction(db.Model):
 	fromUser = db.UserProperty(required=True)
 	toUser = db.UserProperty(required=True)
 	type = db.StringProperty(required=True, choices=set(["debt", "payment", "rejectedDebt", "rejectedPayment"]))
-	ammount = db.FloatProperty(required=True)
+	amount = db.FloatProperty(required=True)
 	reason = db.StringProperty()
 	isRejected = db.BooleanProperty()
 	date = db.DateTimeProperty(auto_now=True)
