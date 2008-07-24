@@ -1,7 +1,6 @@
 from google.appengine.ext import db
 
 class Group(db.Model):
-	id = db.IntegerProperty(required=True)
 	name = db.StringProperty(required=True)
     
 class Membership(db.Model):
@@ -10,7 +9,6 @@ class Membership(db.Model):
 	balance = db.FloatProperty(required=True)
     
 class Transaction(db.Model):
-	id = db.IntegerProperty()
 	creator = db.UserProperty(required=True)
 	fromUser = db.UserProperty(required=True)
 	toUser = db.UserProperty(required=True)
