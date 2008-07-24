@@ -19,7 +19,8 @@ def main():
                                     ('/transactionHistory', TransactionHistory),
                                     ('/groupDetail', GroupDetail),
 					('/groupCreation', GroupCreationHandler),
-					('/enterGroupCreation', EnterGroupCreationHandler)],
+					('/enterGroupCreation', EnterGroupCreationHandler),
+					('/groupInvitation', GroupInvitationHandler)],
                                        debug=True)
   wsgiref.handlers.CGIHandler().run(application)
 
