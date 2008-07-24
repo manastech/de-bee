@@ -64,6 +64,8 @@ class GroupHandler(webapp.RequestHandler):
 			transactions = transactions_from + transactions_to
 			transactions.sort(cmp = compareTransactionsByDate)
 			
+			transactions = transactions[0:transactionCount]
+			
 			messages = []
 			for tr in transactions:
 				if (tr.type == "debt"):
@@ -95,9 +97,6 @@ class GroupHandler(webapp.RequestHandler):
 			validationMessage = ''
 			
 		except BaseException, e:
-			print "1"
-			return
-			
 			transactionCount = 0
 			transactions = []
 			validationError = True
