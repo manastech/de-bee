@@ -5,20 +5,6 @@ from hashlib import *
 from mail_sender import *
 from model import *
 
-class MailHandler(webapp.RequestHandler):
-
-	def get(self):
-		mail_sender = MailSender()
-		mail_sender.sendInvitationMail("jorge@manas.com.ar", "el nombre del grupo", "estas invitado che!", "http://localhost:8080/reject")
-		mail_sender.sendNoticeTransaction("jonat@manas.com.ar", "jorge@manas.com.ar", "un grupo", Transaction.get(""))
-		self.response.out.write("""
-			<html>
-			<body>
-			Ya lo mande
-			</body>
-			</html>""")
-
-
 class RejectTransactionHandler(webapp.RequestHandler):
 
 	def get(self):

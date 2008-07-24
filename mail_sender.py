@@ -22,8 +22,8 @@ class TransactionHash:
 		
 class MailSender:
 
-	def sendInvitationMail(self,user_recipient, group, custom_invitation_text):
-		inv = GroupInvitation(group, user_recipient)
+	def sendInvitationMail(self,user_recipient, group, custom_invitation_text, urlBuilder):
+		inv = GroupInvitation(group, user_recipient, urlBuilder)
 		subject = "You are invited to %s group!" % group.name
 		body = "click %s to accept. yeah! %s " % (inv.getUrl(), custom_invitation_text)
 		mail.send_mail("de-bee@manas.com.ar", user_recipient, subject, body)

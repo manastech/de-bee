@@ -7,12 +7,12 @@ import os
 from google.appengine.ext.webapp import template
 from mail_handler import *
 from mail_sender import *
+from serverUtils import UrlBuilder
 
 class RegisterTransactionHandler(webapp.RequestHandler):
 	
 	def post(self):
-		# TODO HACK Server base url
-		rejectPath = 'http://localhost:8080/reject'
+		rejectPath = UrlBuilder(self.request).buildUrl('/reject')
 		
 		group = Group.get(self.request.get('group'))
 		creator = users.get_current_user();

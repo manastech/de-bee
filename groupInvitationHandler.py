@@ -6,6 +6,7 @@ import registration as registration
 import os
 from google.appengine.ext.webapp import template
 from hashlib import *
+from serverUtils import UrlBuilder
 
 class GroupInvitationHandler(webapp.RequestHandler):
 		
@@ -16,7 +17,7 @@ class GroupInvitationHandler(webapp.RequestHandler):
 			return		
 		group = Group.get(self.request.get("group"))
 		userEmail = self.request.get("user")
-		invitation = GroupInvitation(group, userEmail)
+		invitation = GroupInvitation(group, userEmail, UrlBuilder(self.request))
 		if invitation.makeHash() != self.request.get("hash"):
 			self.response.out.write("Invitation is invalid") # TODO HTTP ERROR
 			return		
@@ -33,13 +34,13 @@ class GroupInvitationHandler(webapp.RequestHandler):
 	
 class GroupInvitation:
 	
-	def __init__(self, group, userEmail):
+	def __init__(self, group, userEmail, urlBuilder):
 		self.group = group
 		self.userEmail = userEmail
+		self.urlBuilder = urlBuilder
 	
 	def getUrl(self):
-		# TODO UNHACK HOST
-		return "http://localhost:8080/groupInvitation?group=%s&user=%s&hash=%s" % (str(self.group.key()) , self.userEmail , self.makeHash())
+		return self.urlBuilder.buildUrl("/groupInvitation?group=%s&user=%s&hash=%s" % (str(self.group.key()) , self.userEmail , self.makeHash()))
 	
 	def makeHash(self):
 		m = sha224()

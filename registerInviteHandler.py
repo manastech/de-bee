@@ -6,6 +6,7 @@ from google.appengine.api import users
 import registration as registration
 import os
 from google.appengine.ext.webapp import template
+from serverUtils import UrlBuilder
 
 class RegisterInviteHandler(webapp.RequestHandler):
 	
@@ -18,5 +19,5 @@ class RegisterInviteHandler(webapp.RequestHandler):
 		sender = MailSender()
 		for email in emails:
 			email = email.strip()
-			sender.sendInvitationMail(email, group, invitationText)
+			sender.sendInvitationMail(email, group, invitationText, UrlBuilder(self.request))
 		self.redirect("/group?group=" + self.request.get('group') + "&msg=" + cgi.escape("Your invite has been sent!"))

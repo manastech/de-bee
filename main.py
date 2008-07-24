@@ -14,7 +14,6 @@ import wsgiref.handlers
 def main():
   application = webapp.WSGIApplication([
 					('/', MainHandler),
-					('/mail', MailHandler),
 					('/registerTransaction', RegisterTransactionHandler),
                     ('/registerInvite', RegisterInviteHandler),
                     ('/groupCreation', GroupCreationHandler),
