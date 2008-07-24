@@ -85,54 +85,39 @@ class GroupHandler(webapp.RequestHandler):
 		path = os.path.join(os.path.dirname(__file__), 'group.html')
 		self.response.out.write(template.render(path, template_values))
 
-class EnterGroupCreationHandler(webapp.RequestHandler):
-	
-	def get(self):
-    		registered = authenticatedUser(self)
-		if registered:
-			self.response.out.write("""
-      <html>
-        <body>
-          <form action="/groupCreation" method="post">
-          	<div>Name: <input type="text" value="group name" name="name"/></div>
-            <div><input type="submit" value="Create"></div>
-          </form>
-        </body>
-      </html>""")
-			
-
 class GroupCreationHandler(webapp.RequestHandler):
 
 	def post(self):
-		
-    		registered = authenticatedUser(self)
+		registered = authenticatedUser(self)
 		if registered:
-			self.response.out.write('<html><body><pre>')
 			groupName = self.request.get('name')
 			escapedGroupName = cgi.escape(groupName)
 
 			if groupName == "":
-				self.response.out.write("Group name is required")
+				self.response.out.write('<html><body><pre>')
+				self.response.out.write("Group name is required. <a href='javascript:history.back()'>Go back</a>.")
+				self.response.out.write('</pre></body></html>')
 			else:
 				group = self.createGroupAndInsertMember(groupName)
 
 				if group is None:
-					self.response.out.write("The group " + escapedGroupName + " already exists. Please try another name.")
+					self.response.out.write('<html><body><pre>')
+					self.response.out.write("The group " + escapedGroupName + " already exists. Please try another name. <a href='javascript:history.back()'>Go back</a>.")
+					self.response.out.write('</pre></body></html>')
 				else:
-					self.response.out.write("The group " + escapedGroupName + " has been created.")
-			self.response.out.write('</pre></body></html>')
+					self.redirect("/group?group=%s" % group.key())
 
 	def insertUserInGroup(self, group):
 		membership = Membership(user=users.get_current_user(),group=group,balance=0.0)
 		membership.put()
 
 	def createGroupAndInsertMember(self, gname):
-        	query = Group.gql("WHERE name = :1", gname)
-        	count = query.count()
-        	if count > 0:
+		query = Group.gql("WHERE name = :1", gname)
+		count = query.count()
+		if count > 0:
 			return None
-        	group = Group(name=gname)
-        	group.put()
-
+		group = Group(name=gname)
+		group.put()
+    	
 		self.insertUserInGroup(group)
-        	return group
+		return group

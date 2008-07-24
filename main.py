@@ -19,7 +19,6 @@ def main():
                     ('/registerInvite', RegisterInviteHandler),
 					('/groupCreation', GroupCreationHandler),
 					('/group',GroupHandler),
-					('/enterGroupCreation', EnterGroupCreationHandler),
                     ('/enterUnsubscription', EnterUnsubscriptionHandler),
                     ('/groupUnsubscription', UnsubscriptionHandler),
 					('/groupInvitation', GroupInvitationHandler)],
