@@ -21,12 +21,7 @@ body
 {
 	background-color:#FFF41D;
 }
-#footer
-{
-	height:100px;
-	width:1000px;
-	margin: 0 auto;
-}
+
 #mainContent
 {
 	width:1000px;
@@ -58,4 +53,25 @@ body
 #welcome img
 {
 	margin-right:30px;
+}
+
+#footer
+{
+	height:100px;
+	width:1000px;
+	margin: 0 auto;
+	font-family:Verdana;
+	font-size:12px;
+	margin-top:15px;
+}
+
+#copyright
+{
+	float:left;
+}
+
+#powered
+{
+	float:right;
+	font-size:11px;
 }
