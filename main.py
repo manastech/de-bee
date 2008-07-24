@@ -5,6 +5,8 @@ from google.appengine.ext import webapp
 from handlers import *
 from enterTransactionHandler import *
 from registerTransactionHandler import *
+from enterInviteHandler import *
+from registerInviteHandler import *
 from groupInvitationHandler import *
 from mail_handler import *
 from groupHandlers import *
@@ -13,12 +15,15 @@ from groupDetail import *
 import wsgiref.handlers
 
 def main():
-  application = webapp.WSGIApplication([('/', MainHandler),
-                                    ('/mail', MailHandler),
-									('/registerTransaction', RegisterTransactionHandler),
-                                    ('/enterTransaction', EnterTransactionHandler),
-                                    ('/transactionHistory', TransactionHistory),
-                                    ('/groupDetail', GroupDetail),
+  application = webapp.WSGIApplication([
+					('/', MainHandler),
+					('/mail', MailHandler),
+					('/registerTransaction', RegisterTransactionHandler),
+                    ('/enterTransaction', EnterTransactionHandler),
+                    ('/registerInvite', RegisterInviteHandler),
+                    ('/enterInvite', EnterInviteHandler),
+                    ('/transactionHistory', TransactionHistory),
+                    ('/groupDetail', GroupDetail),
 					('/groupCreation', GroupCreationHandler),
 					('/enterGroupCreation', EnterGroupCreationHandler),
 					('/groupInvitation', GroupInvitationHandler)],

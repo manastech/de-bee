@@ -1,0 +1,13 @@
+<html>
+   <body>
+     Enter the emails of the people you want to invite:
+     <form action="/registerInvite" method="post">
+     <input type="hidden" name="group" value="{{group.key}}" />
+     <div><textarea name="emails" rows="5" cols="50"></textarea></div>
+     <br/>
+     You can add an invitation text, or leave it blank and we'll take care of it:
+     <div><textarea name="invitationText" rows="5" cols="50"></textarea></div>
+     <input type="submit" value="Invite them" />
+     </form>
+   </body>
+ </html>
