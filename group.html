@@ -43,15 +43,14 @@
 		
 		{% include "transactionHistory.html" %}
 		
-		<h3>Unsubscribe</h3>
-		
+		<p>
 		{% if balanceIsZero %}
 			<form action="/groupUnsubscription" method="post">
 				<input type="hidden" name="group" value="{{group.key}}" />
 				<input type="submit" value="Unregister me!" />
 			</form>
 		{% else %}
-			You cannot unsuscribe from this group because your balance is not zero.
+			<small>To unsubscribe from this group you must first pay your debts.</small>
 		{% endif %}
-		
+		</p>
 {% endblock %}

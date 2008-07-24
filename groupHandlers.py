@@ -122,7 +122,8 @@ class GroupHandler(webapp.RequestHandler):
 			'validationError': validationError,
 			'validationMessage': validationMessage,
             'groups': self.getGroups(user),
-            'message': self.request.get("msg")
+            'message': self.request.get("msg"),
+            'signout_url': users.create_logout_url("/")
 			 }
 		
 		path = os.path.join(os.path.dirname(__file__), 'group.html')
