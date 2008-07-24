@@ -5,10 +5,15 @@ from google.appengine.api import users
 import registration as registration
 import os
 from google.appengine.ext.webapp import template
+from mail_handler import *
+from mail_sender import *
 
 class RegisterTransactionHandler(webapp.RequestHandler):
 	
 	def post(self):
+		
+		rejectPath = os.path.join(os.path.dirname(__file__), 'reject')
+		
 		group = Group.get(self.request.get('group'))
 		creator = users.get_current_user();
 		fromUser = users.User(self.request.get('fromUser'))
@@ -47,12 +52,17 @@ class RegisterTransactionHandler(webapp.RequestHandler):
 		if type == 'debt' or type == 'rejectedPayment':
 			fromMembership.balance -= amount
 			toMembership.balance += amount
+			if(fromUser != creator):
+				MailSender().sendTransactionNotice(fromUser, group.name, tr, rejectPath)
 		elif type == 'payment' or type == 'rejectedDebt': 
 			fromMembership.balance += amount
 			toMembership.balance -= amount
-			
+			if(toUser != creator):
+				MailSender().sendTransactionNotice(toUser, group.name, tr, rejectPath)
+				
 		fromMembership.put()
 		toMembership.put()
+
 		
 		self.response.out.write("Todo bien!")
 		 

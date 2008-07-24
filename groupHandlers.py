@@ -64,9 +64,7 @@ class GroupHandler(webapp.RequestHandler):
 			validationMessage = '(This should be a number)'
 			
 		# Get all members
-		members = db.Query(Membership)
-		# TODO members.filter('user != ', currentUser)
-		members.filter('group = ', group)
+		members = Membership.gql("WHERE user != :1 AND group = :2", user, group)
 		
 		template_values = {
 			'balance': me.balance * sign,

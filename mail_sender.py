@@ -1,15 +1,42 @@
 from google.appengine.api import mail
 from groupInvitationHandler import GroupInvitation
+from mail_handler import *
 
+class TransactionHash:
+	def validate(self, transaction, hash):
+		realHash = self.makeHash(transaction)
+		valid = hash == realHash
+		return valid
+		
+	def makeHash(self, transaction):
+		m = sha224()
+		m.update(transaction.creator.nickname())
+		m.update(transaction.fromUser.nickname())
+		m.update(transaction.toUser.nickname())
+		m.update(transaction.type)
+		m.update(transaction.date)
+		return m.hexdigest()
+		
+		
 class MailSender:
 	def sendInvitationMail(self,user_recipient, group, custom_invitation_text):
 		inv = GroupInvitation(group, user_recipient)
 		subject = "You are invited to %s group!" % group.name
 		body = "click %s to accept. yeah! %s " % (inv.getUrl(), custom_invitation_text)
 		mail.send_mail("de-bee@manas.com.ar", user_recipient, subject, body)
-
-	def sendNoticeTransaction(self,from_recipient,user_recipient, group_name, transaction):
+	def sendTransactionNotice(self, user_recipient, group_name, transaction, uri_reject_mail):
 		subject = "Transaction notice in %s group" % group_name
-		body = " transaction body "
-		mail.send_mail(from_recipient, user_recipient, subject, body)
+		hasher = TransactionHash()
+		hash = hasher.makeHash(transaction)
+		
+		if transaction.type == 'debt':
+			body = "You owe %s $%s because of %s. If you want to reject the debt you can click <a href='%s' > here </a>." \
+			 	   % transaction.toUser, transaction.amount, transaction.reason,\
+			 	   (uri_reject_mail + "?key=" + transaction.key() +"&h=" +hash)
+		elif transaction.type == 'payment':
+			body = "%s payed you $%s because of %s. If you want to reject the payment you can click <a href='%s' > here </a>." \
+			 	   % transaction.fromUser, transaction.amount, transaction.reason,\
+			 	   (uri_reject_mail + "?key=" + transaction.key() +"&h=" +hash)
+			 	   
+		mail.send_mail("info@de-bee.com", user_recipient, subject, body)
         
