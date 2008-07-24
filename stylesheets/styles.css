@@ -118,7 +118,7 @@ body
 #menuGroups a
 {
 	background:url(/images/s_mygroups_OFF.gif) no-repeat;
-	width:275px;		
+	width:167px;		
 	height:37px;
 	display:block;
 	margin-top:11px;
@@ -126,7 +126,7 @@ body
 #menuGroups a:hover
 {
 	background:url(/images/s_mygroups_OVER.gif) no-repeat;
-	width:275px;
+	width:167px;
 	height:37px;
 	display:block;
 	margin-top:11px;
@@ -135,7 +135,7 @@ body
 #menuGroupsActive 
 {
 	background:url(/images/s_mygroups_ON.gif) no-repeat;
-	width:381px;
+	width:280px;
 	height:48px;
 	display:block;
 }
