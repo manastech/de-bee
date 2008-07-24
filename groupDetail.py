@@ -14,7 +14,7 @@ class GroupDetail(webapp.RequestHandler):
         
         group = Group.get(self.request.get("group"))
         me = Membership.gql("WHERE group = :1 AND user = :2", group, user)[0]
-        if me.balance > 0:
+        if me.balance >= 0:
             members = Membership.gql("WHERE group = :1 AND balance < 0 ORDER BY balance", group)
             sign = 1
         else:
@@ -34,7 +34,7 @@ class GroupDetail(webapp.RequestHandler):
         
         template_values = {'balance': me.balance * sign, 'result': result }
         
-        if me.balance > 0:
+        if me.balance >= 0:
             path = os.path.join(os.path.dirname(__file__), 'groupDetailPositive.html')
         else:
             path = os.path.join(os.path.dirname(__file__), 'groupDetailNegative.html')

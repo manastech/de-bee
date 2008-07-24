@@ -18,6 +18,7 @@ class MainHandler(webapp.RequestHandler):
 				'username' : user.nickname(),
 				'signout_url' : users.create_logout_url("/"),
 				'debts' : self.getDebts(user),
+				'groups' : self.getGroups(user)
 				}
 			self.response.out.write(template.render(path, model))
         else:
@@ -39,7 +40,12 @@ class MainHandler(webapp.RequestHandler):
 		total += m.balance
 		items.append({'isOweToSelf' : m.balance > 0, 'amount' : abs(m.balance), 'group' : m.group })
 	return { 'isOweToSelf' : total > 0, 'total' : abs(total), 'items' : items }
-	
+
+  def getGroups(self, user):
+	memberships = Membership.gql("WHERE user = :1", user)
+	groups = map((lambda x: x.group), memberships)
+	return groups
+
   def getRelevantMemberships(self, user):
 	return Membership.gql("WHERE user = :1 AND balance != 0", user)
 
