@@ -42,21 +42,18 @@ class RejectTransactionHandler(webapp.RequestHandler):
 		if valid :
 			transaction.isRejected = True
 			new_transaction = self.createCompensateTransaction(transaction)
-			print new_transaction
-			return
-			
 			new_transaction.put()
 			transaction.put()
 			
 			fromMembership = Membership.gql("WHERE user = :1 AND group = :2", new_transaction.fromUser, new_transaction.group).get()
 			toMembership = Membership.gql("WHERE user = :1 AND group = :2", new_transaction.toUser, new_transaction.group).get()
 			
-			if new_transaction.type == 'rejectedPayment':
-				fromMembership.balance += amount
-				toMembership.balance -= amount
-			elif new_transaction.type == 'rejectedDebt': 
-				fromMembership.balance -= amount
-				toMembership.balance += amount
+			#if new_transaction.type == 'rejectedPayment':
+			#	fromMembership.balance += amount
+			#	toMembership.balance -= amount
+			#elif new_transaction.type == 'rejectedDebt': 
+			#	fromMembership.balance -= amount
+			#	toMembership.balance += amount
 			
 			fromMembership.put()
 			toMembership.put()
@@ -91,7 +88,6 @@ class RejectTransactionHandler(webapp.RequestHandler):
 class TransactionHash:
 	def validate(self, transaction, hash):
 		realHash = self.makeHash(transaction)
-		print transaction.isRejected 
 		valid = (hash == realHash) and (not transaction.isRejected)
 		return valid
 		
