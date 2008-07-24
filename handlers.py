@@ -74,7 +74,8 @@ class MailHandler(webapp.RequestHandler):
 
 	def get(self):
 		mail_sender = MailSender()
-		mail_sender.sendMail("", "", "")
+		mail_sender.sendInvitationMail("jorge@manas.com.ar", "el nombre del grupo", "estas invitado che!")
+		mail_sender.sendNoticeTransaction("jonat@manas.com.ar", "jorge@manas.com.ar", "un grupo", None)
 		self.response.out.write("""
 			<html>
 			<body>
