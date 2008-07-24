@@ -12,26 +12,19 @@ class MainHandler(webapp.RequestHandler):
     user = users.get_current_user()
     reg = registration.Registration()
     if user:
-        if reg.IsRegistered(user):
-			path = os.path.join(os.path.dirname(__file__), 'dashboard.html')
-			model = { 
-				'username' : user.nickname(),
-				'signout_url' : users.create_logout_url("/"),
-				'debts' : self.getDebts(user),
-				'groups' : self.getGroups(user)
-				}
-			self.response.out.write(template.render(path, model))
-        else:
-			path = os.path.join(os.path.dirname(__file__), 'introduction.html')
-			model = { 
-				'username' : user.nickname(),
-				'signout_url' : users.create_logout_url("/"),
-				}
-			self.response.out.write(template.render(path, model))
+		path = os.path.join(os.path.dirname(__file__), 'dashboard.html')
+		model = { 
+			'username' : user.nickname(),
+			'signout_url' : users.create_logout_url("/"),
+			'debts' : self.getDebts(user),
+			'groups' : self.getGroups(user),
+			'isregistered' : reg.IsRegistered(user)
+			}
+		self.response.out.write(template.render(path, model))
     else:
-        model = {}
-        path = os.path.join(os.path.dirname(__file__), 'login.html')
-        self.response.out.write(template.render(path, model))
+		model = {'loginurl': users.create_login_url("/")}
+  		path = os.path.join(os.path.dirname(__file__), 'introduction.html')
+		self.response.out.write(template.render(path, model))
 	
   def getDebts(self, user):	
 	total = 0

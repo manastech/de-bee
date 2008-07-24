@@ -4,6 +4,7 @@
 		<br/>
 		<br/>
 
+		{% if isregistered %}
 		<div class="debts_summary">
 			{% if debts.isOweToSelf %}
 				They owe you a total of ${{debts.total}}.
@@ -22,13 +23,6 @@
 		</div>
 
 		<div>
-			<form action="/groupCreation" method="post">
-				Create group: <input type="text" value="" name="name"/>
-				<input type="submit" value="Create">
-			</form>
-		</div>
-
-		<div>
 			<form action="/group" method="get">
 				<select name="group">
 					<option>-- select group --</option>
@@ -37,6 +31,14 @@
 				{% endfor %}
 				</select>
 				<input type="submit" value="Go to group page">
+			</form>
+		</div>
+		{% endif %}
+
+		<div>
+			<form action="/groupCreation" method="post">
+				Create group: <input type="text" value="" name="name"/>
+				<input type="submit" value="Create">
 			</form>
 		</div>
 	</body>
