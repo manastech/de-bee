@@ -14,18 +14,10 @@ class MainHandler(webapp.RequestHandler):
     if user:
         if reg.IsRegistered(user):
 			path = os.path.join(os.path.dirname(__file__), 'dashboard.html')
-			model = {
+			model = { 
 				'username' : user.nickname(),
 				'signout_url' : users.create_logout_url("/"),
-				'debts' : {
-						'isOweToSelf' : True,
-						'total' : 35,
-						'items' : [ 
-							{ 'isOweToSelf' : True, 'amount' : 34 },
-							{ 'isOweToSelf' : False, 'amount' : 4 },
-							{ 'isOweToSelf' : True, 'amount' : 5 },
-						],
-					},
+				'debts' : self.getDebts(user),
 				}
 			self.response.out.write(template.render(path, model))
         else:
@@ -39,6 +31,17 @@ class MainHandler(webapp.RequestHandler):
         greeting = ("<a href=\"%s\">Sign in or register</a>." %
                       users.create_login_url("/"))
 	self.response.out.write("<html><body>%s</body></html>" % greeting)
+	
+  def getDebts(self, user):	
+	total = 0
+	items = []
+	for m in self.getRelevantMemberships(user):
+		total += m.balance
+		items.append({'isOweToSelf' : m.balance > 0, 'amount' : abs(m.balance), 'group' : m.group })
+	return { 'isOweToSelf' : total > 0, 'total' : abs(total), 'items' : items }
+	
+  def getRelevantMemberships(self, user):
+	return Membership.gql("WHERE user = :1 AND balance != 0", user)
 
 class TransactionHistory(webapp.RequestHandler):
   def get(self):
