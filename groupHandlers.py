@@ -85,11 +85,17 @@ class GroupHandler(webapp.RequestHandler):
 			'transactionCount': transactionCount,
 			'transactions': transactions,
 			'validationError': validationError,
-			'validationMessage': validationMessage
+			'validationMessage': validationMessage,
+            'groups': self.getGroups(user)
 			 }
 		
 		path = os.path.join(os.path.dirname(__file__), 'group.html')
 		self.response.out.write(template.render(path, template_values))
+	
+	def getGroups(self, user):
+		memberships = Membership.gql("WHERE user = :1", user)
+		groups = map((lambda x: x.group), memberships)
+		return groups
 		
 def compareTransactionsByDate(x, y):
 	if x.date > y.date:
