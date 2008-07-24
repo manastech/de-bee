@@ -37,7 +37,12 @@
 		|
 		<a href="javascript:showGroupTab('groupHistory')">History</a>
 		
+		{% if goToHistoryTab %}
+		<div id="groupHome" style="display:none">
+		{% else %}
 		<div id="groupHome">
+		{% endif %}
+		
 		<h3>Your balance</h3>
 	
 		{% if balanceIsZero %}
@@ -72,7 +77,12 @@
 			{% include "enterInvite.html" %}
 		</div>
 		
+		{% if goToHistoryTab %}
+		<div id="groupHistory">
+		{% else %}
 		<div id="groupHistory" style="display:none">
+		{% endif %}
+			<h3>Invite</h3>
 			<h3>History</h3>
 			
 			{% include "transactionHistory.html" %}

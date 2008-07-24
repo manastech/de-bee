@@ -11,11 +11,12 @@
 	<!--<div id="background"></div>-->
 	<div id="container">
 		<div id="header">
-			<div id="logo"><img src="images/De-Bee_logo.gif" alt="" /></div>
-			<div id="welcome">
+			<div id="logo"><a href="http://www.de-bee.com" style="text-decoration: none"><img src="images/De-Bee_logo.gif" alt="" border="0"/></a></div>
+			<div id="welcome" style="text-align: right">
 			{% block top %}
 				<img src="images/Welcome.gif" alt="" />
 				<a href="{{ loginurl }}"><img src="images/Button_Login.gif" alt="" border="0" /></a>
+				<br>(You need a Google Account)
 			{% endblock %}
 			</div>
 		</div>

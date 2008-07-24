@@ -27,6 +27,7 @@ class GroupHandler(webapp.RequestHandler):
 		# Get user, group and me
 		user = users.get_current_user()
 		group = Group.get(self.request.get("group"))
+		goToHistoryTab = self.request.get("goToHistoryTab")
 		me = Membership.gql("WHERE group = :1 AND user = :2", group, user)[0]
 		
 		# Calculate how much I owe or they owe me
@@ -124,6 +125,7 @@ class GroupHandler(webapp.RequestHandler):
 			'validationMessage': validationMessage,
             'groups': self.getGroups(user),
             'message': self.request.get("msg"),
+            'goToHistoryTab': goToHistoryTab, 
             'signout_url': users.create_logout_url("/")
 			 }
 		
