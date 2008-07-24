@@ -1,6 +1,8 @@
-<html>
-	<body>
-		Welcome, {{username}}!  (<a href="{{signout_url}}">sign out</a>)
+{% extends "master.html" %}
+{% block top %} 
+	<font size="6">{{username}}</font>  (<a href="{{signout_url}}">sign out</a>)
+{% endblock %}
+{% block content %}		
 		<br/>
 		<br/>
 
@@ -33,6 +35,8 @@
 				<input type="submit" value="Go to group page">
 			</form>
 		</div>
+		{% else %}
+		<div>You don't belong to any group. You can create your own and invite your friends.</div><br>
 		{% endif %}
 
 		<div>
@@ -41,5 +45,4 @@
 				<input type="submit" value="Create">
 			</form>
 		</div>
-	</body>
-</html>
+{% endblock %}

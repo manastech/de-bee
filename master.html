@@ -12,7 +12,12 @@
 	<div id="container">
 		<div id="header">
 			<div id="logo"><img src="images/De-Bee_logo.gif" alt="" /></div>
-			<div id="welcome"><img src="images/Welcome.gif" alt="" /><a href="{{ loginurl }}"><img src="images/Button_Login.gif" alt="" border="0" /></a></div>
+			<div id="welcome">
+			<img src="images/Welcome.gif" alt="" />
+			{% block top %}
+				<a href="{{ loginurl }}"><img src="images/Button_Login.gif" alt="" border="0" /></a>
+			{% endblock %}
+			</div>
 		</div>
 		<div id="content">
 			<div id="mainContent" style="text-align:justify">
