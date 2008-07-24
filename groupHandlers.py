@@ -46,6 +46,7 @@ class GroupHandler(webapp.RequestHandler):
 				balance -= member.balance * -sign
 		else:
 			sign = 0
+			result = []
 			
 		# Get transaction history
 		# TODO filtrar por grupo y por mi!
