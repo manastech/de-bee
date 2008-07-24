@@ -3,6 +3,8 @@ from google.appengine.ext import webapp
 from model import *
 from google.appengine.api import users
 import registration as registration
+import os
+from google.appengine.ext.webapp import template
 
 class MainHandler(webapp.RequestHandler):
 
@@ -50,3 +52,15 @@ class RegisterTransactionHandler(webapp.RequestHandler):
 		self.response.out.write(' because of ')
 		self.response.out.write(cgi.escape(self.request.get('reason')))
 		self.response.out.write('</pre></body></html>')
+
+class TransactionHistory(webapp.RequestHandler):
+  def get(self):
+  	
+    if not users.get_current_user():      
+      url = users.create_login_url(self.request.uri)
+      url_linktext = 'Login'
+      
+    template_values = {}
+    
+    path = os.path.join(os.path.dirname(__file__), 'transactionHistory.html')
+    self.response.out.write(template.render(path, template_values))

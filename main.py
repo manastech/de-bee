@@ -9,10 +9,10 @@ from model import *
 def main():
   application = webapp.WSGIApplication([('/', MainHandler), 
 									('/registerTransaction', RegisterTransactionHandler),
-                                    ('/enterTransaction', EnterTransactionHandler)],
+                                    ('/enterTransaction', EnterTransactionHandler),
+                                    ('/transactionHistory', TransactionHistory)],
                                        debug=True)
   wsgiref.handlers.CGIHandler().run(application)
-
 
 if __name__ == '__main__':
   main()
