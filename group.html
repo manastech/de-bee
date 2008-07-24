@@ -1,8 +1,12 @@
-<html>
-	<body>
-		<h2>{{group.name}}</h2>
+{% extends "master.html" %}
+{% block top %} 
+	<h2>{{group.name}}</h2><font size="6">{{username}}</font>  (<a href="{{signout_url}}">sign out</a>)
+{% endblock %}
+{% block navigation %}
+	<a href="/">Home</a>
+{% endblock %}
+{% block content %}		
 		
-		<a href="/">Home</a>
 		<div>
 			<form action="/group" method="get">
 				<select name="group">
@@ -50,5 +54,4 @@
 			You cannot unsuscribe from this group because your balance is not zero.
 		{% endif %}
 		
-	</body>
-</html>
+{% endblock %}
