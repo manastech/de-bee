@@ -1,29 +1,33 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-	<link href="stylesheets/styles.css" rel="stylesheet" type="text/css" />
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<title>De-Bee</title>
-</head>
-<body>
-	<!--<div id="background"></div>-->
-	<div id="container">
-		<div id="header">
-			<div id="logo"><img src="images/De-Bee_logo.gif" alt="" /></div>
-			<div id="welcome"><img src="images/Welcome.gif" alt="" /><a href="{{ loginurl }}"><img src="images/Button_Login.gif" alt="" border="0" /></a></div>
-		</div>
-		<div id="content">
-			<div id="mainContent" ><p>
-			Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Curabitur tempor ullamcorper metus. Integer dolor. Sed lectus. In a nunc porttitor tellus molestie placerat. Sed ac urna. Duis non neque. Vivamus nec ipsum. Vivamus magna. Suspendisse varius, mi ac euismod pharetra, mauris orci congue metus, in tristique elit quam quis dui. Suspendisse dolor ante, facilisis id, mattis ut, egestas non, magna. Nam ullamcorper urna in purus. Pellentesque venenatis bibendum neque. Nam ornare ante eget augue. Quisque ac nulla vitae sapien scelerisque faucibus. Nunc elementum enim non justo. In tristique dolor ut lorem. Nulla facilisi. Nullam lobortis porta felis.</p><p>
+{% extends "master.html" %}
+{% block content %}
+			<p>Do you feel tired of sticky calculations each time you meet with friends for lunch or pay something with other people?
+			De-Bee gives you a new way to deal with <font size="+4">money change and debts</font>. You can have as many groups as you want; 
+			each group has a number of persons that share a common account.</p>
+			
+			<strong>When can you use De-Bee?</strong><br>
+			<p>If you go lunch with friends one or two of you can pay and then the rest of you will owe them an amount of money, 
+			you just register those debts into De-Bee and that’s it, next time you can pay and the account would <font size="+4">get balanced</font>.</p>
+			<p>If at the office you decide to buy something all together someone of you can pay for it and then register the debt the rest of you will have with him; then you do not need to pay 
+			it at the moment it was bought. You can pay that at any further situation.</p>
 
-Aliquam nibh elit, vulputate vel, fringilla id, sagittis ut, magna. Integer auctor hendrerit mi. Pellentesque mattis porta velit. </p><p>Cras tristique, ante ac pulvinar viverra, leo eros rhoncus nisl, ac accumsan dui ante nec erat. In lorem. In ac quam semper purus tincidunt sodales. Proin bibendum condimentum libero. Cras at risus. Proin faucibus vulputate justo. Phasellus laoreet. Cras viverra. Cras metus libero, pulvinar sed, facilisis et, rutrum sit amet, ante. Nulla sed justo. Aenean dictum cursus mauris.</p>
-			</div>
-		</div>
-		<div id="footer">
-			<div id="copyright">2008 De-Bee. All rights reserved.</div>
-			<div id="powered">Powered by Manas.</div>
-		</div>
-	</div>
-	
-</body>
-</html>		
+			<p>Any exchange money situation with friends or any familiar person can be resolved with De-Bee.
+			De-Bee informs you about your summarized situation for all groups and for each group in particular.</p>
+
+You can:
+
+<ul>
+	<li>Create groups; invite your friends to them.</li>
+    <li>Join other groups your friends had invited you to.</li>
+</ul>
+
+De-Bee is totally secure, no one can fool you assigning a debt to you without your consent.
+
+There are four common actions you will use:
+
+<ul>
+	<li>Register a payment you have made to someone</li>
+    <li>Register a debt you have with someone</li>
+    <li>Register a payment someone has given to you</li>
+    <li>Register a debt someone has with you</li>
+</ul>
+{% endblock %}

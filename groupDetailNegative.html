@@ -1,9 +1,9 @@
 <html>
 	<body>
-		Debes {{ balance }}
+		You owe a total of ${{ balance }}:<br>
 		
 		{% for i in result %}
-			Le debes $ {{ i.amount }} a {{ i.user }}
+			$ {{ i.amount }} to {{ i.user }}
 		{% endfor %}
 	</body>
 </html>
