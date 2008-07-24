@@ -41,7 +41,7 @@ class RegisterTransactionHandler(webapp.RequestHandler):
 				
 		fromMembership = Membership.gql("WHERE user = :1 AND group = :2", fromUser, group).get()
 		toMembership = Membership.gql("WHERE user = :1 AND group = :2", toUser, group).get()
-				
+		# TODO revisar
 		if type == 'debt' or type == 'rejectedPayment':
 			fromMembership.balance -= amount
 			toMembership.balance += amount

@@ -21,18 +21,20 @@ class TransactionHash:
 		
 		
 class MailSender:
+
 	def sendInvitationMail(self,user_recipient, group, custom_invitation_text):
 		inv = GroupInvitation(group, user_recipient)
 		subject = "You are invited to %s group!" % group.name
 		body = "click %s to accept. yeah! %s " % (inv.getUrl(), custom_invitation_text)
 		mail.send_mail("de-bee@manas.com.ar", user_recipient, subject, body)
+
 	def sendTransactionNotice(self, user_recipient, group_name, transaction, uri_reject_mail):
 		subject = "Transaction notice in %s group" % group_name
 		hasher = TransactionHash()
 		hash = hasher.makeHash(transaction)
 		
 		if transaction.type == 'debt':
-			body = "You owe %s $%s because of %s. If you want to reject the debt you can click <a href='%s' > here </a>." \
+			body = "You owe %s $%s because of %s. If you want to reject the debt you can click %s ." \
 			 	   % (transaction.toUser, transaction.amount, transaction.reason,\
 			 	   (uri_reject_mail + "?key=" + str(transaction.key()) +"&h=" +hash))
 		elif transaction.type == 'payment':
