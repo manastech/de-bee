@@ -1,0 +1,12 @@
+body
+{
+	background-color:blue;
+}
+#container
+{
+	width: 1000px;
+	background-color:red;
+	margin: 0pt 0pt auto;
+	margin-top:30px;
+
+}
