@@ -1,0 +1,17 @@
+<html>
+<body>
+<form action="/groupUnsubscription" method="post">
+Group:
+	<select name="group">
+     		{% for group in groups %}
+     			<option value="{{group.key}}">
+				{{group.name}}
+			</option>
+     		{% endfor %}
+
+	</select>
+	<input type="submit" value="Unregister me!" />
+</form>
+</body>
+</html>
+
