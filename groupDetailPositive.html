@@ -1,0 +1,9 @@
+<html>
+	<body>
+		Te deben {{ balance }}
+		
+		{% for i in result %}
+			{{ i.user }} te debe $ {{ i.amount }}
+		{% endfor %}
+	</body>
+</html>

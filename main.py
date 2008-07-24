@@ -8,6 +8,7 @@ from registerTransactionHandler import *
 from mail_handler import *
 from groupHandlers import *
 from model import *
+from groupDetail import *
 import wsgiref.handlers
 
 def main():
@@ -16,6 +17,7 @@ def main():
 									('/registerTransaction', RegisterTransactionHandler),
                                     ('/enterTransaction', EnterTransactionHandler),
                                     ('/transactionHistory', TransactionHistory),
+                                    ('/groupDetail', GroupDetail),
 					('/groupCreation', GroupCreationHandler),
 					('/enterGroupCreation', EnterGroupCreationHandler)],
                                        debug=True)
