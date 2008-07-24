@@ -1,5 +1,39 @@
 <html>
-  <body>
-	Transaction History!
-  </body>
+<body>
+Transaction History
+
+<form action="/transactionHistory" method="get">Show last <input
+	type="text" name="transactionCount" value={{transactionCount}}>
+transactions. <input type="submit" value="Refresh"> 
+	{% if validationError %}
+		{{validationMessage}}
+	{%endif%} 
+</form>
+
+<table border="1">
+	<tr>
+		<th>Date</th>
+		<th>Creator</th>
+		<th>From</th>
+		<th>To</th>
+		<th>Type</th>
+		<th>Amount</th>
+		<th>Reason</th>
+		<th>Is rejected?</th>
+	</tr>
+	{% for transaction in transactions %}
+	<tr>
+		<td>{{ transaction.date }}</td>
+		<td>{{ transaction.creator }}</td>
+		<td>{{ transaction.fromUser }}</td>
+		<td>{{ transaction.toUser }}</td>
+		<td>{{ transaction.type }}</td>
+		<td>{{ transaction.amount }}</td>
+		<td>{{ transaction.reason }}</td>
+		<td>{{ transaction.isRejected }}</td>
+	</tr>
+	{% endfor %}
+</table>
+
+</body>
 </html>

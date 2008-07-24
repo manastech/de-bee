@@ -44,14 +44,25 @@ class MainHandler(webapp.RequestHandler):
 	return Membership.gql("WHERE user = :1 AND balance != 0", user)
 
 class TransactionHistory(webapp.RequestHandler):
-  def get(self):
-  	
-    if not users.get_current_user():      
-      url = users.create_login_url(self.request.uri)
-      url_linktext = 'Login'
-      
-    template_values = {}
-    
-    path = os.path.join(os.path.dirname(__file__), 'transactionHistory.html')
-    self.response.out.write(template.render(path, template_values))
+	def get(self):		
 
+		try:
+			transactionCount = int(self.request.get('transactionCount', default_value="0"))
+			transactions_query = Transaction.all().order('-date')
+			transactions = transactions_query.fetch(transactionCount)
+
+			template_values = {'transactionCount':transactionCount,
+						       'transactions':transactions,
+						       'validationError':False,
+						       'validationMessage':''}		
+			
+		except BaseException, e:
+			template_values = {'transactionCount':0,
+						       'transactions':[],
+						       'validationError':True,
+						       'validationMessage':'(This should be a number)'}
+			
+			
+		path = os.path.join(os.path.dirname(__file__), 'transactionHistory.html')
+		self.response.out.write(template.render(path, template_values))
+		
