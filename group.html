@@ -5,7 +5,7 @@
 {% block navigation %}
 	<a href="/">Home</a>
 {% endblock %}
-{% block content %}		
+{% block content %}
 		{{ message }}
 		<div>
 			<form action="/group" method="get">
@@ -18,7 +18,8 @@
 				<input type="submit" value="Go to group page">
 			</form>
 		</div>
-	
+		
+		<div id="groupHome">
 		<h3>Your balance</h3>
 	
 		{% if balanceIsZero %}
@@ -35,14 +36,6 @@
 	
 		{% include "enterTransaction.html" %}
 		
-		<h3>Invite</h3>
-		
-		{% include "enterInvite.html" %}
-		
-		<h3>History</h3>
-		
-		{% include "transactionHistory.html" %}
-		
 		<p>
 		{% if balanceIsZero %}
 			<form action="/groupUnsubscription" method="post">
@@ -53,4 +46,18 @@
 			<small>To unsubscribe from this group you must first pay your debts.</small>
 		{% endif %}
 		</p>
+		</div>
+		
+		<div id="groupInvite">
+			<h3>Invite</h3>
+			
+			{% include "enterInvite.html" %}
+		</div>
+		
+		<div id="groupHistory">
+			<h3>History</h3>
+			
+			{% include "transactionHistory.html" %}
+		</div>
+		
 {% endblock %}

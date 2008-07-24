@@ -106,7 +106,7 @@ class GroupHandler(webapp.RequestHandler):
 		members = Membership.gql("WHERE user != :1 AND group = :2", user, group)
 		members = members.fetch(100000)
 		
-		hasMembers = members.count(100000) > 0
+		hasMembers = len(members) > 0
 		
 		template_values = {
 			'balance': me.balance * sign,
@@ -117,6 +117,7 @@ class GroupHandler(webapp.RequestHandler):
 			'members': members,
 			'hasMembers': hasMembers,
 			'group': group,
+			'hasTransactions': len(transactions) > 0,
 			'transactionCount': transactionCount,
 			'transactions': transactions,
 			'validationError': validationError,

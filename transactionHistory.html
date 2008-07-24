@@ -1,5 +1,3 @@
-{% if hasMembers %}
-
 <form action="/group" method="get">
 <input type="hidden" name="group" value="{{group.key}}"/>
 
@@ -11,6 +9,10 @@ transactions. <input type="submit" value="Refresh">
 	{%endif%} 
 </form>
 
+<br/>
+
+{% if hasTransactions %}
+
 <ul>
 	{% for tr in transactions %}
 		<li>{{tr}}</li>
@@ -19,6 +21,6 @@ transactions. <input type="submit" value="Refresh">
 
 {% else %}
 
-You are the only member in this group. Go invite someone!
+No transactions to show.
 
 {% endif %}
