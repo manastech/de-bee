@@ -42,5 +42,5 @@ class MailSender:
 			 	   % (transaction.fromUser, transaction.amount, transaction.reason,\
 			 	   (uri_reject_mail + "?key=" + str(transaction.key()) +"&h=" +hash))
 			 	   
-		mail.send_mail("info@de-bee.com", user_recipient, subject, body)
+		mail.send_mail("de-bee@manas.com.ar", user_recipient, subject, body)
         

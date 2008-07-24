@@ -3,7 +3,7 @@
 <!--I Owe =========================================================== -->
 <form action="/registerTransaction" method="post">
 	<input type="hidden" name="group" value="{{group.key}}" />
-	<input type="hidden" name="fromUser" value="{{currentUser}}" />
+	<input type="hidden" name="fromUser" value="{{currentUser.email}}" />
 	<input type="hidden" name="type" value="debt" />
 
 	I owe &nbsp;<select name="toUser">
@@ -19,7 +19,7 @@
 <!--I Payed =========================================================== -->
 <form action="/registerTransaction" method="post">
 	<input type="hidden" name="group" value="{{group.key}}" />
-	<input type="hidden" name="fromUser" value="{{currentUser}}" />
+	<input type="hidden" name="fromUser" value="{{currentUser.email}}" />
 	<input type="hidden" name="type" value="payment" />
 
 	I payed &nbsp;<select name="toUser">
@@ -35,7 +35,7 @@
 <!--Someone owes me =========================================================== -->
 <form action="/registerTransaction" method="post">
 	<input type="hidden" name="group" value="{{group.key}}" />
-	<input type="hidden" name="toUser" value="{{currentUser}}" />
+	<input type="hidden" name="toUser" value="{{currentUser.email}}" />
 	<input type="hidden" name="type" value="debt" />
 
 	<select name="fromUser">
@@ -52,7 +52,7 @@
 <!--Someone payed me =========================================================== -->
 <form action="/registerTransaction" method="post">
 	<input type="hidden" name="group" value="{{group.key}}" />
-	<input type="hidden" name="toUser" value="{{currentUser}}" />
+	<input type="hidden" name="toUser" value="{{currentUser.email}}" />
 	<input type="hidden" name="type" value="payment" />
 
 	<select name="fromUser">
