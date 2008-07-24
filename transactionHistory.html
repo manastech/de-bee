@@ -2,8 +2,11 @@
 <body>
 Transaction History
 
-<form action="/transactionHistory" method="get">Show last <input
-	type="text" name="transactionCount" value={{transactionCount}}>
+<form action="/group" method="get">
+<input type="hidden" name="group" value="{{group.key}}"/>
+
+Show last <input
+	type="text" name="transactionCount" value="{{transactionCount}}">
 transactions. <input type="submit" value="Refresh"> 
 	{% if validationError %}
 		{{validationMessage}}

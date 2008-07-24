@@ -51,8 +51,8 @@ class GroupHandler(webapp.RequestHandler):
 		# Get transaction history
 		# TODO filtrar por grupo y por mi!
 		try:
-			transactionCount = int(self.request.get('transactionCount', default_value="0"))
-			transactions_query = Transaction.all().order('-date')
+			transactionCount = int(self.request.get('transactionCount', default_value=10))
+			transactions_query = Transaction.gql("WHERE group = :1 ORDER BY date DESC", group)
 			transactions = transactions_query.fetch(transactionCount)
 			validationError = False
 			validationMessage = ''

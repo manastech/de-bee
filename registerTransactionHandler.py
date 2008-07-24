@@ -21,13 +21,13 @@ class RegisterTransactionHandler(webapp.RequestHandler):
 		try:
 		  amount = float(self.request.get('amount'))
 		except BaseException, e:
-			self.response.out.write("Invalid amount: %s" % self.request.get('amount'))
+			self.response.out.write("Invalid amount: %s. <a href='javascript:history.back()'>Go back</a>." % self.request.get('amount'))
 			return
 		reason = self.request.get('reason')
 		type = self.request.get('type')
 		
 		if amount <= 0:
-			self.response.out.write("Invalid amount: %s" % amount)
+			self.response.out.write("Invalid amount: %s. <a href='javascript:history.back()'>Go back</a>." % amount)
 			return
 		
 		tr = Transaction(
@@ -64,5 +64,5 @@ class RegisterTransactionHandler(webapp.RequestHandler):
 		toMembership.put()
 
 		
-		self.response.out.write("Todo bien!")
+		self.redirect("/group?group=%s" % group.key())
 		 
