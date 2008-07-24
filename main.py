@@ -11,6 +11,7 @@ from groupInvitationHandler import *
 from mail_handler import *
 from groupHandlers import *
 from model import *
+from userGroupUnsubscription import *
 from groupDetail import *
 import wsgiref.handlers
 
@@ -26,6 +27,8 @@ def main():
                     ('/groupDetail', GroupDetail),
 					('/groupCreation', GroupCreationHandler),
 					('/enterGroupCreation', EnterGroupCreationHandler),
+                                        ('/enterUnsubscription', EnterUnsubscriptionHandler),
+                                        ('/groupUnsubscription', UnsubscriptionHandler),
 					('/groupInvitation', GroupInvitationHandler)],
                                        debug=True)
   wsgiref.handlers.CGIHandler().run(application)
