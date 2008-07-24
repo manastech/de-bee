@@ -19,6 +19,14 @@
 			</form>
 		</div>
 		
+		<br/>
+		
+		<a href="javascript:showGroupTab('groupHome')">{{group.name}} Home</a>
+		|
+		<a href="javascript:showGroupTab('groupInvite')">Invite</a>
+		|
+		<a href="javascript:showGroupTab('groupHistory')">History</a>
+		
 		<div id="groupHome">
 		<h3>Your balance</h3>
 	
@@ -48,16 +56,25 @@
 		</p>
 		</div>
 		
-		<div id="groupInvite">
+		<div id="groupInvite" style="display:none">
 			<h3>Invite</h3>
 			
 			{% include "enterInvite.html" %}
 		</div>
 		
-		<div id="groupHistory">
+		<div id="groupHistory" style="display:none">
 			<h3>History</h3>
 			
 			{% include "transactionHistory.html" %}
 		</div>
+		
+		<script>
+		function showGroupTab(id) {
+			document.getElementById("groupHome").style.display = "none";
+			document.getElementById("groupInvite").style.display = "none";
+			document.getElementById("groupHistory").style.display = "none";
+			document.getElementById(id).style.display = "";
+		}
+		</script>
 		
 {% endblock %}
