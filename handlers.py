@@ -22,6 +22,7 @@ class MainHandler(webapp.RequestHandler):
     else:
         greeting = ("<a href=\"%s\">Sign in or register</a>." %
                       users.create_login_url("/"))
+	self.response.out.write("<html><body>%s</body></html>" % greeting)
 
 class EnterTransactionHandler(webapp.RequestHandler):
 	
