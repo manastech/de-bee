@@ -91,6 +91,8 @@ body
 	vertical-align:bottom;
 }
 
+
+
 #menuHome a{
 	background:url(/images/s_home_OFF.gif) no-repeat;
 	width:118px;
@@ -139,27 +141,44 @@ body
 	display:block;
 }
 
-#groupInviteImage a
+/*
+esto se usa para los botones de las acciones sobre el grupo.
+#groupHomeImage 
+{
+	background:url(/images/s_Actions_OFF.gif) no-repeat;
+	width:150px;		
+	height:49px;
+	display:table;
+}
+
+#groupHomeImage:hover
+{
+	background:url(/images/s_Actions_OVER.gif) no-repeat;
+}	
+
+#groupInviteImage
 {
 	background:url(/images/s_InvitePeople_OFF.gif) no-repeat;
 	width:224px;		
 	height:49px;
-	display:block;
-	margin-top:11px;
+	display:table;
 }
-#groupInviteImage a:hover
+
+#groupInviteImage:hover
 {
 	background:url(/images/s_InvitePeople_OVER.gif) no-repeat;
-	width:224px;
-	height:49px;
-	display:block;
-	margin-top:11px;
 }
 	
-#groupInviteImageSelected 
+#groupHistoryImage
 {
-	background:url(/images/s_InvitePeople_ON.gif) no-repeat;
-	width:224px;
+	background:url(/images/s_History_OFF.gif) no-repeat;
+	width:134px;		
 	height:49px;
-	display:block;
+	display:table;
 }
+
+#groupHistoryImage:hover
+{
+	background:url(/images/s_History_OVER.gif) no-repeat;
+}
+*/

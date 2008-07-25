@@ -30,9 +30,21 @@
 		</div>
 		
 		<br/>
+		<!--
+	
+			Esto se usa para poner los botones con imagenes.
+			
+		<a id="groupHomeImage" href="javascript:showGroupTab('groupHome')"></a>
 		
-		<span id="groupHomeImage"><a href="javascript:showGroupTab('groupHome')" id="groupHomeImage">Balance & Actions</a></div>
+		<a id="groupInviteImage" href="javascript:showGroupTab('groupInvite')"></a>
 		
+		<a id="groupHistoryImage" href="javascript:showGroupTab('groupHistory')"></a>
+		-->
+		<a  href="javascript:showGroupTab('groupHome')">Balance & Actions</a>
+		
+		<a href="javascript:showGroupTab('groupInvite')">Invite</a>
+		
+		<a href="javascript:showGroupTab('groupHistory')">History</a>
 		<span id="groupInviteImage"><a href="javascript:showGroupTab('groupInvite')" >Invite</a></div>
 		
 		<span id="groupHistoryImage"><a href="javascript:showGroupTab('groupHistory')" id="groupHistoryImage">History</a></div>
@@ -97,8 +109,27 @@
 			document.getElementById("groupInviteImage").style.display = "groupInviteImage";
 			document.getElementById("groupHistoryImage").style.display = "groupHistoryImage";
 			document.getElementById(id).style.display = "";
-			document.getElementById(id + "Image").class = id + "ImageSelected";
+			/*
+			Esto se usa para poner los botones con imagenes.
+			document.getElementById("groupHomeImage").style.backgroundImage = "url(/images/s_Actions_OFF.gif)";
+			document.getElementById("groupInviteImage").style.backgroundImage = "url(/images/s_InvitePeople_OFF.gif)";
+			document.getElementById("groupHistoryImage").style.backgroundImage = "url(/images/s_History_OFF.gif)";
+			
+			switch(id)
+			{
+				case 'groupHome':
+					document.getElementById(id + "Image").style.backgroundImage = "url(/images/s_Actions_ON.gif)"
+				break;
+				case 'groupInvite':
+					document.getElementById(id + "Image").style.backgroundImage = "url(/images/s_InvitePeople_ON.gif)"
+				break;
+				case 'groupHistory':
+					document.getElementById(id + "Image").style.backgroundImage = "url(/images/s_History_ON.gif)"
+				break;
 			}
+			*/
+			
+		}
 		</script>
 		
 {% endblock %}
