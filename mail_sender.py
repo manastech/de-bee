@@ -26,7 +26,7 @@ class MailSender:
 		inv = GroupInvitation(group, user_recipient, urlBuilder)
 		subject = "You are invited to %s group!" % group.name
 		body = "click %s to accept. yeah! %s " % (inv.getUrl(), custom_invitation_text)
-		mail.send_mail("de-bee@manas.com.ar", user_recipient, subject, body)
+		mail.send_mail("info@de-bee.com", user_recipient, subject, body)
 
 	def sendTransactionNotice(self, user_recipient, group_name, transaction, uri_reject_mail):
 		subject = "Transaction notice in %s group" % group_name
@@ -42,5 +42,5 @@ class MailSender:
 			 	   % (transaction.fromUser, transaction.amount, transaction.reason,\
 			 	   (uri_reject_mail + "?key=" + str(transaction.key()) +"&h=" +hash))
 			 	   
-		mail.send_mail("de-bee@manas.com.ar", user_recipient, subject, body)
+		mail.send_mail("info@de-bee.com", user_recipient, subject, body)
         
