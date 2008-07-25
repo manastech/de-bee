@@ -71,24 +71,24 @@ class GroupHandler(webapp.RequestHandler):
 			for tr in transactions:
 				if (tr.type == "debt"):
 			 		if (tr.fromUser == user):
-			 			message = "I owed " + tr.toUser.email() + " $" + str(tr.amount) + " due to " + tr.reason
+			 			message = "I owed " + tr.toUser.nickname() + " $" + str(tr.amount) + " due to " + tr.reason
 			 		else:
-			 			message = tr.fromUser.email() + " owed me $" + str(tr.amount) + " due to " + tr.reason
+			 			message = tr.fromUser.nickname() + " owed me $" + str(tr.amount) + " due to " + tr.reason
 			 	if (tr.type == "payment"):
 			 		if (tr.fromUser == user):
-			 			message = "I payed " + tr.toUser.email() + " $" + str(tr.amount) + " due to " + tr.reason
+			 			message = "I payed " + tr.toUser.nickname() + " $" + str(tr.amount) + " due to " + tr.reason
 			 		else:
-			 			message = tr.fromUser.email() + " payed me $" + str(tr.amount) + " due to " + tr.reason
+			 			message = tr.fromUser.nickname() + " payed me $" + str(tr.amount) + " due to " + tr.reason
 			 	if (tr.type == "rejectedDebt"):
 			 		if (tr.fromUser == user):
-			 			message = "I rejected from " + tr.toUser.email() + " a debt of $" + str(tr.amount) + " due to " + tr.reason
+			 			message = "I rejected from " + tr.toUser.nickname() + " a debt of $" + str(tr.amount) + " due to " + tr.reason
 			 		else:
-			 			message = tr.fromUseremail() + " rejected you a debt of $" + str(tr.amount) + " due to " + tr.reason
+			 			message = tr.fromUser.nickname() + " rejected you a debt of $" + str(tr.amount) + " due to " + tr.reason
 			 	if (tr.type == "rejectedPayment"):
 			 		if (tr.fromUser == user):
-			 			message = "I rejected from " + tr.toUser.email() + " a payment of $" + str(tr.amount) + " due to " + tr.reason
+			 			message = "I rejected from " + tr.toUser.nickname() + " a payment of $" + str(tr.amount) + " due to " + tr.reason
 			 		else:
-			 			message = tr.fromUser.email() + " rejected you a payment of $" + str(tr.amount) + " due to " + tr.reason
+			 			message = tr.fromUser.nickname() + " rejected you a payment of $" + str(tr.amount) + " due to " + tr.reason
 			 	message = niceDate(tr.date) + " " + message
 			 	messages.append(message)
 			 	
