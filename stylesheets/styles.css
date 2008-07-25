@@ -2,7 +2,7 @@ body
 {
    	margin:0px;
    	padding:0px;
-   
+	font-family: Arial;
 }
 
 #container
@@ -26,7 +26,6 @@ body
 {
 	width:1000px;
 	margin: 0 auto;
-	font-family:Arial;
 	color:#4F4C10;
 	font-size:20px;
 	padding-top:20px;
