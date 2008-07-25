@@ -17,38 +17,26 @@
 {% endblock %}
 {% block content %}
 		{{ message }}
-		<div>
+		<div style="float: right">
 			<form action="/group" method="get">
-				<select name="group">
-					<option>-- select group --</option>
+				Group:
+				<select name="group" onchange="form.submit();">
+					<option>-- select another group --</option>
 				{% for group in groups %}
 				<option value="{{ group.key }}">{{ group.name }}</option>
 				{% endfor %}
 				</select>
-				<input type="submit" value="Go to group page">
 			</form>
 		</div>
+		<h3>Group {{ group.name }}</h3>
 		
-		<br/>
-		<!--
-	
-			Esto se usa para poner los botones con imagenes.
-			
-		<a id="groupHomeImage" href="javascript:showGroupTab('groupHome')"></a>
-		
-		<a id="groupInviteImage" href="javascript:showGroupTab('groupInvite')"></a>
-		
-		<a id="groupHistoryImage" href="javascript:showGroupTab('groupHistory')"></a>
-		-->
-		<a  href="javascript:showGroupTab('groupHome')">Balance & Actions</a>
-		
-		<a href="javascript:showGroupTab('groupInvite')">Invite</a>
-		
-		<a href="javascript:showGroupTab('groupHistory')">History</a>
-		<!--<span id="groupInviteImage"><a href="javascript:showGroupTab('groupInvite')" >Invite</a></div>-->
-		
-		<!--<span id="groupHistoryImage"><a href="javascript:showGroupTab('groupHistory')" id="groupHistoryImage">History</a></div>-->
-		
+		<div style="margin-bottom: 40px;">
+			<a href="javascript:showGroupTab('groupHome')" {% if goToHistoryTab %}{%else%}class="active"{%endif%} id="buttonGroupHome"></a>
+			<a href="javascript:showGroupTab('groupInvite')" id="buttonGroupInvite"></a>
+			<a href="javascript:showGroupTab('groupHistory')" {% if goToHistoryTab %}class="active"{%endif%} id="buttonGroupHistory"></a>
+		</div>
+		<h3>&nbsp;</h3>
+
 		{% if goToHistoryTab %}
 		<div id="groupHome" style="display:none">
 		{% else %}
@@ -84,8 +72,6 @@
 		</div>
 		
 		<div id="groupInvite" style="display:none">
-			<h3>Invite</h3>
-			
 			{% include "enterInvite.html" %}
 		</div>
 		
@@ -94,7 +80,6 @@
 		{% else %}
 		<div id="groupHistory" style="display:none">
 		{% endif %}
-			<h3>Invite</h3>
 			<h3>History</h3>
 			
 			{% include "transactionHistory.html" %}
@@ -105,30 +90,17 @@
 			document.getElementById("groupHome").style.display = "none";
 			document.getElementById("groupInvite").style.display = "none";
 			document.getElementById("groupHistory").style.display = "none";
-			//document.getElementById("groupHomeImage").class = "groupHomeImage";
-			//document.getElementById("groupInviteImage").style.display = "groupInviteImage";
-			//document.getElementById("groupHistoryImage").style.display = "groupHistoryImage";
+			document.getElementById("buttonGroupHome").className = "";
+			document.getElementById("buttonGroupInvite").className = "";
+			document.getElementById("buttonGroupHistory").className = "";
 			document.getElementById(id).style.display = "";
-			/*
-			Esto se usa para poner los botones con imagenes.
-			document.getElementById("groupHomeImage").style.backgroundImage = "url(/images/s_Actions_OFF.gif)";
-			document.getElementById("groupInviteImage").style.backgroundImage = "url(/images/s_InvitePeople_OFF.gif)";
-			document.getElementById("groupHistoryImage").style.backgroundImage = "url(/images/s_History_OFF.gif)";
-			
-			switch(id)
+
+			switch (id)
 			{
-				case 'groupHome':
-					document.getElementById(id + "Image").style.backgroundImage = "url(/images/s_Actions_ON.gif)"
-				break;
-				case 'groupInvite':
-					document.getElementById(id + "Image").style.backgroundImage = "url(/images/s_InvitePeople_ON.gif)"
-				break;
-				case 'groupHistory':
-					document.getElementById(id + "Image").style.backgroundImage = "url(/images/s_History_ON.gif)"
-				break;
+				case 'groupHome': document.getElementById("buttonGroupHome").className = "active"; break;
+				case 'groupInvite': document.getElementById("buttonGroupInvite").className = "active"; break;
+				case 'groupHistory': document.getElementById("buttonGroupHistory").className = "active"; break;
 			}
-			*/
-			
 		}
 		</script>
 		

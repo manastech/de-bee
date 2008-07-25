@@ -5,6 +5,11 @@ body
 	font-family: Arial;
 }
 
+hd3
+{
+	margin-top: 0px;
+}
+
 #container
 {
 
@@ -36,7 +41,6 @@ body
 #mainContent #mainContent2
 {
 	margin-left: 100px;
-	margin-top:40px;
 }
 	
 #logo
@@ -139,6 +143,66 @@ body
 	width:280px;
 	height:48px;
 	display:block;
+}
+
+#buttonGroupHome
+{
+	background: url(/images/s_Actions_OFF.gif) no-repeat;
+	width: 150px;
+	height: 49px;
+	display: block;
+	float: left;
+	margin-left: -10px;
+}
+
+#buttonGroupHome:hover
+{
+	background: url(/images/s_Actions_OVER.gif) no-repeat;
+}
+
+#buttonGroupHome.active
+{
+	background: url(/images/s_Actions_ON.gif) no-repeat;
+}
+
+#buttonGroupInvite
+{
+	background: url(/images/s_InvitePeople_OFF.gif) no-repeat;
+	width: 224px;
+	height: 49px;
+	display: block;
+	float: left;
+	margin-left: 10px;
+}
+
+#buttonGroupInvite:hover
+{
+	background: url(/images/s_InvitePeople_OVER.gif) no-repeat;
+}
+
+#buttonGroupInvite.active
+{
+	background: url(/images/s_InvitePeople_ON.gif) no-repeat;
+}
+
+#buttonGroupHistory
+{
+	background: url(/images/s_History_OFF.gif) no-repeat;
+	width: 134px;
+	height: 49px;
+	display: block;
+	float: left;
+	margin-left: 10px;
+}
+
+#buttonGroupHistory:hover
+{
+	background: url(/images/s_History_OVER.gif) no-repeat;
+}
+
+#buttonGroupHistory.active
+{
+	background: url(/images/s_History_ON.gif) no-repeat;
 }
 
 /*
