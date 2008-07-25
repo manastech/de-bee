@@ -38,8 +38,8 @@ class RejectTransactionHandler(webapp.RequestHandler):
 				fromMembership.balance += new_transaction.amount
 				toMembership.balance -= new_transaction.amount
 			elif new_transaction.type == 'rejectedDebt': 
-				fromMembership.balance -= new_transaction.amount
-				toMembership.balance += new_transaction.amount
+				fromMembership.balance += new_transaction.amount
+				toMembership.balance -= new_transaction.amount
 			
 			fromMembership.put()
 			toMembership.put()
