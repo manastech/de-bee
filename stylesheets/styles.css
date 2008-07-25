@@ -145,7 +145,7 @@ hd3
 	display:block;
 }
 
-#buttonGroupHome
+#groupHomeButton
 {
 	background: url(/images/s_Actions_OFF.gif) no-repeat;
 	width: 150px;
@@ -155,17 +155,17 @@ hd3
 	margin-left: -10px;
 }
 
-#buttonGroupHome:hover
+#groupHomeButton:hover
 {
 	background: url(/images/s_Actions_OVER.gif) no-repeat;
 }
 
-#buttonGroupHome.active
+#groupHomeButton.active
 {
 	background: url(/images/s_Actions_ON.gif) no-repeat;
 }
 
-#buttonGroupInvite
+#groupInviteButton
 {
 	background: url(/images/s_InvitePeople_OFF.gif) no-repeat;
 	width: 224px;
@@ -175,17 +175,17 @@ hd3
 	margin-left: 10px;
 }
 
-#buttonGroupInvite:hover
+#groupInviteButton:hover
 {
 	background: url(/images/s_InvitePeople_OVER.gif) no-repeat;
 }
 
-#buttonGroupInvite.active
+#groupInviteButton.active
 {
 	background: url(/images/s_InvitePeople_ON.gif) no-repeat;
 }
 
-#buttonGroupHistory
+#groupHistoryButton
 {
 	background: url(/images/s_History_OFF.gif) no-repeat;
 	width: 134px;
@@ -195,12 +195,12 @@ hd3
 	margin-left: 10px;
 }
 
-#buttonGroupHistory:hover
+#groupHistoryButton:hover
 {
 	background: url(/images/s_History_OVER.gif) no-repeat;
 }
 
-#buttonGroupHistory.active
+#groupHistoryButton.active
 {
 	background: url(/images/s_History_ON.gif) no-repeat;
 }
