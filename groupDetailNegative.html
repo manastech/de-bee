@@ -1,6 +1,8 @@
 <html>
 	<body>
-		You owe a total of ${{ balance }}:<br>
+		{% if hasMoreThanOneItem %}
+			You owe a total of ${{ balance }}:<br>
+		{% endif %}
 		
 		{% for i in result %}
 			$ {{ i.amount }} to {{ i.user }}

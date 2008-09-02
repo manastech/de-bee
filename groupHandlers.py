@@ -126,7 +126,8 @@ class GroupHandler(webapp.RequestHandler):
             'groups': self.getGroups(user),
             'message': self.request.get("msg"),
             'goToHistoryTab': goToHistoryTab, 
-            'signout_url': users.create_logout_url("/")
+            'signout_url': users.create_logout_url("/"),
+            'hasMoreThanOneItem': len(result) > 1
 			 }
 		
 		path = os.path.join(os.path.dirname(__file__), 'group.html')

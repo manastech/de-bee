@@ -40,10 +40,12 @@
 			{% if debts.isZero %}
 				You owe nobody, and nobody owes you. Hurray!
 			{% else %}
-				{% if debts.isOweToSelf %}
-					They owe you a total of ${{debts.total}}.
-				{% else %}
-					You owe a total of ${{debts.total}}.
+				{% if debts.hasMoreThanOneItem %}
+					{% if debts.isOweToSelf %}
+						They owe you a total of ${{debts.total}}.
+					{% else %}
+						You owe a total of ${{debts.total}}.
+					{% endif %}
 				{% endif %}
 			{% endif %}
 			<ul>
