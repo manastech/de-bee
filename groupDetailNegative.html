@@ -3,9 +3,10 @@
 		{% if hasMoreThanOneItem %}
 			You owe a total of ${{ balance }}:<br>
 		{% endif %}
-		
+		<ul>
 		{% for i in result %}
-			$ {{ i.amount }} to {{ i.user }}
-		{% endfor %}
+			<li>$ {{ i.amount }} to {{ i.user }}</li>
+		{% endfor %}	
+		</ul>
 	</body>
 </html>

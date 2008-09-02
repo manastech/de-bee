@@ -1,11 +1,12 @@
 <html>
 	<body>
 		{% if hasMoreThanOneItem %}
-			This group owes you a total of ${{ balance }}
+			This group owes you a total of ${{ balance }}:<br>
 		{% endif %}
-		
+		<ul>
 		{% for i in result %}
-			{{ i.user }} owes you $ {{ i.amount }}
+			<li>{{ i.user }} owes you $ {{ i.amount }}</li>
 		{% endfor %}
+		</ul>
 	</body>
 </html>
