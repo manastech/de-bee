@@ -133,7 +133,8 @@ class GroupHandler(webapp.RequestHandler):
 		self.response.out.write(template.render(path, template_values))
 	
 	def getGroups(self, user):
-		memberships = Membership.gql("WHERE user = :1", user)
+		actualGroup = Group.get(self.request.get("group"))
+		memberships = Membership.gql("WHERE user = :1 AND group != :2", user, actualGroup)
 		groups = map((lambda x: x.group), memberships)
 		return groups
 		
