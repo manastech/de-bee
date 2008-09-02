@@ -24,6 +24,18 @@
 		<br/>
 
 		{% if isregistered %}
+		<div style="float: right">
+			<form action="/group" method="get">
+				Go to group:
+				<select name="group" onchange="form.submit();">
+					<option>-- select group --</option>
+				{% for group in groups %}
+					<option value="{{ group.key }}">{{ group.name }}</option>
+				{% endfor %}
+				</select>
+			</form>
+		</div>
+		
 		<div class="debts_summary">
 			{% if debts.isZero %}
 				You owe nobody, and nobody owes you. Hurray!
@@ -43,18 +55,6 @@
 				{% endif %}
 			{% endfor %}
 			</ul>
-		</div>
-
-		<div>
-			<form action="/group" method="get">
-				<select name="group">
-					<option>-- select group --</option>
-				{% for group in groups %}
-					<option value="{{ group.key }}">{{ group.name }}</option>
-				{% endfor %}
-				</select>
-				<input type="submit" value="Go to group page">
-			</form>
 		</div>
 		{% else %}
 		<div>You don't belong to any group. You can create your own and invite your friends.</div><br>
