@@ -1,70 +1,122 @@
 {% if hasMembers %}
 
+<table>
+	
 <!--I Owe =========================================================== -->
+<tr>
 <form action="/registerTransaction" method="post">
 	<input type="hidden" name="group" value="{{group.key}}" />
 	<input type="hidden" name="fromUser" value="{{currentUser.email}}" />
 	<input type="hidden" name="type" value="debt" />
-
-	I owe &nbsp;<select name="toUser">
-	{% for member in members %}
-	<option value="{{member.user.email}}">{{member.user.nickname}}</option>
-	{% endfor %}
+<td>
+	I owe
+	<select name="toUser">
+		{% for member in members %}
+			<option value="{{member.user.email}}">{{member.user.nickname}}</option>
+		{% endfor %}
 	</select>
-	&nbsp; $<input type="text" value="" name="amount"/>
-	&nbsp; due to  &nbsp;<input type="text" value="" name="reason"/>
-  <input type="submit" value="Save">	
+</td>
+<td>
+	$ <input type="text" value="" name="amount"/>
+</td>
+<td>
+	due to
+</td>
+<td>
+	<input type="text" value="" name="reason"/>
+</td>
+<td>
+  <input type="submit" value="Save">
+</td>	
 </form>
-
+</tr>
 <!--I Payed =========================================================== -->
+<tr>
 <form action="/registerTransaction" method="post">
 	<input type="hidden" name="group" value="{{group.key}}" />
 	<input type="hidden" name="fromUser" value="{{currentUser.email}}" />
 	<input type="hidden" name="type" value="payment" />
-
-	I payed &nbsp;<select name="toUser">
+<td>
+	I payed
+	<select name="toUser">
 		{% for member in members %}
 			<option value="{{member.user.email}}">{{member.user.nickname}}</option>
 		{% endfor %}
 	</select>
-	&nbsp; $<input type="text" value="" name="amount"/>
-	&nbsp; due to  &nbsp;<input type="text" value="" name="reason"/>
-  <input type="submit" value="Save">	
+</td>
+<td>	
+	$ <input type="text" value="" name="amount"/>
+</td>
+<td>	
+	due to  
+</td>
+<td>
+	<input type="text" value="" name="reason"/>
+</td>
+<td>
+	<input type="submit" value="Save">
+</td>	
 </form>
-
+</tr>
 <!--Someone owes me =========================================================== -->
+<tr>
 <form action="/registerTransaction" method="post">
 	<input type="hidden" name="group" value="{{group.key}}" />
 	<input type="hidden" name="toUser" value="{{currentUser.email}}" />
 	<input type="hidden" name="type" value="debt" />
-
+<td>
 	<select name="fromUser">
 		{% for member in members %}
 			<option value="{{member.user.email}}">{{member.user.nickname}}</option>
 		{% endfor %}
 	</select>
-	&nbsp; owes me
-	&nbsp; $<input type="text" value="" name="amount"/>
-	&nbsp; due to  &nbsp;<input type="text" value="" name="reason"/>
-  <input type="submit" value="Save">	
+	owes me
+</td>
+<td>
+	$ <input type="text" value="" name="amount"/>
+</td>
+<td>
+	due to  
+</td>
+<td>
+	<input type="text" value="" name="reason"/>
+</td>
+<td>
+	<input type="submit" value="Save">
+</td>	
 </form>
-
+</tr>
 <!--Someone payed me =========================================================== -->
+<tr>
 <form action="/registerTransaction" method="post">
 	<input type="hidden" name="group" value="{{group.key}}" />
 	<input type="hidden" name="toUser" value="{{currentUser.email}}" />
 	<input type="hidden" name="type" value="payment" />
 
+<td>
 	<select name="fromUser">
 		{% for member in members %}
 			<option value="{{member.user.email}}">{{member.user.nickname}}</option>
 		{% endfor %}
 	</select>
-	&nbsp; payed me
-	&nbsp; $<input type="text" value="" name="amount"/>
-	&nbsp; due to  &nbsp;<input type="text" value="" name="reason"/>
-  <input type="submit" value="Save">	
+	payed me
+</td>
+<td>
+	$ <input type="text" value="" name="amount"/>
+</td>
+<td>
+	due to
+</td>
+<td>
+	<input type="text" value="" name="reason"/>
+</td>
+<td>
+	<input type="submit" value="Save">
+</td>
 </form>
+</tr>
+
+</table>
 
 {% else %}
 
