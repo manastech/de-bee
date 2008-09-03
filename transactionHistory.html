@@ -14,14 +14,14 @@ transactions. <input type="submit" value="Refresh">
 
 {% if hasTransactions %}
 
-<ul>
-	{% for tr in transactions %}
-		<li>{{tr}}</li>
-	{% endfor %}
-</ul>
+	<ul>
+		{% for tr in transactions %}
+			<li>{{tr}}</li>
+		{% endfor %}
+	</ul>
 
 {% else %}
 
-No transactions to show.
+	No transactions to show.
 
 {% endif %}
