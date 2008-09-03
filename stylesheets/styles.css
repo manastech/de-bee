@@ -158,11 +158,13 @@ hd3
 #groupHomeButton:hover
 {
 	background: url(/images/s_Actions_OVER.gif) no-repeat;
+	outline: none;
 }
 
 #groupHomeButton.active
 {
 	background: url(/images/s_Actions_ON.gif) no-repeat;
+	outline: none;
 }
 
 #groupInviteButton
@@ -178,11 +180,13 @@ hd3
 #groupInviteButton:hover
 {
 	background: url(/images/s_InvitePeople_OVER.gif) no-repeat;
+	outline: none;
 }
 
 #groupInviteButton.active
 {
 	background: url(/images/s_InvitePeople_ON.gif) no-repeat;
+	outline: none;
 }
 
 #groupHistoryButton
@@ -198,11 +202,13 @@ hd3
 #groupHistoryButton:hover
 {
 	background: url(/images/s_History_OVER.gif) no-repeat;
+	outline: none;
 }
 
 #groupHistoryButton.active
 {
 	background: url(/images/s_History_ON.gif) no-repeat;
+	outline: none;
 }
 
 /*
