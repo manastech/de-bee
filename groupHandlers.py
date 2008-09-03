@@ -71,22 +71,22 @@ class GroupHandler(webapp.RequestHandler):
 			for tr in transactions:
 				if (tr.type == "debt"):
 			 		if (tr.fromUser == user):
-			 			message = "I owed " + tr.toUser.nickname() + " $" + str(tr.amount)
+			 			message = "you owed " + tr.toUser.nickname() + " $" + str(tr.amount)
 			 		else:
-			 			message = tr.fromUser.nickname() + " owed me $" + str(tr.amount)
+			 			message = tr.fromUser.nickname() + " owed you $" + str(tr.amount)
 			 	if (tr.type == "payment"):
 			 		if (tr.fromUser == user):
-			 			message = "I payed " + tr.toUser.nickname() + " $" + str(tr.amount)
+			 			message = "you payed " + tr.toUser.nickname() + " $" + str(tr.amount)
 			 		else:
-			 			message = tr.fromUser.nickname() + " payed me $" + str(tr.amount)
+			 			message = tr.fromUser.nickname() + " payed you $" + str(tr.amount)
 			 	if (tr.type == "rejectedDebt"):
 			 		if (tr.fromUser == user):
-			 			message = "I rejected from " + tr.toUser.nickname() + " a debt of $" + str(tr.amount)
+			 			message = "you rejected from " + tr.toUser.nickname() + " a debt of $" + str(tr.amount)
 			 		else:
 			 			message = tr.fromUser.nickname() + " rejected you a debt of $" + str(tr.amount)
 			 	if (tr.type == "rejectedPayment"):
 			 		if (tr.fromUser == user):
-			 			message = "I rejected from " + tr.toUser.nickname() + " a payment of $" + str(tr.amount)
+			 			message = "you rejected from " + tr.toUser.nickname() + " a payment of $" + str(tr.amount)
 			 		else:
 			 			message = tr.fromUser.nickname() + " rejected you a payment of $" + str(tr.amount)
 			 	if ( len(tr.reason) > 0 ):
