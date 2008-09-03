@@ -153,7 +153,7 @@ def niceDate(t):
 	now = datetime.datetime.now()
 	if now.year == t.year:
 		if now.month == t.month and now.day == t.day:
-			return t.strftime("At %H:%S")
+			return t.strftime("Today at %H:%S")
 		return t.strftime("On %b %d")
 	else:
 		return t.strftime("On %D")
