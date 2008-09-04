@@ -20,8 +20,8 @@
 		<div style="float: right">
 			<form action="/group" method="get">
 				Group:
-				<select name="group" onchange="form.submit();">
-					<option>-- select another group --</option>
+				<select name="group" onchange="selectGroup(this,form);">
+					<option value="">-- select another group --</option>
 				{% for membership in memberships %}
 				<option value="{{ membership.group.key }}">{{ membership.alias }}</option>
 				{% endfor %}
@@ -71,19 +71,29 @@
 			{% include "groupProperties.html" %}
 		</div>
 		
-		<script>
-		function showGroupTab(id) {
-			document.getElementById("groupHome").style.display = "none";
-			document.getElementById("groupInvite").style.display = "none";
-			document.getElementById("groupHistory").style.display = "none";
-			document.getElementById("groupProperties").style.display = "none";
-			document.getElementById("groupHomeButton").className = "";
-			document.getElementById("groupInviteButton").className = "";
-			document.getElementById("groupHistoryButton").className = "";
-			document.getElementById("groupPropertiesButton").className = "";
-			document.getElementById(id).style.display = "";
-			document.getElementById(id + "Button").className = "active";
-		}
+		<script type="text/javascript">
+			function showGroupTab(id) {
+				document.getElementById("groupHome").style.display = "none";
+				document.getElementById("groupInvite").style.display = "none";
+				document.getElementById("groupHistory").style.display = "none";
+				document.getElementById("groupProperties").style.display = "none";
+				document.getElementById("groupHomeButton").className = "";
+				document.getElementById("groupInviteButton").className = "";
+				document.getElementById("groupHistoryButton").className = "";
+				document.getElementById("groupPropertiesButton").className = "";
+				document.getElementById(id).style.display = "";
+				document.getElementById(id + "Button").className = "active";
+			}
+		
+			function selectGroup(select, form) {
+				indice = select.selectedIndex;
+				value = select.options[indice].value;
+				if ( value.length > 0 ) {
+					form.submit();				
+				} else {
+					return false;
+				}
+			}
 		</script>
 		
 {% endblock %}

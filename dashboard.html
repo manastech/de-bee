@@ -27,8 +27,8 @@
 		<div style="float: right">
 			<form action="/group" method="get">
 				Go to group:
-				<select name="group" onchange="form.submit();">
-					<option>-- select group --</option>
+				<select name="group" onchange="selectGroup(this,form);">
+					<option value="">-- select group --</option>
 				{% for membership in memberships %}
 					<option value="{{ membership.group.key }}">{{ membership.alias }}</option>
 				{% endfor %}
@@ -74,4 +74,16 @@
 				
 			</form>
 		</div>
+		
+		<script type="text/javascript">
+			function selectGroup(select, form) {
+				indice = select.selectedIndex;
+				value = select.options[indice].value;
+				if ( value.length > 0 ) {
+					form.submit();				
+				} else {
+					return false;
+				}
+			}
+		</script>
 {% endblock %}
