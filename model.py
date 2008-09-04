@@ -7,6 +7,7 @@ class Membership(db.Model):
 	user = db.UserProperty(required=True)
 	group = db.ReferenceProperty(Group)
 	balance = db.FloatProperty(required=True)
+	alias = db.StringProperty(required=True)
     
 class Transaction(db.Model):
 	group = db.ReferenceProperty(Group)

@@ -24,8 +24,13 @@ class MailSender:
 
 	def sendInvitationMail(self,user_recipient, group, custom_invitation_text, urlBuilder):
 		inv = GroupInvitation(group, user_recipient, urlBuilder)
+		
+		plainUrl = inv.getUrl()
+		fancyUrl = "<a href=\"" + plainUrl + "\">here</a>"
+		
 		subject = "You are invited to %s group!" % group.name
-		body = "click %s to accept. yeah! %s " % (inv.getUrl(), custom_invitation_text)
+		body = "click %s to accept. yeah! %s \n\nIf you can't click there, please copy this text \
+				and paste it into your browser: %s" % (fancyUrl, custom_invitation_text, plainUrl)
 		mail.send_mail("info@de-bee.com", user_recipient, subject, body)
 
 	def sendTransactionNotice(self, user_recipient, group_name, transaction, uri_reject_mail):

@@ -13,10 +13,10 @@ class MainHandler(webapp.RequestHandler):
     reg = registration.Registration()
 
     if user:
-        groups = self.getGroups(user)
-        hasGroup = len(groups) > 0
-        if hasGroup:
-            group = groups[0]
+        memberships = self.getMemberships(user)
+        hasMembership = memberships.count() > 0
+        if hasMembership:
+            group = memberships.get()
         else:
             group = 0
         path = os.path.join(os.path.dirname(__file__), 'dashboard.html')
@@ -24,9 +24,9 @@ class MainHandler(webapp.RequestHandler):
 			'username' : user.nickname(),
 			'signout_url' : users.create_logout_url("/"),
 			'debts' : self.getDebts(user),
-			'groups' : groups,
+			'memberships' : memberships,
 			'isregistered' : reg.IsRegistered(user),
-            'hasgroups' : hasGroup,
+            'hasMembership' : hasMembership,
             'group' : group
 			}
         self.response.out.write(template.render(path, model))
@@ -41,13 +41,12 @@ class MainHandler(webapp.RequestHandler):
 	items = []
 	for m in self.getRelevantMemberships(user):
 		total += m.balance
-		items.append({'isZero': m.balance == 0.0, 'isOweToSelf' : m.balance > 0, 'amount' : abs(m.balance), 'group' : m.group })
+		items.append({'isZero': m.balance == 0.0, 'isOweToSelf' : m.balance > 0, 'amount' : abs(m.balance), 'group' : m.group, 'alias' : m.alias })
 	return { 'isZero': total == 0.0, 'isOweToSelf' : total > 0, 'total' : abs(total), 'items' : items, 'hasMoreThanOneItem' : len(items) > 1 }
 
-  def getGroups(self, user):
+  def getMemberships(self, user):
 	memberships = Membership.gql("WHERE user = :1", user)
-	groups = map((lambda x: x.group), memberships)
-	return groups
+	return memberships
 
   def getRelevantMemberships(self, user):
 	return Membership.gql("WHERE user = :1 AND balance != 0", user)

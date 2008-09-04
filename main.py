@@ -21,7 +21,9 @@ def main():
                     ('/reject', RejectTransactionHandler),
                     ('/enterUnsubscription', EnterUnsubscriptionHandler),
                     ('/groupUnsubscription', UnsubscriptionHandler),
-					('/groupInvitation', GroupInvitationHandler)],
+					('/groupInvitation', GroupInvitationHandler),
+                    ('/groupJoin', GroupJoinHandler),
+                    ('/groupChangeAlias', GroupChangeAliasHandler),],
                                        debug=True)
   wsgiref.handlers.CGIHandler().run(application)
 

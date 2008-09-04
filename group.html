@@ -22,18 +22,19 @@
 				Group:
 				<select name="group" onchange="form.submit();">
 					<option>-- select another group --</option>
-				{% for group in groups %}
-				<option value="{{ group.key }}">{{ group.name }}</option>
+				{% for membership in memberships %}
+				<option value="{{ membership.group.key }}">{{ membership.alias }}</option>
 				{% endfor %}
 				</select>
 			</form>
 		</div>
-		<h3>Group {{ group.name }}</h3>
+		<h3>Group {{ membership.alias }}</h3>
 		
 		<div style="margin-bottom: 40px;">
 			<a href="javascript:showGroupTab('groupHome')" {% if not goToHistoryTab %} class="active" {% endif %} id="groupHomeButton"></a>
 			<a href="javascript:showGroupTab('groupInvite')" id="groupInviteButton"></a>
 			<a href="javascript:showGroupTab('groupHistory')" {% if goToHistoryTab %} class="active" {% endif %} id="groupHistoryButton"></a>
+			<a href="javascript:showGroupTab('groupProperties')" id="groupPropertiesButton"></a>
 		</div>
 		<h3>&nbsp;</h3>
 
@@ -54,16 +55,6 @@
 	
 		{% include "enterTransaction.html" %}
 		
-		<p>
-		{% if balanceIsZero %}
-			<form action="/groupUnsubscription" method="post">
-				<input type="hidden" name="group" value="{{group.key}}" />
-				<input type="submit" value="Unregister me!" />
-			</form>
-		{% else %}
-			<small>To unsubscribe from this group nobody must owe you and you must owe noone.</small>
-		{% endif %}
-		</p>
 		</div>
 		
 		<div id="groupInvite" style="display:none">
@@ -76,14 +67,20 @@
 			{% include "transactionHistory.html" %}
 		</div>
 		
+		<div id="groupProperties" style="display:none">
+			{% include "groupProperties.html" %}
+		</div>
+		
 		<script>
 		function showGroupTab(id) {
 			document.getElementById("groupHome").style.display = "none";
 			document.getElementById("groupInvite").style.display = "none";
 			document.getElementById("groupHistory").style.display = "none";
+			document.getElementById("groupProperties").style.display = "none";
 			document.getElementById("groupHomeButton").className = "";
 			document.getElementById("groupInviteButton").className = "";
 			document.getElementById("groupHistoryButton").className = "";
+			document.getElementById("groupPropertiesButton").className = "";
 			document.getElementById(id).style.display = "";
 			document.getElementById(id + "Button").className = "active";
 		}

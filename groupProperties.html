@@ -1,0 +1,20 @@
+<div>
+	<form action="/groupChangeAlias" method="post">
+			<label style="font-size:12">Change the alias of this group:</label> 
+			<input type="text" value="{{membership.alias}}" name="alias"/>
+			<input type="hidden" value="{{membership.key}}" name="membership"/>
+			<input style="vertical-align:middle" type="image" src="/images/Button_Save.gif" alt="ChangeAlias" title="ChangeAlias">
+	</form>
+</div>
+<br>
+<div>
+	{% if balanceIsZero %}
+		<form action="/groupUnsubscription" method="post">
+			<input type="hidden" name="group" value="{{membership.group.key}}" />
+			<input type="submit" value="Unregister me!" />
+		</form>
+	{% else %}
+		<small>At this moment you can not unsuscribe from this group, nobody must owe you and you must owe noone, 
+		your balance in the group must be zero.</small>
+	{% endif %}
+</div>

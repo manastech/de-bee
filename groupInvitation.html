@@ -1,0 +1,47 @@
+{% extends "master.html" %}
+
+{% block top %} 
+	<div style="text-align: right"> 
+	<font size="5">{{currentUser.nickname}}</font><br>  
+	(<a href="{{signout_url}}">sign out</a>)
+	</div>
+{% endblock %}
+{% block navigation %}
+	<div id="menuGroupsActive">
+		
+	</div>
+	<div id="menuHome">
+		<a href="/">
+			<span/>
+		</a>
+	</div>
+{% endblock %}
+
+{% block content %}
+
+{% if isValidInvitation %}
+	{% if isValidUser %}
+		{% if isMember %}
+			You are already a member of the group {{group.name}}.
+		{% else %}
+			<h2>You have been invited to join group {{group.name}}</h2>
+			<br />
+			<div>
+			<form action="/groupJoin" method="post">
+				<label style="font-size:12">Alias:</label> 
+				<br />
+				<input type="text" value="{{group.name}}" name="alias"/>
+				<input type="hidden" value="{{group.key}}" name="group"/>
+				<input style="vertical-align:middle" type="image" src="/images/Button_CreateGroup.gif" alt="JoinGroup" title="JoinGroup">
+				
+			</form>
+			</div>
+		{% endif %}
+	{% else %}
+		This invitation is not for you.
+	{% endif %}
+{% else %}
+	Invitation is invalid
+{% endif %}
+
+{% endblock %}

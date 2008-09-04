@@ -211,6 +211,28 @@ hd3
 	outline: none;
 }
 
+#groupPropertiesButton
+{
+	background: url(/images/s_InvitePeople_OFF.gif) no-repeat;
+	width: 224px;
+	height: 49px;
+	display: block;
+	float: left;
+	margin-left: 10px;
+}
+
+#groupPropertiesButton:hover
+{
+	background: url(/images/s_InvitePeople_OVER.gif) no-repeat;
+	outline: none;
+}
+
+#groupPropertiesButton.active
+{
+	background: url(/images/s_InvitePeople_ON.gif) no-repeat;
+	outline: none;
+}
+
 /*
 esto se usa para los botones de las acciones sobre el grupo.
 #groupHomeImage 

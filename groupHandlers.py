@@ -119,13 +119,13 @@ class GroupHandler(webapp.RequestHandler):
 			'currentUser': user,
 			'members': members,
 			'hasMembers': hasMembers,
-			'group': group,
+			'membership': me,
 			'hasTransactions': len(transactions) > 0,
 			'transactionCount': transactionCount,
 			'transactions': transactions,
 			'validationError': validationError,
 			'validationMessage': validationMessage,
-            'groups': self.getGroups(user),
+            'memberships': self.getMemberships(user),
             'message': self.request.get("msg"),
             'goToHistoryTab': goToHistoryTab, 
             'signout_url': users.create_logout_url("/"),
@@ -135,11 +135,10 @@ class GroupHandler(webapp.RequestHandler):
 		path = os.path.join(os.path.dirname(__file__), 'group.html')
 		self.response.out.write(template.render(path, template_values))
 	
-	def getGroups(self, user):
+	def getMemberships(self, user):
 		actualGroup = Group.get(self.request.get("group"))
 		memberships = Membership.gql("WHERE user = :1 AND group != :2", user, actualGroup)
-		groups = map((lambda x: x.group), memberships)
-		return groups
+		return memberships
 		
 def compareTransactionsByDate(x, y):
 	if x.date > y.date:
@@ -166,27 +165,27 @@ class GroupCreationHandler(webapp.RequestHandler):
 			groupName = self.request.get('name')
 			escapedGroupName = cgi.escape(groupName)
 
-			if groupName == "":
+			if groupName == "": # verificar que el nombre no sea vacio
 				self.response.out.write('<html><body><pre>')
 				self.response.out.write("Group name is required. <a href='javascript:history.back()'>Go back</a>.")
 				self.response.out.write('</pre></body></html>')
 			else:
 				group = self.createGroupAndInsertMember(groupName)
 
-				if group is None:
+				if group is None: # si el usuario es miembro de un grupo con alias igual al nombre del grupo que quiere crear, no dejarlo
 					self.response.out.write('<html><body><pre>')
-					self.response.out.write("The group " + escapedGroupName + " already exists. Please try another name. <a href='javascript:history.back()'>Go back</a>.")
+					self.response.out.write("You already have a group with the alias " + escapedGroupName + ". Please try another name. <a href='javascript:history.back()'>Go back</a>.")
 					self.response.out.write('</pre></body></html>')
 				else:
 					self.redirect("/group?group=%s" % group.key())
 
 	def insertUserInGroup(self, group):
-		membership = Membership(user=users.get_current_user(),group=group,balance=0.0)
+		membership = Membership(user=users.get_current_user(),group=group,balance=0.0,alias=group.name)
 		membership.put()
 
 	def createGroupAndInsertMember(self, gname):
-		query = Group.gql("WHERE name = :1", gname)
-		count = query.count()
+		user = users.get_current_user()
+		count = Membership.gql("WHERE user = :1 AND alias = :2", user, gname).count()
 		if count > 0:
 			return None
 		group = Group(name=gname)
@@ -194,3 +193,36 @@ class GroupCreationHandler(webapp.RequestHandler):
     	
 		self.insertUserInGroup(group)
 		return group
+
+class GroupChangeAliasHandler(webapp.RequestHandler):
+	
+	def post(self):
+		registered = authenticatedUser(self)
+		if registered:
+			membership = Membership.get(self.request.get('membership'))
+			# Verificar que la membership que se paso sea efectivamente del usuario
+			if self.isMember(membership):
+				newAlias = self.request.get('alias')
+				
+				if newAlias == "": # verificar que el alias no sea vacio
+					self.response.out.write('<html><body><pre>')
+					self.response.out.write("Alias name is required. <a href='javascript:history.back()'>Go back</a>.")
+					self.response.out.write('</pre></body></html>')
+					return
+				elif self.isAliasTaken(newAlias): # verificar que no exista un alias del usuario con el mismo nombre
+					self.response.out.write('<html><body><pre>')
+					self.response.out.write("You already have a Group with the selected alias, please select another name. <a href='javascript:history.back()'>Go back</a>.")
+					self.response.out.write('</pre></body></html>')
+					return
+				else: # good to go
+				    membership.alias = newAlias
+				    membership.put()
+				    self.redirect("/group?group=%s" % membership.group.key())
+		    
+	def isMember(self,membership):
+		user = users.get_current_user()
+		return membership.user == user 
+	
+	def isAliasTaken(self,alias):
+		user = users.get_current_user()
+		return Membership.gql("WHERE user = :1 AND alias = :2", user, alias).count() > 0
