@@ -52,12 +52,12 @@ class RegisterTransactionHandler(webapp.RequestHandler):
 			fromMembership.balance -= amount
 			toMembership.balance += amount
 			if(fromUser != creator):
-				MailSender().sendTransactionNotice(fromUser.email(), group.name, tr, rejectPath)
+				MailSender().sendTransactionNotice(fromUser.email(), fromMembership.alias, tr, rejectPath)
 		elif type == 'payment' or type == 'rejectedDebt': 
 			fromMembership.balance += amount
 			toMembership.balance -= amount
 			if(toUser != creator):
-				MailSender().sendTransactionNotice(toUser.email(), group.name, tr, rejectPath)
+				MailSender().sendTransactionNotice(toUser.email(), toMembership.alias, tr, rejectPath)
 				
 		fromMembership.put()
 		toMembership.put()
