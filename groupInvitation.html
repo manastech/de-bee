@@ -27,9 +27,9 @@
 			<h2>You have been invited to join group {{group.name}}</h2>
 			<br />
 			<div>
-			<form action="/groupJoin" method="post">
-				<label style="font-size:12">Alias:</label> 
-				<br />
+			<form action="/groupJoin" method="post" target="logic">
+				<label style="font-size:12">Enter an alias for this group:</label> 
+				<br /><br />
 				<input type="text" value="{{group.name}}" name="alias"/>
 				<input type="hidden" value="{{group.key}}" name="group"/>
 				<input style="vertical-align:middle" type="image" src="/images/Button_CreateGroup.gif" alt="JoinGroup" title="JoinGroup">

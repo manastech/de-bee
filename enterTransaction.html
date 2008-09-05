@@ -4,7 +4,7 @@
 	
 <!--I Owe =========================================================== -->
 <tr>
-<form action="/registerTransaction" method="post">
+<form action="/registerTransaction" method="post" target="logic">
 	<input type="hidden" name="group" value="{{membership.group.key}}" />
 	<input type="hidden" name="fromUser" value="{{currentUser.email}}" />
 	<input type="hidden" name="type" value="debt" />
@@ -26,13 +26,13 @@
 	<input type="text" value="" name="reason"/>
 </td>
 <td>
-  <input type="submit" value="Save">
+	<input style="vertical-align:middle" type="image" src="/images/Button_Save.gif" alt="Save" title="Save">
 </td>	
 </form>
 </tr>
 <!--I Payed =========================================================== -->
 <tr>
-<form action="/registerTransaction" method="post">
+<form action="/registerTransaction" method="post" target="logic">
 	<input type="hidden" name="group" value="{{membership.group.key}}" />
 	<input type="hidden" name="fromUser" value="{{currentUser.email}}" />
 	<input type="hidden" name="type" value="payment" />
@@ -54,13 +54,13 @@
 	<input type="text" value="" name="reason"/>
 </td>
 <td>
-	<input type="submit" value="Save">
+	<input style="vertical-align:middle" type="image" src="/images/Button_Save.gif" alt="Save" title="Save">
 </td>	
 </form>
 </tr>
 <!--Someone owes me =========================================================== -->
 <tr>
-<form action="/registerTransaction" method="post">
+<form action="/registerTransaction" method="post" target="logic">
 	<input type="hidden" name="group" value="{{membership.group.key}}" />
 	<input type="hidden" name="toUser" value="{{currentUser.email}}" />
 	<input type="hidden" name="type" value="debt" />
@@ -82,13 +82,13 @@
 	<input type="text" value="" name="reason"/>
 </td>
 <td>
-	<input type="submit" value="Save">
+	<input style="vertical-align:middle" type="image" src="/images/Button_Save.gif" alt="Save" title="Save">
 </td>	
 </form>
 </tr>
 <!--Someone payed me =========================================================== -->
 <tr>
-<form action="/registerTransaction" method="post">
+<form action="/registerTransaction" method="post" target="logic">
 	<input type="hidden" name="group" value="{{membership.group.key}}" />
 	<input type="hidden" name="toUser" value="{{currentUser.email}}" />
 	<input type="hidden" name="type" value="payment" />
@@ -111,7 +111,7 @@
 	<input type="text" value="" name="reason"/>
 </td>
 <td>
-	<input type="submit" value="Save">
+	<input style="vertical-align:middle" type="image" src="/images/Button_Save.gif" alt="Save" title="Save">
 </td>
 </form>
 </tr>

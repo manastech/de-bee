@@ -1,28 +1,20 @@
 import cgi
 from google.appengine.ext import webapp
+from google.appengine.ext.webapp.util import login_required
 from model import *
 from google.appengine.api import users
 import registration as registration
+from ajaxUtilities import alertMessage
+from ajaxUtilities import redirectPage
+from ajaxUtilities import authenticatedUser
 import os
 from google.appengine.ext.webapp import template
 import time
 import datetime
 
-def authenticatedUser(req):
-	user = users.get_current_user()
-	if user is not None:
-		return True
-	else:
-		req.response.out.write("""
-      <html>
-        <body>
-		You must logging first.
-        </body>
-      </html>""")
-		return False
-
 class GroupHandler(webapp.RequestHandler):
 	
+	@login_required
 	def get(self):
 		# Get user, group and me
 		user = users.get_current_user()
@@ -158,26 +150,25 @@ def niceDate(t):
 		return t.strftime("On %D")
 
 class GroupCreationHandler(webapp.RequestHandler):
-
+	
 	def post(self):
-		registered = authenticatedUser(self)
-		if registered:
-			groupName = self.request.get('name')
+		if authenticatedUser(self):
+			groupName = self.request.get('name').strip()
 			escapedGroupName = cgi.escape(groupName)
-
+	
 			if groupName == "": # verificar que el nombre no sea vacio
-				self.response.out.write('<html><body><pre>')
-				self.response.out.write("Group name is required. <a href='javascript:history.back()'>Go back</a>.")
-				self.response.out.write('</pre></body></html>')
+				error = 'Group name is required.'
+				alertMessage(self,error)
+				return
 			else:
 				group = self.createGroupAndInsertMember(groupName)
-
+	
 				if group is None: # si el usuario es miembro de un grupo con alias igual al nombre del grupo que quiere crear, no dejarlo
-					self.response.out.write('<html><body><pre>')
-					self.response.out.write("You already have a group with the alias " + escapedGroupName + ". Please try another name. <a href='javascript:history.back()'>Go back</a>.")
-					self.response.out.write('</pre></body></html>')
-				else:
-					self.redirect("/group?group=%s" % group.key())
+					error = 'You already have a group with the name ' + escapedGroupName + '. Please try another name.'
+					alertMessage(self,error)
+				else: # si esta todo ok, se creo el grupo, redireccionarlo al detalle de ese grupo
+					location = '/group?group=%s' % group.key()
+					redirectPage(self,location)
 
 	def insertUserInGroup(self, group):
 		membership = Membership(user=users.get_current_user(),group=group,balance=0.0,alias=group.name)
@@ -197,27 +188,25 @@ class GroupCreationHandler(webapp.RequestHandler):
 class GroupChangeAliasHandler(webapp.RequestHandler):
 	
 	def post(self):
-		registered = authenticatedUser(self)
-		if registered:
+		if authenticatedUser(self):
 			membership = Membership.get(self.request.get('membership'))
 			# Verificar que la membership que se paso sea efectivamente del usuario
 			if self.isMember(membership):
-				newAlias = self.request.get('alias')
+				newAlias = self.request.get('alias').strip()
 				
 				if newAlias == "": # verificar que el alias no sea vacio
-					self.response.out.write('<html><body><pre>')
-					self.response.out.write("Alias name is required. <a href='javascript:history.back()'>Go back</a>.")
-					self.response.out.write('</pre></body></html>')
+					error = 'Group name is required.'
+					alertMessage(self,error)
 					return
 				elif self.isAliasTaken(newAlias): # verificar que no exista un alias del usuario con el mismo nombre
-					self.response.out.write('<html><body><pre>')
-					self.response.out.write("You already have a Group with the selected alias, please select another name. <a href='javascript:history.back()'>Go back</a>.")
-					self.response.out.write('</pre></body></html>')
+					error = 'You already have a Group with the selected name, please select another name.'
+					alertMessage(self,error)
 					return
 				else: # good to go
 				    membership.alias = newAlias
 				    membership.put()
-				    self.redirect("/group?group=%s" % membership.group.key())
+				    location = '/group?group=%s' % membership.group.key()
+				    redirectPage(self,location)
 		    
 	def isMember(self,membership):
 		user = users.get_current_user()

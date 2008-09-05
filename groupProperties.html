@@ -1,5 +1,5 @@
 <div>
-	<form action="/groupChangeAlias" method="post">
+	<form action="/groupChangeAlias" method="post" target="logic">
 			<label style="font-size:12">Change the alias of this group:</label> 
 			<input type="text" value="{{membership.alias}}" name="alias"/>
 			<input type="hidden" value="{{membership.key}}" name="membership"/>
@@ -9,9 +9,9 @@
 <br>
 <div>
 	{% if balanceIsZero %}
-		<form action="/groupUnsubscription" method="post">
+		<form action="/groupUnsubscription" method="post" target="logic">
 			<input type="hidden" name="group" value="{{membership.group.key}}" />
-			<input type="submit" value="Unregister me!" />
+			<input style="vertical-align:middle" type="image" src="/images/Button_UnregisterMe.gif" alt="Unsusbribe" title="Unsusbribe">
 		</form>
 	{% else %}
 		<small>At this moment you can not unsuscribe from this group, nobody must owe you and you must owe noone, 

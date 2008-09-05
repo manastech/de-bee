@@ -7,6 +7,9 @@ import os
 from google.appengine.ext.webapp import template
 from hashlib import *
 from serverUtils import UrlBuilder
+from ajaxUtilities import alertMessage
+from ajaxUtilities import redirectPage
+from ajaxUtilities import authenticatedUser
 
 class GroupInvitationHandler(webapp.RequestHandler):
 		
@@ -14,7 +17,7 @@ class GroupInvitationHandler(webapp.RequestHandler):
 		user = users.get_current_user()
 		if not user:
 			self.redirect(users.create_login_url(self.request.uri))
-			return		
+			return
 		group = Group.get(self.request.get("group"))
 		userEmail = self.request.get("user")
 		invitation = GroupInvitation(group, userEmail, UrlBuilder(self.request))
@@ -57,23 +60,23 @@ class GroupInvitation:
 class GroupJoinHandler(webapp.RequestHandler):
 	
 	def post(self):
-		user = users.get_current_user()
-		group = Group.get(self.request.get("group"))
-		alias = self.request.get("alias")
-		
-		if alias == "": # verificar que el alias no sea vacio
-			self.response.out.write('<html><body><pre>')
-			self.response.out.write("Alias name is required. <a href='javascript:history.back()'>Go back</a>.")
-			self.response.out.write('</pre></body></html>')
-			return
-		elif self.isAliasTaken(alias): # verificar que el usuario no sea miembre de un grupo con el mismo alias seleccionado
-			self.response.out.write('<html><body><pre>')
-			self.response.out.write("You already have a Group with the selected alias, please select another name. <a href='javascript:history.back()'>Go back</a>.")
-			self.response.out.write('</pre></body></html>')
-			return
-		else: # todo ok, hacerlo miembro
-			Membership(user=user,group=group,balance=0.0,alias=alias).put()
-			self.redirect("/group?group=%s" % group.key())
+		if authenticatedUser(self):
+			user = users.get_current_user()
+			group = Group.get(self.request.get("group"))
+			alias = self.request.get("alias").strip()
+			
+			if alias == "": # verificar que el alias no sea vacio
+				error = 'Group name is required.'
+				alertMessage(self,error)
+				return
+			elif self.isAliasTaken(alias): # verificar que el usuario no sea miembre de un grupo con el mismo alias seleccionado
+			    error = 'You already have a Group with the selected name, please select another name.'
+			    alertMessage(self,error)
+			    return
+			else: # todo ok, hacerlo miembro
+				Membership(user=user,group=group,balance=0.0,alias=alias).put()
+				location = '/group?group=%s' % group.key()
+				redirectPage(self,location)
 		
 	def isAliasTaken(self,alias):
 		user = users.get_current_user()

@@ -5,6 +5,9 @@ from google.appengine.api import users
 import registration as registration
 import os
 from google.appengine.ext.webapp import template
+from ajaxUtilities import alertMessage
+from ajaxUtilities import redirectPage
+from ajaxUtilities import authenticatedUser
 
 def authenticatedUser(req):
 	user = users.get_current_user()
@@ -42,29 +45,34 @@ class EnterUnsubscriptionHandler(webapp.RequestHandler):
 class UnsubscriptionHandler(webapp.RequestHandler):
 
 	def post(self):
-    		registered = authenticatedUser(self)
-    		
-		if registered:
-			registered = users.get_current_user()
+		if authenticatedUser(self):
+			user = users.get_current_user()
 			
-			self.response.out.write('<html><body><pre>')
-			groupKey = self.request.get('group')
+			groupKey = self.request.get('group').strip()
 			
 			if groupKey == "":
-				self.response.out.write("Group is required")
+				error = 'Group is required'
+				alertMessage(self,error)
+				return
 			else:
-                                group = Group.get(groupKey)
-                                memberships = Membership.gql("WHERE group = :1 AND user = :2", group, registered)
+				group = Group.get(groupKey)
+                memberships = Membership.gql("WHERE group = :1 AND user = :2", group, user)
 
-                                if memberships.count() <> 1:
-					self.response.out.write("You are not registered in this group")
-				else:
-                                        membership = memberships.get()
-                                        if not membership.balance == 0.0:
-                                                self.response.out.write("You cannot leave this group")
-                                        else:
-											membership.delete()
-											if Membership.gql("WHERE group = :1", group).count() == 0:
-												group.delete()
-											self.response.out.write("You have been unsubscribed from the group " + cgi.escape(group.name))
-			self.response.out.write('</pre></body></html>')
+                if memberships.count() <> 1:
+                	error = 'You are not registered in this group.'
+                	alertMessage(self,error)
+                	return
+                else:
+					membership = memberships.get()
+					if not membership.balance == 0.0:
+						error = 'You cannot leave this group, your balance must be zero.'
+						alertMessage(self,error)
+						return
+					else:
+						membership.delete()
+						if Membership.gql("WHERE group = :1", group).count() == 0:
+							group.delete()
+						
+						msg = 'You have been succesfully unsubscribed from the group ' + cgi.escape(group.name) + '!'
+						location = '/?msg=' + msg
+						redirectPage(self,location)

@@ -8,6 +8,9 @@ from google.appengine.ext.webapp import template
 from mail_handler import *
 from mail_sender import *
 from serverUtils import UrlBuilder
+from ajaxUtilities import alertMessage
+from ajaxUtilities import redirectPage
+from ajaxUtilities import authenticatedUser
 
 class RegisterTransactionHandler(webapp.RequestHandler):
 	
@@ -21,13 +24,16 @@ class RegisterTransactionHandler(webapp.RequestHandler):
 		try:
 		  amount = float(self.request.get('amount'))
 		except BaseException, e:
-			self.response.out.write("Invalid amount: %s. <a href='javascript:history.back()'>Go back</a>." % self.request.get('amount'))
+			error = 'Invalid amount: %s.' % self.request.get('amount')
+			alertMessage(self, error)
 			return
+		
 		reason = self.request.get('reason')
 		type = self.request.get('type')
 		
 		if amount <= 0:
-			self.response.out.write("Invalid amount: %s. <a href='javascript:history.back()'>Go back</a>." % amount)
+			error = 'Invalid amount: %s.' % amount
+			alertMessage(self, error)
 			return
 		
 		tr = Transaction(
@@ -56,5 +62,6 @@ class RegisterTransactionHandler(webapp.RequestHandler):
 		fromMembership.put()
 		toMembership.put()
 		
-		self.redirect("/group?group=%s" % group.key())
+		location = '/group?group=%s' % group.key()
+		redirectPage(self,location)
 		 

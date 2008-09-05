@@ -213,7 +213,7 @@ hd3
 
 #groupPropertiesButton
 {
-	background: url(/images/s_InvitePeople_OFF.gif) no-repeat;
+	background: url(/images/s_properties_OFF.gif) no-repeat;
 	width: 224px;
 	height: 49px;
 	display: block;
@@ -223,13 +223,13 @@ hd3
 
 #groupPropertiesButton:hover
 {
-	background: url(/images/s_InvitePeople_OVER.gif) no-repeat;
+	background: url(/images/s_properties_OVER.gif) no-repeat;
 	outline: none;
 }
 
 #groupPropertiesButton.active
 {
-	background: url(/images/s_InvitePeople_ON.gif) no-repeat;
+	background: url(/images/s_properties_ON.gif) no-repeat;
 	outline: none;
 }
 

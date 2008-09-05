@@ -19,7 +19,9 @@ class MainHandler(webapp.RequestHandler):
             group = memberships.get()
         else:
             group = 0
-        path = os.path.join(os.path.dirname(__file__), 'dashboard.html')
+        
+        message = self.request.get('msg')
+        
         model = { 
 			'username' : user.nickname(),
 			'signout_url' : users.create_logout_url("/"),
@@ -27,8 +29,12 @@ class MainHandler(webapp.RequestHandler):
 			'memberships' : memberships,
 			'isregistered' : reg.IsRegistered(user),
             'hasMembership' : hasMembership,
-            'group' : group
+            'group' : group,
+            'message' : message,
+            'hasMessage' : len(message) > 0
 			}
+        
+        path = os.path.join(os.path.dirname(__file__), 'dashboard.html')
         self.response.out.write(template.render(path, model))
             
     else:
