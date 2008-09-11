@@ -17,17 +17,19 @@
 {% endblock %}
 {% block content %}
 		{{ message }}
-		<div style="float: right">
-			<form action="/group" method="get">
-				Group:
-				<select name="group" onchange="selectGroup(this,form);">
-					<option value="">-- select another group --</option>
-				{% for membership in memberships %}
-				<option value="{{ membership.group.key }}">{{ membership.alias }}</option>
-				{% endfor %}
-				</select>
-			</form>
-		</div>
+		{% if hasMemberships %}
+			<div style="float: right">
+				<form action="/group" method="get">
+					Group:
+					<select name="group" onchange="selectGroup(this,form);">
+						<option value="">-- select another group --</option>
+					{% for membership in memberships %}
+					<option value="{{ membership.group.key }}">{{ membership.alias }}</option>
+					{% endfor %}
+					</select>
+				</form>
+			</div>
+		{% endif %}
 		<h3>Group {{ membership.alias }}</h3>
 		
 		<div style="margin-bottom: 40px;">

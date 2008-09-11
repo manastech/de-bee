@@ -103,6 +103,9 @@ class GroupHandler(webapp.RequestHandler):
 		
 		hasMembers = len(members) > 0
 		
+		memberships = self.getMemberships(user)
+		hasMemberships = len(memberships) > 0
+		
 		template_values = {
 			'balance': me.balance * sign,
 			'balancePositive': sign > 0,
@@ -118,6 +121,7 @@ class GroupHandler(webapp.RequestHandler):
 			'validationError': validationError,
 			'validationMessage': validationMessage,
             'memberships': self.getMemberships(user),
+            'hasMemberships': hasMemberships,
             'message': self.request.get("msg"),
             'goToHistoryTab': goToHistoryTab, 
             'signout_url': users.create_logout_url("/"),
@@ -130,6 +134,7 @@ class GroupHandler(webapp.RequestHandler):
 	def getMemberships(self, user):
 		actualGroup = Group.get(self.request.get("group"))
 		memberships = Membership.gql("WHERE user = :1 AND group != :2", user, actualGroup)
+		memberships = memberships.fetch(100000)
 		return memberships
 		
 def compareTransactionsByDate(x, y):
