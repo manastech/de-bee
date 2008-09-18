@@ -40,7 +40,7 @@ hd3
 
 #mainContent #mainContent2
 {
-	margin-left: 100px;
+	margin-left: 10px;
 }
 	
 #logo
@@ -214,7 +214,7 @@ hd3
 #groupPropertiesButton
 {
 	background: url(/images/s_properties_OFF.gif) no-repeat;
-	width: 224px;
+	width: 167px;
 	height: 49px;
 	display: block;
 	float: left;
@@ -232,6 +232,29 @@ hd3
 	background: url(/images/s_properties_ON.gif) no-repeat;
 	outline: none;
 }
+
+#groupBalanceButton
+{
+	background: url(/images/s_balance_OFF.gif) no-repeat;
+	width: 167px;
+	height: 49px;
+	display: block;
+	float: left;
+	margin-left: 10px;
+}
+
+#groupBalanceButton:hover
+{
+	background: url(/images/s_balance_OVER.gif) no-repeat;
+	outline: none;
+}
+
+#groupBalanceButton.active
+{
+	background: url(/images/s_balance_ON.gif) no-repeat;
+	outline: none;
+}
+
 
 /*
 esto se usa para los botones de las acciones sobre el grupo.

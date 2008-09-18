@@ -37,6 +37,7 @@
 			<a href="javascript:showGroupTab('groupInvite')" id="groupInviteButton"></a>
 			<a href="javascript:showGroupTab('groupHistory')" {% if goToHistoryTab %} class="active" {% endif %} id="groupHistoryButton"></a>
 			<a href="javascript:showGroupTab('groupProperties')" id="groupPropertiesButton"></a>
+			<a href="javascript:showGroupTab('groupBalance')" id="groupBalanceButton"></a>
 		</div>
 		<h3>&nbsp;</h3>
 
@@ -73,16 +74,22 @@
 			{% include "groupProperties.html" %}
 		</div>
 		
+		<div id="groupBalance" style="display:none">
+			{% include "groupBalance.html" %}
+		</div>
+		
 		<script type="text/javascript">
 			function showGroupTab(id) {
 				document.getElementById("groupHome").style.display = "none";
 				document.getElementById("groupInvite").style.display = "none";
 				document.getElementById("groupHistory").style.display = "none";
 				document.getElementById("groupProperties").style.display = "none";
+				document.getElementById("groupBalance").style.display = "none";
 				document.getElementById("groupHomeButton").className = "";
 				document.getElementById("groupInviteButton").className = "";
 				document.getElementById("groupHistoryButton").className = "";
 				document.getElementById("groupPropertiesButton").className = "";
+				document.getElementById("groupBalanceButton").className = "";
 				document.getElementById(id).style.display = "";
 				document.getElementById(id + "Button").className = "active";
 			}

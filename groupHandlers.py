@@ -105,6 +105,18 @@ class GroupHandler(webapp.RequestHandler):
 		
 		memberships = self.getMemberships(user)
 		hasMemberships = len(memberships) > 0
+
+		# Get group balance
+		debtors = Membership.gql("WHERE group = :1 AND balance < 0 ORDER BY balance", group)
+		creditors = Membership.gql("WHERE group = :1 AND balance > 0 ORDER BY balance", group)
+
+		groupDebtors = []
+		for member in debtors:
+			groupDebtors.append({'user': member.user, 'amount': member.balance*-1})
+		
+		groupCreditors = []
+		for member in creditors:
+			groupCreditors.append({'user': member.user, 'amount': member.balance})
 		
 		template_values = {
 			'balance': me.balance * sign,
@@ -120,12 +132,16 @@ class GroupHandler(webapp.RequestHandler):
 			'transactions': transactions,
 			'validationError': validationError,
 			'validationMessage': validationMessage,
-            'memberships': self.getMemberships(user),
-            'hasMemberships': hasMemberships,
-            'message': self.request.get("msg"),
-            'goToHistoryTab': goToHistoryTab, 
-            'signout_url': users.create_logout_url("/"),
-            'hasMoreThanOneItem': len(result) > 1
+			'memberships': self.getMemberships(user),
+			'hasMemberships': hasMemberships,
+			'message': self.request.get("msg"),
+			'goToHistoryTab': goToHistoryTab, 
+			'signout_url': users.create_logout_url("/"),
+			'hasMoreThanOneItem': len(result) > 1,
+			'groupDebtors': groupDebtors,
+			'hasDebtors': len(groupDebtors) > 0,
+			'groupCreditors': groupCreditors,
+			'hasCreditors': len(groupCreditors) > 0,
 			 }
 		
 		path = os.path.join(os.path.dirname(__file__), 'group.html')
