@@ -37,7 +37,7 @@
 				<select name="group" onchange="selectGroup(this,form);">
 					<option value="">-- select group --</option>
 				{% for membership in memberships %}
-					<option value="{{ membership.group.key }}">{{ membership.alias }}</option>
+					<option value="{{ membership.group.key }}">{{ membership.name }}</option>
 				{% endfor %}
 				</select>
 			</form>
@@ -60,7 +60,7 @@
 				{% if debt.isOweToSelf %}
 					<li>in <a href="/group?group={{debt.group.key}}">{{debt.group.name}}</a> they owe you ${{debt.amount}}</li>
 				{% else %}					
-					<li>you owe ${{debt.amount}} in <a href="/group?group={{debt.group.key}}">{{debt.alias}}</a></li>
+					<li>you owe ${{debt.amount}} in <a href="/group?group={{debt.group.key}}">{{debt.name}}</a></li>
 				{% endif %}
 			{% endfor %}
 			</ul>

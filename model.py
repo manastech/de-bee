@@ -7,7 +7,13 @@ class Membership(db.Model):
 	user = db.UserProperty(required=True)
 	group = db.ReferenceProperty(Group)
 	balance = db.FloatProperty(required=True)
-	alias = db.StringProperty(required=True)
+	alias = db.StringProperty(required=False)
+	
+	def name(self):
+		if self.alias and self.alias != "":
+			return self.alias
+		else:
+			return self.group.name
     
 class Transaction(db.Model):
 	group = db.ReferenceProperty(Group)

@@ -24,13 +24,13 @@
 					<select name="group" onchange="selectGroup(this,form);">
 						<option value="">-- select another group --</option>
 					{% for membership in memberships %}
-					<option value="{{ membership.group.key }}">{{ membership.alias }}</option>
+					<option value="{{ membership.group.key }}">{{ membership.name }}</option>
 					{% endfor %}
 					</select>
 				</form>
 			</div>
 		{% endif %}
-		<h3>Group {{ membership.alias }}</h3>
+		<h3>Group {{ membership.name }}</h3>
 		
 		<div style="margin-bottom: 40px;">
 			<a href="javascript:showGroupTab('groupHome')" {% if not goToHistoryTab %} class="active" {% endif %} id="groupHomeButton"></a>

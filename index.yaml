@@ -16,24 +16,30 @@ indexes:
   - name: group
   - name: balance
 
-# Used 122 times in query history.
+# Used 127 times in query history.
 - kind: Membership
   properties:
   - name: group
   - name: balance
     direction: desc
 
-# Used 490 times in query history.
+# Used 554 times in query history.
 - kind: Membership
   properties:
   - name: group
   - name: user
 
-# Used 84 times in query history.
+# Used 104 times in query history.
 - kind: Membership
   properties:
   - name: user
   - name: balance
+
+# Used 68 times in query history.
+- kind: Membership
+  properties:
+  - name: user
+  - name: group
 
 # Used once in query history.
 - kind: Transaction
@@ -41,7 +47,7 @@ indexes:
   - name: date
     direction: desc
 
-# Used 8 times in query history.
+# Used 40 times in query history.
 - kind: Transaction
   properties:
   - name: fromUser
@@ -56,7 +62,7 @@ indexes:
   - name: date
     direction: desc
 
-# Used 4 times in query history.
+# Used 36 times in query history.
 - kind: Transaction
   properties:
   - name: group
