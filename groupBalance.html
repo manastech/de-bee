@@ -1,16 +1,12 @@
-<html>
-	<body>
-		{% if hasDebtors %}
-			<ul>
-			{% for i in groupDebtors %}
-				<li>{{ i.user }} owes $ {{ i.amount }}</li>
-			{% endfor %}
-			{% for i in groupCreditors %}
-				<li>{{ i.user }} has $ {{ i.amount }} of credit</li>
-			{% endfor %}
-			</ul>
-		{% else %}
-			There's no one owing no one, hurray!
-		{% endif %}
-	</body>
-</html>
+{% if hasDebtors %}
+	<ul>
+	{% for i in groupDebtors %}
+		<li><span style="color:#5C0101">{{ i.user }} owes $ {{ i.amount }}</span></li>
+	{% endfor %}
+	{% for i in groupCreditors %}
+		<li><span style="color:#003500">{{ i.user }} has $ {{ i.amount }} of credit</span></li>
+	{% endfor %}
+	</ul>
+{% else %}
+	There's no one owing no one, hurray!
+{% endif %}

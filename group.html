@@ -79,6 +79,29 @@
 		</div>
 		
 		<script type="text/javascript">
+			// Preload some images so that hovering over the tabs
+			// doesn't show a blank for some seconds
+			if (document.images) {
+				preloadTabImages("Actions");
+				preloadTabImages("balance");
+				preloadTabImages("History");
+				preloadTabImages("home");
+				preloadTabImages("InvitePeople");
+				preloadTabImages("mygroups");
+				preloadTabImages("properties");
+			}
+
+			function preloadTabImages(name) {
+				preloadImage("s_" + name + "_OFF.gif");
+				preloadImage("s_" + name + "_ON.gif");
+				preloadImage("s_" + name + "_OVER.gif");
+			}
+
+			function preloadImage(src) {
+				var img = new Image(100, 100);
+				img.src = "/images/" + src;
+			}
+		
 			function showGroupTab(id) {
 				document.getElementById("groupHome").style.display = "none";
 				document.getElementById("groupInvite").style.display = "none";

@@ -47,12 +47,12 @@ class MainHandler(webapp.RequestHandler):
 	items = []
 	for m in self.getRelevantMemberships(user):
 		total += m.balance
-		items.append({'isZero': m.balance == 0.0, 'isOweToSelf' : m.balance > 0, 'amount' : abs(m.balance), 'group' : m.group, 'name' : m.name() })
-	return { 'isZero': total == 0.0, 'isOweToSelf' : total > 0, 'total' : abs(total), 'items' : items, 'hasMoreThanOneItem' : len(items) > 1 }
+		items.append({'isZero': m.balance == 0.0, 'isOweToSelf' : m.balance > 0.0, 'amount' : abs(m.balance), 'group' : m.group, 'name' : m.name() })
+	return { 'isZero': total == 0.0, 'isOweToSelf' : total > 0.0, 'total' : abs(total), 'items' : items, 'hasMoreThanOneItem' : len(items) > 1 }
 
   def getMemberships(self, user):
 	memberships = Membership.gql("WHERE user = :1", user)
 	return memberships
 
   def getRelevantMemberships(self, user):
-	return Membership.gql("WHERE user = :1 AND balance != 0", user)
+	return Membership.gql("WHERE user = :1 AND balance != 0.0", user)

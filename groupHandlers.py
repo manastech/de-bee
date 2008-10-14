@@ -23,19 +23,19 @@ class GroupHandler(webapp.RequestHandler):
 		me = Membership.gql("WHERE group = :1 AND user = :2", group, user)[0]
 		
 		# Calculate how much I owe or they owe me
-		if me.balance != 0:
-			if me.balance > 0:
-				members = Membership.gql("WHERE group = :1 AND balance < 0 ORDER BY balance", group)
+		if me.balance != 0.0:
+			if me.balance > 0.0:
+				members = Membership.gql("WHERE group = :1 AND balance < 0.0 ORDER BY balance", group)
 				sign = 1
 			else:
-				members = Membership.gql("WHERE group = :1 AND balance > 0 ORDER BY balance DESC", group)
+				members = Membership.gql("WHERE group = :1 AND balance > 0.0 ORDER BY balance DESC", group)
 				sign = -1
 			
 			balance = me.balance * sign
 			result = []
 			
 			for member in members:
-				if balance <= 0:
+				if balance <= 0.0:
 					break
 				result.append({'user': member.user, 'amount': min(balance, member.balance * -sign)})
 				balance -= member.balance * -sign
@@ -107,8 +107,8 @@ class GroupHandler(webapp.RequestHandler):
 		hasMemberships = len(memberships) > 0
 
 		# Get group balance
-		debtors = Membership.gql("WHERE group = :1 AND balance < 0 ORDER BY balance", group)
-		creditors = Membership.gql("WHERE group = :1 AND balance > 0 ORDER BY balance", group)
+		debtors = Membership.gql("WHERE group = :1 AND balance < 0.0 ORDER BY balance", group)
+		creditors = Membership.gql("WHERE group = :1 AND balance > 0.0 ORDER BY balance", group)
 
 		groupDebtors = []
 		for member in debtors:
