@@ -25,7 +25,7 @@ class GroupInvitationHandler(webapp.RequestHandler):
 		# verificar que la invitacion es valida (coinciden los hashes)
 		isValidInvitation = invitation.makeHash() == self.request.get("hash")
 		# verificar que el usuario logueado coincide con el mail de la invitacion
-		isValidUser = user.email() == userEmail
+		isValidUser = user.email().lower() == userEmail.lower()
 		# verificar que el usuario no sea miembro del grupo
 		isMember = Membership.gql("WHERE user = :1 AND group = :2", user, group).count() > 0
 			
