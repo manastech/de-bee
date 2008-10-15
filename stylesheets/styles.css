@@ -17,10 +17,9 @@ hd3
 #header
 {
 	margin:0 auto;
-	height:200px;
+	height:160px;
 	width:1000px;
 	padding:0px;
-	
 }
 #content
 {
@@ -31,16 +30,33 @@ hd3
 {
 	width:1000px;
 	margin: 0 auto;
-	color:#4F4C10;
-	font-size:20px;
-	padding-top:20px;
-	padding-bottom:20px;
+	font-size:18px;
+	padding-top:10px;
+	padding-bottom:10px;
 	text-align: justify;
 }
 
 #mainContent #mainContent2
 {
 	margin-left: 10px;
+}
+
+#introduction
+{
+	color:#878116;
+}
+
+#mainContent .big {
+	font-size: 22px;
+	font-weight: bold;
+	color: #504D10;
+}
+
+
+#mainContent .title {
+	font-size: 28px;
+	font-weight: bold;
+	color: #504D10;
 }
 	
 #logo
@@ -87,6 +103,7 @@ hd3
 	height:48px;
 	width:1000px;
 	padding:0px;
+	clear:both;
 }
 
 #menuHome, #menuHomeActive, #menuGroups, #menuGroupsActive
@@ -255,6 +272,29 @@ hd3
 	outline: none;
 }
 
+#hello
+{
+	color: #79775D;
+	font-size:17px;
+	font-family: verdana;
+}
+
+#username
+{
+	color: black;
+	font-size:22px;
+	font-weight: bold;
+	font-family: verdana;
+}
+
+#logout
+{
+	color: #79775D;
+	font-size:11px;
+	font-style: italic;
+	font-weight: bold;
+	font-family: verdana;
+}
 
 /*
 esto se usa para los botones de las acciones sobre el grupo.

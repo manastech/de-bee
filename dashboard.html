@@ -1,17 +1,17 @@
 {% extends "master.html" %}
 {% block top %}
 	<div style="text-align: right"> 
-	<font size="5">Hello {{username}}!</font><br>  
-	(<a href="{{signout_url}}">sign out</a>)
+	<span id="hello">Hello</span> <span id="username">{{username}}!</span><br>  
+	<a href="{{signout_url}}" id="logout">Logout</a>
 	</div>
 {% endblock %}
 {% block navigation %}
 	{% if hasgroups %}
-	<div id="menuGroups">
-		<a href="/group?group={{ group.key }}">
-			<span/>
-		</a>
-	</div>
+		<div id="menuGroups">
+			<a href="/group?group={{ group.key }}">
+				<span/>
+			</a>
+		</div>
 	{% endif %}
 	<div id="menuHomeActive">
 		<a href="/">

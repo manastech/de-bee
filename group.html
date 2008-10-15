@@ -1,8 +1,8 @@
 {% extends "master.html" %}
 {% block top %} 
 	<div style="text-align: right"> 
-	<font size="5">{{currentUser.nickname}}</font><br>  
-	(<a href="{{signout_url}}">sign out</a>)
+	<span id="hello">Hello</span> <span id="username">{{currentUser.nickname}}!</span><br>  
+	<a href="{{signout_url}}" id="logout">Logout</a>
 	</div>
 {% endblock %}
 {% block navigation %}

@@ -1,6 +1,6 @@
 {% if hasMembers %}
 
-<table>
+<table style="hspace">
 	
 <!--I Owe =========================================================== -->
 <tr>
@@ -8,24 +8,25 @@
 	<input type="hidden" name="group" value="{{membership.group.key}}" />
 	<input type="hidden" name="fromUser" value="{{currentUser.email}}" />
 	<input type="hidden" name="type" value="debt" />
-<td>
+<td style="padding: 0px 10px 4px 10px">
 	I owe
+</td>
+<td style="padding: 0px 10px 4px 10px">
 	<select name="toUser">
 		{% for member in members %}
 			<option value="{{member.user.email}}">{{member.user.nickname}}</option>
 		{% endfor %}
 	</select>
 </td>
-<td>
-	$ <input type="text" value="" name="amount"/>
-</td>
-<td>
+<td style="padding: 0px 2px 4px 2px"> $ </td>
+<td style="padding: 0px 10px 4px 2px"><input type="text" value="" name="amount"/></td>
+<td style="padding: 0px 10px 4px 10px">
 	due to
 </td>
-<td>
+<td style="padding: 0px 10px 4px 10px">
 	<input type="text" value="" name="reason"/>
 </td>
-<td>
+<td style="padding: 0px 10px 4px 10px">
 	<input style="vertical-align:middle" type="image" src="/images/Button_Save.gif" alt="Save" title="Save">
 </td>	
 </form>
@@ -36,24 +37,23 @@
 	<input type="hidden" name="group" value="{{membership.group.key}}" />
 	<input type="hidden" name="fromUser" value="{{currentUser.email}}" />
 	<input type="hidden" name="type" value="payment" />
-<td>
-	I payed
+<td style="padding: 4px 10px 4px 10px">I payed</td>
+<td style="padding: 4px 10px 4px 10px">
 	<select name="toUser">
 		{% for member in members %}
 			<option value="{{member.user.email}}">{{member.user.nickname}}</option>
 		{% endfor %}
 	</select>
 </td>
-<td>	
-	$ <input type="text" value="" name="amount"/>
-</td>
-<td>	
+<td style="padding: 4px 2px 4px 2px"> $ </td>
+<td style="padding: 4px 10px 4px 2px"><input type="text" value="" name="amount"/> </td>
+<td style="padding: 4px 10px 4px 10px">	
 	due to  
 </td>
-<td>
+<td style="padding: 4px 10px 4px 10px">
 	<input type="text" value="" name="reason"/>
 </td>
-<td>
+<td style="padding: 4px 10px 4px 10px">
 	<input style="vertical-align:middle" type="image" src="/images/Button_Save.gif" alt="Save" title="Save">
 </td>	
 </form>
@@ -64,24 +64,25 @@
 	<input type="hidden" name="group" value="{{membership.group.key}}" />
 	<input type="hidden" name="toUser" value="{{currentUser.email}}" />
 	<input type="hidden" name="type" value="debt" />
-<td>
+<td style="padding: 4px 10px 4px 10px">
 	<select name="fromUser">
 		{% for member in members %}
 			<option value="{{member.user.email}}">{{member.user.nickname}}</option>
 		{% endfor %}
 	</select>
+</td>
+<td style="padding: 4px 10px 4px 10px">
 	owes me
 </td>
-<td>
-	$ <input type="text" value="" name="amount"/>
-</td>
-<td>
+<td style="padding: 4px 2px 4px 2px"> $ </td>
+<td style="padding: 4px 10px 4px 2px"><input type="text" value="" name="amount"/></td>
+<td style="padding: 4px 10px 4px 10px">
 	due to  
 </td>
-<td>
+<td style="padding: 4px 10px 4px 10px">
 	<input type="text" value="" name="reason"/>
 </td>
-<td>
+<td style="padding: 4px 10px 4px 10px">
 	<input style="vertical-align:middle" type="image" src="/images/Button_Save.gif" alt="Save" title="Save">
 </td>	
 </form>
@@ -93,24 +94,25 @@
 	<input type="hidden" name="toUser" value="{{currentUser.email}}" />
 	<input type="hidden" name="type" value="payment" />
 
-<td>
+<td style="padding: 4px 10px 4px 10px">
 	<select name="fromUser">
 		{% for member in members %}
 			<option value="{{member.user.email}}">{{member.user.nickname}}</option>
 		{% endfor %}
 	</select>
+</td>
+<td style="padding: 4px 10px 4px 10px">
 	payed me
 </td>
-<td>
-	$ <input type="text" value="" name="amount"/>
-</td>
-<td>
+<td style="padding: 4px 2px 4px 2px"> $ </td>
+<td style="padding: 4px 10px 4px 2px"><input type="text" value="" name="amount"/></td>
+<td style="padding: 4px 10px 4px 10px">
 	due to
 </td>
-<td>
+<td style="padding: 4px 10px 4px 10px">
 	<input type="text" value="" name="reason"/>
 </td>
-<td>
+<td style="padding: 4px 10px 4px 10px">
 	<input style="vertical-align:middle" type="image" src="/images/Button_Save.gif" alt="Save" title="Save">
 </td>
 </form>
