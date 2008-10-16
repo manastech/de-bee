@@ -272,6 +272,28 @@ hd3
 	outline: none;
 }
 
+#groupBulkButton
+{
+	background: url(/images/s_Bulk_OFF.gif) no-repeat;
+	width: 150px;
+	height: 49px;
+	display: block;
+	float: left;
+	margin-left: 10px;
+}
+
+#groupBulkButton:hover
+{
+	background: url(/images/s_Bulk_OVER.gif) no-repeat;
+	outline: none;
+}
+
+#groupBulkButton.active
+{
+	background: url(/images/s_Bulk_ON.gif) no-repeat;
+	outline: none;
+}
+
 #hello
 {
 	color: #79775D;

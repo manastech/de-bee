@@ -1,0 +1,63 @@
+<script>
+var popupName = 'comandoPopup';
+var textareaName = 'comando';
+var textHeight = 20;
+var suggestionsPerPage = 5;
+var paga = new Array('Pays');
+var miembros = new Array( {{ autocompleteMembers }} );
+miembros.sort();
+var comidas = new Array();
+comidas.sort();
+
+function whatIsBulkFor() {
+	document.getElementById("whatIsBulkFor").style.display = "";
+}
+</script>
+
+<a href="javascript:whatIsBulkFor()">What's this for?</a>
+
+<div id="whatIsBulkFor" style="display:none">
+Say you go to lunch with your friends. It's easier if someone pays
+for the rest of the group and then uploads the debts into De-Bee. The one that
+pays simply enters below who payed, what consumed each one, how much did
+they pay, and De-Bee will handle the rest.
+</div>
+
+<table style="margin:0px; padding:0px">
+	<tr>
+		<td>
+		<form name="ejecutarComando" action="/bulkDo" target="logic" method="post">
+		<input type="hidden" name="group" value="{{membership.group.key}}" />
+		<table>
+			<tr>
+				<td colspan="2">
+				<div><textarea id="comando" name="command" rows="6"
+					style="width: 500px" onKeyDown="return keyDown(event);"
+					onKeyUp="return keyUp(event);" onFocus="evaluateShowSuggestions()"
+					onBlur="hideSuggestions()"></textarea></div>
+				<div id="comandoPopup"
+					style="display: none; position: absolute; border: 1px solid black; background-color: #DDDDDD; width: 500px; overflow: auto;">
+				</td>
+			</tr>
+			<tr>
+				<td><input type="submit" value="Aceptar"
+					onClick="javascript:this.form.action='/bulkDo'"></td>
+					<!--
+				<td align="right"><input type="submit" value="View summary"
+					onClick="javascript:this.form.action='/bulkSummary'"></td>
+					  -->
+			</tr>
+		</table>
+		</form>
+		</td>
+		<td width="8">&nbsp;</td>
+		<td valign="baseline" style="font-size:14px">
+		<strong>Example</strong>:<br />
+
+		<span style="font-family: courier new"> Pays: SomeMember<br />
+		AnotherMember: stuff $8<br />
+		MemberOne, MemberTwo: something they both bought $12<br />
+		Buyer: one thing, another thing, and one more $20</span>
+		</td>
+	</tr>
+</table>

@@ -10,5 +10,8 @@ handlers:
 - url: /images
   static_dir: images
   
+- url: /scripts
+  static_dir: scripts
+  
 - url: .*
   script: main.py

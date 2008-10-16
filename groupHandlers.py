@@ -63,22 +63,22 @@ class GroupHandler(webapp.RequestHandler):
 			for tr in transactions:
 				if (tr.type == "debt"):
 			 		if (tr.fromUser == user):
-			 			message = "you owed " + tr.toUser.nickname() + " $" + str(tr.amount)
+			 			message = "You owed " + tr.toUser.nickname() + " $" + str(tr.amount)
 			 		else:
 			 			message = tr.fromUser.nickname() + " owed you $" + str(tr.amount)
 			 	if (tr.type == "payment"):
 			 		if (tr.fromUser == user):
-			 			message = "you payed " + tr.toUser.nickname() + " $" + str(tr.amount)
+			 			message = "You payed " + tr.toUser.nickname() + " $" + str(tr.amount)
 			 		else:
 			 			message = tr.fromUser.nickname() + " payed you $" + str(tr.amount)
 			 	if (tr.type == "rejectedDebt"):
 			 		if (tr.fromUser == user):
-			 			message = "you rejected from " + tr.toUser.nickname() + " a debt of $" + str(tr.amount)
+			 			message = "You rejected from " + tr.toUser.nickname() + " a debt of $" + str(tr.amount)
 			 		else:
 			 			message = tr.fromUser.nickname() + " rejected you a debt of $" + str(tr.amount)
 			 	if (tr.type == "rejectedPayment"):
 			 		if (tr.fromUser == user):
-			 			message = "you rejected from " + tr.toUser.nickname() + " a payment of $" + str(tr.amount)
+			 			message = "You rejected from " + tr.toUser.nickname() + " a payment of $" + str(tr.amount)
 			 		else:
 			 			message = tr.fromUser.nickname() + " rejected you a payment of $" + str(tr.amount)
 			 	if ( len(tr.reason) > 0 ):
@@ -117,6 +117,12 @@ class GroupHandler(webapp.RequestHandler):
 		groupCreditors = []
 		for member in creditors:
 			groupCreditors.append({'user': member.user, 'amount': member.balance})
+			
+		autocompleteMembers = "";
+		for member in members:
+			autocompleteMembers += "'" + member.user.email() + "'"
+			autocompleteMembers += ", "
+		autocompleteMembers += "'" + user.email() + "'"
 		
 		template_values = {
 			'balance': me.balance * sign,
@@ -142,6 +148,7 @@ class GroupHandler(webapp.RequestHandler):
 			'hasDebtors': len(groupDebtors) > 0,
 			'groupCreditors': groupCreditors,
 			'hasCreditors': len(groupCreditors) > 0,
+			'autocompleteMembers': autocompleteMembers
 			 }
 		
 		path = os.path.join(os.path.dirname(__file__), 'group.html')

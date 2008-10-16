@@ -36,32 +36,51 @@ class RegisterTransactionHandler(webapp.RequestHandler):
 			alertMessage(self, error)
 			return
 		
-		tr = Transaction(
+		registerTransaction(group, creator, fromUser, toUser, amount, reason, type, rejectPath)
+		
+		location = '/group?group=%s' % group.key()
+		redirectPage(self,location)
+
+def registerTransaction(group, creator, fromUser, toUser, amount, reason, type, rejectPath):
+	fromMembership = Membership.gql("WHERE user = :1 AND group = :2", fromUser, group).get()
+	toMembership = Membership.gql("WHERE user = :1 AND group = :2", toUser, group).get()
+	creatorMembership = Membership.gql("WHERE user = :1 AND group = :2", creator, group).get()
+	
+	if not fromMembership:
+		return
+	
+	if not toMembership:
+		return
+	
+	if not creatorMembership:
+		return
+	
+	if not (fromMembership.group.key() == toMembership.group.key() and toMembership.group.key() == creatorMembership.group.key()):
+		return
+	
+	tr = Transaction(
 			group = group,
 			creator = creator, fromUser = fromUser, toUser = toUser,
 			type = type,
 			amount = amount, reason = reason,
 			isRejected = False
 			)
-		tr.put()
-				
-		fromMembership = Membership.gql("WHERE user = :1 AND group = :2", fromUser, group).get()
-		toMembership = Membership.gql("WHERE user = :1 AND group = :2", toUser, group).get()
-		# TODO revisar
-		if type == 'debt' or type == 'rejectedPayment':
-			fromMembership.balance -= amount
-			toMembership.balance += amount
-			if(fromUser != creator):
-				MailSender().sendTransactionNotice(fromUser.email(), fromMembership.name(), tr, rejectPath)
-		elif type == 'payment' or type == 'rejectedDebt': 
-			fromMembership.balance += amount
-			toMembership.balance -= amount
-			if(toUser != creator):
-				MailSender().sendTransactionNotice(toUser.email(), toMembership.name(), tr, rejectPath)
-				
-		fromMembership.put()
-		toMembership.put()
+	tr.put()
+
+	if type == 'debt' or type == 'rejectedPayment':
+		fromMembership.balance -= amount
+		toMembership.balance += amount
+	elif type == 'payment' or type == 'rejectedDebt': 
+		fromMembership.balance += amount
+		toMembership.balance -= amount
 		
-		location = '/group?group=%s' % group.key()
-		redirectPage(self,location)
-		 
+	fromMembership.put()
+	toMembership.put()
+		
+	if(fromUser.email() != creator.email()):
+		MailSender().sendTransactionNotice(fromUser.email(), fromMembership.name(), tr, rejectPath)
+		
+	if(toUser.email() != creator.email()):
+		MailSender().sendTransactionNotice(toUser.email(), toMembership.name(), tr, rejectPath)
+		
+			
