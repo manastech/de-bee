@@ -16,7 +16,7 @@ class MainHandler(webapp.RequestHandler):
         memberships = self.getMemberships(user)
         hasMembership = memberships.count() > 0
         if hasMembership:
-            group = memberships.get()
+            group = memberships.get().group
         else:
             group = 0
         
@@ -29,6 +29,7 @@ class MainHandler(webapp.RequestHandler):
 			'memberships' : memberships,
 			'isregistered' : reg.IsRegistered(user),
             'hasMembership' : hasMembership,
+            'hasgroups' : hasMembership,
             'group' : group,
             'message' : message,
             'hasMessage' : len(message) > 0

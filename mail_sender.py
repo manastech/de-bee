@@ -52,8 +52,8 @@ class MailSender:
 		'* Register a debt you have with someone\n' \
 		'* Register a payment someone has made to you\n' \
 		'* Register a debt someone has with you\n\n' \
-		'De-bee informs you about your summarized situation for all your groups and for each group in particular.\n\n\n' \
-		'Thanks,\n\nDe-Bee Team' \
+		'De-Bee informs you about your summarized situation for all your groups and for each group in particular.\n\n\n' \
+		'Thanks,\n\nDe-Bee' \
 		% (user_recipient, user_sender, group.name, plainInvitationText, plainUrl )
 		
 		message.html = 'Hello %s!<br><br>' \
@@ -72,12 +72,8 @@ class MailSender:
 		'<li>Register a payment someone has made to you</li>' \
 		'<li>Register a debt someone has with you</li></ul><br>' \
 		'De-bee informs you about your summarized situation for all your groups and for each group in particular.<br><br><br>' \
-		'Thanks,<br><br>De-Bee Team' \
+		'Thanks,<br><br>De-Bee' \
 		% (user_recipient, user_sender, group.name, fancyInvitationText, fancyUrl )
-		
-		#body = "click %s to accept. yeah! %s \n\nIf you can't click there, please copy this text \
-		#		and paste it into your browser: %s" % (fancyUrl, custom_invitation_text, plainUrl)
-		#mail.send_mail("info@de-bee.com", user_recipient, subject, body)
 		
 		message.send()
 
@@ -94,100 +90,139 @@ class MailSender:
 			if transaction.creator == transaction.toUser:
 				message.body = 'Hi %s!\n\n' \
 				'%s told us that you owe him/her $%s because of %s.\n' \
-				'If do not owe this money you can reject the debt, please copy and paste this text in your browser: %s\n\n\n' \
-				'Thanks,\n\nDe-Bee Team' \
+				'If you do not owe this money you can reject the debt, please copy and paste this text in your browser: %s\n\n\n' \
+				'Yours,\n\e-Bee' \
 				% (transaction.fromUser, transaction.toUser, transaction.amount, transaction.reason, url)
 				
 				message.html = 'Hi %s!<br><br>' \
 				'<b>%s</b> told us that <b>you owe him/her $%s</b> because of %s.<br>' \
-				'If do not owe this money you can reject the debt clicking %s.<br><br><br>' \
-				'Thanks,<br><br>De-Bee Team' \
+				'If you do not owe this money you can reject the debt clicking %s.<br><br><br>' \
+				'Yours,<br>De-Bee' \
 				% (transaction.fromUser, transaction.toUser, transaction.amount, transaction.reason, fancyUrl)
 			elif transaction.creator == transaction.fromUser:
 				message.body = 'Hi %s!\n\n' \
 				'%s told us that he/she owes you $%s because of %s.\n' \
 				'If he/she does not owe this money you can reject the debt, please copy and paste this text in your browser: %s\n\n\n' \
-				'Thanks,\n\nDe-Bee Team' \
+				'Yours,\nDe-Bee' \
 				% (transaction.toUser, transaction.fromUser, transaction.amount, transaction.reason, url)
 				
 				message.html = 'Hi %s!<br><br>' \
 				'<b>%s</b> told us that <b>he/she owes you $%s</b> because of %s.<br>' \
 				'If he/she does not owe this money you can reject the debt clicking %s.<br><br><br>' \
-				'Thanks,<br><br>De-Bee Team' \
+				'Yours,<br>De-Bee' \
 				% (transaction.toUser, transaction.fromUser, transaction.amount, transaction.reason, fancyUrl)
 			elif user_recipient == transaction.fromUser.email():
 				message.body = 'Hi %s!\n\n' \
 				'%s told us that you owe %s $%s because of %s.\n' \
-				'If do not owe this money you can reject the debt, please copy and paste this text in your browser: %s\n\n\n' \
-				'Thanks,\n\nDe-Bee Team' \
+				'If you do not owe this money you can reject the debt, please copy and paste this text in your browser: %s\n\n\n' \
+				'Yours,\nDe-Bee' \
 				% (transaction.fromUser, transaction.creator, transaction.toUser, transaction.amount, transaction.reason, url)
 				
 				message.html = 'Hi %s!<br><br>' \
 				'<b>%s</b> told us that <b>you owe %s $%s</b> because of %s.<br>' \
-				'If do not owe this money you can reject the debt clicking %s.<br><br><br>' \
-				'Thanks,<br><br>De-Bee Team' \
+				'If you do not owe this money you can reject the debt clicking %s.<br><br><br>' \
+				'Yours,<br>De-Bee' \
 				% (transaction.fromUser, transaction.creator, transaction.toUser, transaction.amount, transaction.reason, fancyUrl)
 			elif user_recipient == transaction.toUser.email():
 				message.body = 'Hi %s!\n\n' \
 				'%s told us that %s owes you $%s because of %s.\n' \
 				'If he/she does not owe this money you can reject the debt, please copy and paste this text in your browser: %s\n\n\n' \
-				'Thanks,\n\nDe-Bee Team' \
+				'Yours,\nDe-Bee' \
 				% (transaction.toUser, transaction.creator, transaction.fromUser, transaction.amount, transaction.reason, url)
 				
 				message.html = 'Hi %s!<br><br>' \
 				'<b>%s</b> told us that <b>%s owes you $%s</b> because of %s.<br>' \
 				'If he/she does not owe this money you can reject the debt clicking %s.<br><br><br>' \
-				'Thanks,<br><br>De-Bee Team' \
+				'Yours,<br>De-Bee' \
 				% (transaction.toUser, transaction.creator, transaction.fromUser, transaction.amount, transaction.reason, fancyUrl)
 		elif transaction.type == 'payment':
 			if transaction.creator == transaction.fromUser:
 				message.body = 'Hi %s!\n\n' \
 				'%s told us that he/she payed you $%s because of %s.\n' \
 				'If you did not get that money you can reject this, please copy and paste this text in your browser: %s\n\n\n' \
-				'Thanks,\n\nDe-Bee Team' \
+				'Yours,\nDe-Bee' \
 				% (transaction.toUser, transaction.fromUser, transaction.amount, transaction.reason, url)
 				
 				message.html = 'Hi %s!<br><br>' \
 				'<b>%s</b> told us that <b>he/she payed you $%s</b> because of %s.<br>' \
 				'If you did not get that money you can reject this clicking %s.<br><br><br>' \
-				'Thanks,<br><br>De-Bee Team' \
+				'Yours,<br>De-Bee' \
 				% (transaction.toUser, transaction.fromUser, transaction.amount, transaction.reason, fancyUrl)
 			elif transaction.creator == transaction.toUser:
 				message.body = 'Hi %s!\n\n' \
 				'%s told us that you payed him/her $%s because of %s.\n' \
 				'If you did not get that money you can reject this, please copy and paste this text in your browser: %s\n\n\n' \
-				'Thanks,\n\nDe-Bee Team' \
+				'Yours,\nDe-Bee' \
 				% (transaction.fromUser, transaction.toUser, transaction.amount, transaction.reason, url)
 				
 				message.html = 'Hi %s!<br><br>' \
 				'<b>%s</b> told us that <b>you payed him/her $%s</b> because of %s.<br>' \
 				'If you did not get that money you can reject this clicking %s.<br><br><br>' \
-				'Thanks,<br><br>De-Bee Team' \
+				'Yours,<br>De-Bee' \
 				% (transaction.fromUser, transaction.toUser, transaction.amount, transaction.reason, fancyUrl)
 			elif user_recipient == transaction.toUser.email():
 				message.body = 'Hi %s!\n\n' \
 				'%s told us that %s payed you $%s because of %s.\n' \
 				'If you did not get that money you can reject this, please copy and paste this text in your browser: %s\n\n\n' \
-				'Thanks,\n\nDe-Bee Team' \
+				'Yours,\nDe-Bee' \
 				% (transaction.toUser, transaction.creator, transaction.fromUser, transaction.amount, transaction.reason, url)
 				
 				message.html = 'Hi %s!<br><br>' \
 				'<b>%s</b> told us that <b>%s payed you $%s</b> because of %s.<br>' \
 				'If you did not get that money you can reject this clicking %s.<br><br><br>' \
-				'Thanks,<br><br>De-Bee Team' \
+				'Yours,<br>De-Bee' \
 				% (transaction.toUser, transaction.creator, transaction.fromUser, transaction.amount, transaction.reason, fancyUrl)
 			elif user_recipient == transaction.fromUser.email():
 				message.body = 'Hi %s!\n\n' \
 				'%s told us that you payed %s $%s because of %s.\n' \
 				'If you did not payed that money you can reject this, please copy and paste this text in your browser: %s\n\n\n' \
-				'Thanks,\n\nDe-Bee Team' \
+				'Yours,\nDe-Bee' \
 				% (transaction.fromUser, transaction.creator, transaction.toUser, transaction.amount, transaction.reason, url)
 				
 				message.html = 'Hi %s!<br><br>' \
 				'<b>%s</b> told us that <b>you payed %s $%s</b> because of %s.<br>' \
 				'If you did not payed that money you can reject this clicking %s.<br><br><br>' \
-				'Thanks,<br><br>De-Bee Team' \
+				'Yours,<br>De-Bee' \
 				% (transaction.fromUser, transaction.creator, transaction.toUser, transaction.amount, transaction.reason, fancyUrl)
 				
 		message.send();
-        
+		
+	def sendTransactionRejectNotice(self, user_recipient, group_name, transaction, reason):
+		subject = "De-Bee: Transaction rejection notice in %s group" % group_name
+		message = mail.EmailMessage(sender="info@de-bee.com", to=user_recipient, subject=subject)
+		message.body = 'Hi %s!\n\n' % user_recipient
+		message.html = 'Hi %s!<br><br>' % user_recipient
+		
+		if user_recipient == transaction.fromUser.email():
+			msg = '%s has rejected a transaction saying that ' % transaction.toUser.nickname()
+			msg += 'you '
+			if transaction.type == 'debt':
+				msg += 'owe '
+			else:
+				msg += 'payed '
+			msg += 'him/her '
+			
+			message.body += msg
+			message.html += msg
+		else:
+			msg = '%s has rejected a transaction saying that ' % transaction.fromUser.nickname()
+			msg += 'he/she '
+			if transaction.type == 'debt':
+				msg += 'owes '
+			else:
+				msg += 'payed '
+			msg += 'you '
+			
+			message.body += msg
+			message.html += msg
+		 
+		message.body += '$%s because of %s\n\n' % (transaction.amount, transaction.reason)
+		message.html += '$%s because of %s<br><br>' % (transaction.amount, transaction.reason)
+		
+		message.body += 'His/her reason is:\n\n%s\n\n' % reason
+		message.html += 'His/her reason is:<br><br>%s<br><br>' % reason
+		
+		message.body += 'Yours,\nDe-Bee'
+		message.html += 'Yours,<br>De-Bee'
+		
+		message.send();

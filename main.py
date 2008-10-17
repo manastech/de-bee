@@ -25,6 +25,7 @@ def main():
                     ('/groupCreation', GroupCreationHandler),
                     ('/group',GroupHandler),
                     ('/reject', RejectTransactionHandler),
+                    ('/doReject', DoRejectTransactionHandler),
                     ('/enterUnsubscription', EnterUnsubscriptionHandler),
                     ('/groupUnsubscription', UnsubscriptionHandler),
 					('/groupInvitation', GroupInvitationHandler),
