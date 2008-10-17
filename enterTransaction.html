@@ -3,12 +3,12 @@
 <table style="hspace">
 	
 <!--I Owe =========================================================== -->
-<tr>
+<tr style="color:#5C0101">
 <form action="/registerTransaction" method="post" target="logic">
 	<input type="hidden" name="group" value="{{membership.group.key}}" />
 	<input type="hidden" name="fromUser" value="{{currentUser.email}}" />
 	<input type="hidden" name="type" value="debt" />
-<td style="padding: 0px 10px 4px 10px">
+<td style="padding: 0px 10px 4px 10px" align="center">
 	I owe
 </td>
 <td style="padding: 0px 10px 4px 10px">
@@ -32,12 +32,12 @@
 </form>
 </tr>
 <!--I Payed =========================================================== -->
-<tr>
+<tr style="color:#005E00">
 <form action="/registerTransaction" method="post" target="logic">
 	<input type="hidden" name="group" value="{{membership.group.key}}" />
 	<input type="hidden" name="fromUser" value="{{currentUser.email}}" />
 	<input type="hidden" name="type" value="payment" />
-<td style="padding: 4px 10px 4px 10px">I payed</td>
+<td style="padding: 4px 10px 4px 10px" align="center">I payed</td>
 <td style="padding: 4px 10px 4px 10px">
 	<select name="toUser">
 		{% for member in members %}
@@ -47,7 +47,7 @@
 </td>
 <td style="padding: 4px 2px 4px 2px"> $ </td>
 <td style="padding: 4px 10px 4px 2px"><input type="text" value="" name="amount"/> </td>
-<td style="padding: 4px 10px 4px 10px">	
+<td style="padding: 4px 10px 4px 10px" align="center">	
 	due to  
 </td>
 <td style="padding: 4px 10px 4px 10px">
@@ -59,7 +59,7 @@
 </form>
 </tr>
 <!--Someone owes me =========================================================== -->
-<tr>
+<tr style="color:#005E00">
 <form action="/registerTransaction" method="post" target="logic">
 	<input type="hidden" name="group" value="{{membership.group.key}}" />
 	<input type="hidden" name="toUser" value="{{currentUser.email}}" />
@@ -71,12 +71,12 @@
 		{% endfor %}
 	</select>
 </td>
-<td style="padding: 4px 10px 4px 10px">
+<td style="padding: 4px 10px 4px 10px" align="center">
 	owes me
 </td>
 <td style="padding: 4px 2px 4px 2px"> $ </td>
 <td style="padding: 4px 10px 4px 2px"><input type="text" value="" name="amount"/></td>
-<td style="padding: 4px 10px 4px 10px">
+<td style="padding: 4px 10px 4px 10px" align="center">
 	due to  
 </td>
 <td style="padding: 4px 10px 4px 10px">
@@ -88,7 +88,7 @@
 </form>
 </tr>
 <!--Someone payed me =========================================================== -->
-<tr>
+<tr style="color:#5C0101">
 <form action="/registerTransaction" method="post" target="logic">
 	<input type="hidden" name="group" value="{{membership.group.key}}" />
 	<input type="hidden" name="toUser" value="{{currentUser.email}}" />
@@ -101,12 +101,12 @@
 		{% endfor %}
 	</select>
 </td>
-<td style="padding: 4px 10px 4px 10px">
+<td style="padding: 4px 10px 4px 10px" align="center">
 	payed me
 </td>
 <td style="padding: 4px 2px 4px 2px"> $ </td>
 <td style="padding: 4px 10px 4px 2px"><input type="text" value="" name="amount"/></td>
-<td style="padding: 4px 10px 4px 10px">
+<td style="padding: 4px 10px 4px 10px" align="center">
 	due to
 </td>
 <td style="padding: 4px 10px 4px 10px">

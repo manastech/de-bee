@@ -49,18 +49,18 @@
 			{% else %}
 				{% if debts.hasMoreThanOneItem %}
 					{% if debts.isOweToSelf %}
-						They owe you a total of ${{debts.total}}.
+						<span style="color:#005E00">They owe you a total of ${{debts.total}}.</span>
 					{% else %}
-						You owe a total of ${{debts.total}}.
+						<span style="color:#5C0101">You owe a total of ${{debts.total}}.</span>
 					{% endif %}
 				{% endif %}
 			{% endif %}
 			<ul>
     		{% for debt in debts.items %}
 				{% if debt.isOweToSelf %}
-					<li>in <a href="/group?group={{debt.group.key}}">{{debt.group.name}}</a> they owe you ${{debt.amount}}</li>
+					<li style="color:#005E00">in <a href="/group?group={{debt.group.key}}">{{debt.group.name}}</a> they owe you ${{debt.amount}}</li>
 				{% else %}					
-					<li>You owe ${{debt.amount}} in <a href="/group?group={{debt.group.key}}">{{debt.name}}</a></li>
+					<li style="color:#5C0101">You owe ${{debt.amount}} in <a href="/group?group={{debt.group.key}}">{{debt.name}}</a></li>
 				{% endif %}
 			{% endfor %}
 			</ul>
