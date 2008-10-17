@@ -10,32 +10,32 @@ indexes:
 # automatically uploaded to the admin console when you next deploy
 # your application using appcfg.py.
 
-# Used 241 times in query history.
+# Used 249 times in query history.
 - kind: Membership
   properties:
   - name: group
   - name: balance
 
-# Used 135 times in query history.
+# Used 136 times in query history.
 - kind: Membership
   properties:
   - name: group
   - name: balance
     direction: desc
 
-# Used 822 times in query history.
+# Used 828 times in query history.
 - kind: Membership
   properties:
   - name: group
   - name: user
 
-# Used 370 times in query history.
+# Used 374 times in query history.
 - kind: Membership
   properties:
   - name: user
   - name: balance
 
-# Used 600 times in query history.
+# Used 612 times in query history.
 - kind: Membership
   properties:
   - name: user
@@ -47,7 +47,7 @@ indexes:
   - name: date
     direction: desc
 
-# Used 174 times in query history.
+# Used 177 times in query history.
 - kind: Transaction
   properties:
   - name: fromUser
@@ -62,7 +62,7 @@ indexes:
   - name: date
     direction: desc
 
-# Used 170 times in query history.
+# Used 173 times in query history.
 - kind: Transaction
   properties:
   - name: group

@@ -2,11 +2,15 @@
 	<body>
 		{% if hasMoreThanOneItem %}
 			You owe a total of ${{ balance }}:<br>
+			<ul>
+			{% for i in result %}
+				<li>$ {{ i.amount }} to {{ i.user }}</li>
+			{% endfor %}	
+			</ul>
+		{% else %}
+			{% for i in result %}
+				You owe $ {{ i.amount }} to {{ i.user }}
+			{% endfor %}
 		{% endif %}
-		<ul>
-		{% for i in result %}
-			<li>$ {{ i.amount }} to {{ i.user }}</li>
-		{% endfor %}	
-		</ul>
 	</body>
 </html>
