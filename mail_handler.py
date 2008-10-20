@@ -113,7 +113,7 @@ class DoRejectTransactionHandler(webapp.RequestHandler):
 		elif transaction.type == "debt":
 			comp_type = "rejectedDebt"
 		
-		new_transaction = Transaction(creator = creatorVar,
+		new_transaction = Transaction(creatorMember = creatorVar,
 									fromMember = fromVar, toMember = toVar,
 									type = comp_type, amount = transaction.amount,
 									group = transaction.group,
