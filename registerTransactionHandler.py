@@ -60,7 +60,7 @@ def registerTransaction(group, creator, fromUser, toUser, amount, reason, type, 
 	
 	tr = Transaction(
 			group = group,
-			creator = creator, fromUser = fromUser, toUser = toUser,
+			creatorMember = creatorMembership, fromMember = fromMembership, toMember = toMembership,
 			type = type,
 			amount = amount, reason = reason,
 			isRejected = False

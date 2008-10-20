@@ -102,19 +102,19 @@ class DoRejectTransactionHandler(webapp.RequestHandler):
 				
 	def createCompensateTransaction(self, transaction):
 		comp_type = None
-		fromVar = transaction.fromUser
-		toVar = transaction.toUser
-		creatorVar = user = users.get_current_user()
+		fromVar = transaction.fromMember
+		toVar = transaction.toMember
+		creatorVar = Membership.gql("WHERE user = :1 AND group = :2", users.get_current_user(), transaction.group).get()
 		
 		if transaction.type == "payment":
 			comp_type = "rejectedPayment"
-			fromVar = transaction.toUser
-			toVar = transaction.fromUser
+			fromVar = transaction.toMember
+			toVar = transaction.fromMember
 		elif transaction.type == "debt":
 			comp_type = "rejectedDebt"
 		
 		new_transaction = Transaction(creator = creatorVar,
-									fromUser = fromVar, toUser = toVar,
+									fromMember = fromVar, toMember = toVar,
 									type = comp_type, amount = transaction.amount,
 									group = transaction.group,
 									reason = transaction.reason,

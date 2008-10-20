@@ -13,29 +13,36 @@ indexes:
 # Used 14 times in query history.
 - kind: Membership
   properties:
+  - name: alias
+  - name: user
+  - name: group
+
+# Used 224 times in query history.
+- kind: Membership
+  properties:
   - name: group
   - name: balance
 
-# Unused in query history -- copied from input.
+# Used 56 times in query history.
 - kind: Membership
   properties:
   - name: group
   - name: balance
     direction: desc
 
-# Used 14 times in query history.
+# Used 228 times in query history.
 - kind: Membership
   properties:
   - name: group
   - name: user
 
-# Used 4 times in query history.
+# Used 14 times in query history.
 - kind: Membership
   properties:
   - name: user
   - name: balance
 
-# Used 28 times in query history.
+# Used 440 times in query history.
 - kind: Membership
   properties:
   - name: user
@@ -47,7 +54,15 @@ indexes:
   - name: date
     direction: desc
 
-# Used 7 times in query history.
+# Used once in query history.
+- kind: Transaction
+  properties:
+  - name: fromMember
+  - name: group
+  - name: date
+    direction: desc
+
+# Used 99 times in query history.
 - kind: Transaction
   properties:
   - name: fromUser
@@ -62,7 +77,15 @@ indexes:
   - name: date
     direction: desc
 
-# Used 7 times in query history.
+# Used once in query history.
+- kind: Transaction
+  properties:
+  - name: group
+  - name: toMember
+  - name: date
+    direction: desc
+
+# Used 99 times in query history.
 - kind: Transaction
   properties:
   - name: group

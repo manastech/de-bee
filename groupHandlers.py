@@ -48,10 +48,10 @@ class GroupHandler(webapp.RequestHandler):
 		try:
 			transactionCount = int(self.request.get('transactionCount', default_value=10))
 			
-			transactions_query_from = Transaction.gql("WHERE group = :1 AND fromUser = :2 ORDER BY date DESC", group, user)
+			transactions_query_from = Transaction.gql("WHERE group = :1 AND fromMember = :2 ORDER BY date DESC", group, me)
 			transactions_from = transactions_query_from.fetch(transactionCount)
 			
-			transactions_query_to = Transaction.gql("WHERE group = :1 AND toUser = :2 ORDER BY date DESC", group, user)
+			transactions_query_to = Transaction.gql("WHERE group = :1 AND toMember = :2 ORDER BY date DESC", group, me)
 			transactions_to = transactions_query_to.fetch(transactionCount)
 			
 			transactions = transactions_from + transactions_to
@@ -61,28 +61,31 @@ class GroupHandler(webapp.RequestHandler):
 			
 			messages = []
 			for tr in transactions:
+				if not tr.fromUser or not tr.toUser or not tr.creator:
+					continue
+				
 				if (tr.type == "debt"):
 			 		if (tr.fromUser == user):
-			 			message = "You owed " + tr.toUser.nickname() + " $" + str(tr.amount)
+			 			message = "<span style=\"color:#5C0101\">You owed " + tr.toUser.nickname() + " $" + str(tr.amount)
 			 		else:
-			 			message = tr.fromUser.nickname() + " owed you $" + str(tr.amount)
+			 			message = "<span style=\"color:#005E00\">" + tr.fromUser.nickname() + " owed you $" + str(tr.amount)
 			 	if (tr.type == "payment"):
 			 		if (tr.fromUser == user):
-			 			message = "You payed " + tr.toUser.nickname() + " $" + str(tr.amount)
+			 			message = "<span style=\"color:#005E00\">You payed " + tr.toUser.nickname() + " $" + str(tr.amount)
 			 		else:
-			 			message = tr.fromUser.nickname() + " payed you $" + str(tr.amount)
+			 			message = "<span style=\"color:#5C0101\">" + tr.fromUser.nickname() + " payed you $" + str(tr.amount)
 			 	if (tr.type == "rejectedDebt"):
 			 		if (tr.fromUser == user):
-			 			message = "You rejected from " + tr.toUser.nickname() + " a debt of $" + str(tr.amount)
+			 			message = "<span style=\"color:#005E00\">You rejected from " + tr.toUser.nickname() + " a debt of $" + str(tr.amount)
 			 		else:
-			 			message = tr.fromUser.nickname() + " rejected you a debt of $" + str(tr.amount)
+			 			message = "<span style=\"color:#5C0101\">" + tr.fromUser.nickname() + " rejected you a debt of $" + str(tr.amount)
 			 	if (tr.type == "rejectedPayment"):
 			 		if (tr.fromUser == user):
-			 			message = "You rejected from " + tr.toUser.nickname() + " a payment of $" + str(tr.amount)
+			 			message = "<span style=\"color:#005E00\">You rejected from " + tr.toUser.nickname() + " a payment of $" + str(tr.amount)
 			 		else:
-			 			message = tr.fromUser.nickname() + " rejected you a payment of $" + str(tr.amount)
+			 			message = "<span style=\"color:#5C0101\">" + tr.fromUser.nickname() + " rejected you a payment of $" + str(tr.amount)
 			 	if ( len(tr.reason) > 0 ):
-			 		message = message + " due to " + tr.reason
+			 		message = message + " due to " + tr.reason + "</span>"
 			 	message = niceDate(tr.date) + " " + message
 			 	messages.append(message)
 			 	

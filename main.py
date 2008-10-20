@@ -13,11 +13,6 @@ from userGroupUnsubscription import *
 import wsgiref.handlers
 
 def main():
-#  group = Group.get('agZkZS1iZWVyCwsSBUdyb3VwGB0M')
-#  user = users.get_current_user();
-#  if user:
-#  	Membership(user=user,group=group,balance=0.0,alias='Work').put()
-	
   application = webapp.WSGIApplication([
 					('/', MainHandler),
 					('/registerTransaction', RegisterTransactionHandler),
