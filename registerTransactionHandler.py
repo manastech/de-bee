@@ -78,9 +78,9 @@ def registerTransaction(group, creator, fromUser, toUser, amount, reason, type, 
 	toMembership.put()
 		
 	if(fromUser.email() != creator.email()):
-		MailSender().sendTransactionNotice(fromUser.email(), fromMembership.name(), tr, rejectPath)
+		MailSender().sendTransactionNotice(fromUser.email(), fromMembership.name, tr, rejectPath)
 		
 	if(toUser.email() != creator.email()):
-		MailSender().sendTransactionNotice(toUser.email(), toMembership.name(), tr, rejectPath)
+		MailSender().sendTransactionNotice(toUser.email(), toMembership.name, tr, rejectPath)
 		
 			

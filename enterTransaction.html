@@ -14,7 +14,7 @@
 <td style="padding: 0px 10px 4px 10px">
 	<select name="toUser">
 		{% for member in members %}
-			<option value="{{member.user.email}}">{{member.user.nickname}}</option>
+			<option value="{{member.user.email}}">{{member.nick}}</option>
 		{% endfor %}
 	</select>
 </td>
@@ -41,7 +41,7 @@
 <td style="padding: 4px 10px 4px 10px">
 	<select name="toUser">
 		{% for member in members %}
-			<option value="{{member.user.email}}">{{member.user.nickname}}</option>
+			<option value="{{member.user.email}}">{{member.nick}}</option>
 		{% endfor %}
 	</select>
 </td>
@@ -67,7 +67,7 @@
 <td style="padding: 4px 10px 4px 10px">
 	<select name="fromUser">
 		{% for member in members %}
-			<option value="{{member.user.email}}">{{member.user.nickname}}</option>
+			<option value="{{member.user.email}}">{{member.nick}}</option>
 		{% endfor %}
 	</select>
 </td>
@@ -97,7 +97,7 @@
 <td style="padding: 4px 10px 4px 10px">
 	<select name="fromUser">
 		{% for member in members %}
-			<option value="{{member.user.email}}">{{member.user.nickname}}</option>
+			<option value="{{member.user.email}}">{{member.nick}}</option>
 		{% endfor %}
 	</select>
 </td>

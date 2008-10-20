@@ -37,7 +37,7 @@ class GroupHandler(webapp.RequestHandler):
 			for member in members:
 				if balance <= 0.0:
 					break
-				result.append({'user': member.user, 'amount': min(balance, member.balance * -sign)})
+				result.append({'user': member.nick, 'amount': min(balance, member.balance * -sign)})
 				balance -= member.balance * -sign
 		else:
 			sign = 0
@@ -66,24 +66,24 @@ class GroupHandler(webapp.RequestHandler):
 				
 				if (tr.type == "debt"):
 			 		if (tr.fromUser == user):
-			 			message = "<span style=\"color:#5C0101\">You owed " + tr.toUser.nickname() + " $" + str(tr.amount)
+			 			message = "<span style=\"color:#5C0101\">You owed " + tr.toMember.nick + " $" + str(tr.amount)
 			 		else:
-			 			message = "<span style=\"color:#005E00\">" + tr.fromUser.nickname() + " owed you $" + str(tr.amount)
+			 			message = "<span style=\"color:#005E00\">" + tr.fromMember.nick + " owed you $" + str(tr.amount)
 			 	if (tr.type == "payment"):
 			 		if (tr.fromUser == user):
-			 			message = "<span style=\"color:#005E00\">You payed " + tr.toUser.nickname() + " $" + str(tr.amount)
+			 			message = "<span style=\"color:#005E00\">You payed " + tr.toMember.nick + " $" + str(tr.amount)
 			 		else:
-			 			message = "<span style=\"color:#5C0101\">" + tr.fromUser.nickname() + " payed you $" + str(tr.amount)
+			 			message = "<span style=\"color:#5C0101\">" + tr.fromMember.nick + " payed you $" + str(tr.amount)
 			 	if (tr.type == "rejectedDebt"):
 			 		if (tr.fromUser == user):
-			 			message = "<span style=\"color:#005E00\">You rejected from " + tr.toUser.nickname() + " a debt of $" + str(tr.amount)
+			 			message = "<span style=\"color:#005E00\">You rejected from " + tr.toMember.nick + " a debt of $" + str(tr.amount)
 			 		else:
-			 			message = "<span style=\"color:#5C0101\">" + tr.fromUser.nickname() + " rejected you a debt of $" + str(tr.amount)
+			 			message = "<span style=\"color:#5C0101\">" + tr.fromMember.nick + " rejected you a debt of $" + str(tr.amount)
 			 	if (tr.type == "rejectedPayment"):
 			 		if (tr.fromUser == user):
-			 			message = "<span style=\"color:#005E00\">You rejected from " + tr.toUser.nickname() + " a payment of $" + str(tr.amount)
+			 			message = "<span style=\"color:#005E00\">You rejected from " + tr.toMember.nick + " a payment of $" + str(tr.amount)
 			 		else:
-			 			message = "<span style=\"color:#5C0101\">" + tr.fromUser.nickname() + " rejected you a payment of $" + str(tr.amount)
+			 			message = "<span style=\"color:#5C0101\">" + tr.fromMember.nick + " rejected you a payment of $" + str(tr.amount)
 			 	if ( len(tr.reason) > 0 ):
 			 		message = message + " due to " + tr.reason + "</span>"
 			 	message = niceDate(tr.date) + " " + message
@@ -115,17 +115,17 @@ class GroupHandler(webapp.RequestHandler):
 
 		groupDebtors = []
 		for member in debtors:
-			groupDebtors.append({'user': member.user, 'amount': member.balance*-1})
+			groupDebtors.append({'user': member.nick, 'amount': member.balance*-1})
 		
 		groupCreditors = []
 		for member in creditors:
-			groupCreditors.append({'user': member.user, 'amount': member.balance})
+			groupCreditors.append({'user': member.nick, 'amount': member.balance})
 			
 		autocompleteMembers = "";
 		for member in members:
-			autocompleteMembers += "'" + member.user.email() + "'"
+			autocompleteMembers += "'" + member.nick + "'"
 			autocompleteMembers += ", "
-		autocompleteMembers += "'" + user.email() + "'"
+		autocompleteMembers += "'" + me.nick + "'"
 		
 		template_values = {
 			'balance': me.balance * sign,
@@ -219,30 +219,53 @@ class GroupCreationHandler(webapp.RequestHandler):
 class GroupChangeAliasHandler(webapp.RequestHandler):
 	
 	def post(self):
-		if authenticatedUser(self):
-			membership = Membership.get(self.request.get('membership'))
-			# Verificar que la membership que se paso sea efectivamente del usuario
-			if self.isMember(membership):
-				newAlias = self.request.get('alias').strip()
-				
-				if newAlias == "": # verificar que el alias no sea vacio
-					error = 'Group name is required.'
-					alertMessage(self,error)
-					return
-				elif self.isAliasTaken(newAlias): # verificar que no exista un alias del usuario con el mismo nombre
-					error = 'You already have a Group with the selected name, please select another name.'
-					alertMessage(self,error)
-					return
-				else: # good to go
-				    membership.alias = newAlias
-				    membership.put()
-				    location = '/group?group=%s' % membership.group.key()
-				    redirectPage(self,location)
+		if not authenticatedUser(self):
+			return
+			
+		membership = Membership.get(self.request.get('membership'))
+		
+		# Verificar que la membership que se paso sea efectivamente del usuario
+		if not self.isMember(membership):
+			return
+		
+		newAlias = self.request.get('alias').strip()
+		newNickname = self.request.get('nickname').strip()
+		
+		# Verificar que el alias no sea vacio
+		if newAlias == "":
+			error = 'The name by which you want to see this group is required.'
+			alertMessage(self,error)
+			return
+		
+		# Verificar que no exista un alias del usuario con el mismo nombre
+		if self.isAliasTaken(newAlias, membership.group):
+			error = 'You already have a Group with the selected name, please select another name.'
+			alertMessage(self,error)
+			return
+		
+		# Verificar que el nickname no sea vacio
+		if newNickname == "":
+			error = 'The name by which you want others to see you in this group is required.'
+			alertMessage(self,error)
+			return
+		
+		# Verificar que el nickname no este tomado
+		for other in Membership.gql("WHERE group = :1 AND user != :2", membership.group, membership.user):
+			if other.nick == newNickname:
+				error = 'The name by which you want others to see you in this group is already used by another member.'
+				alertMessage(self,error)
+				return
+
+		membership.alias = newAlias
+		membership.nickname = newNickname
+		membership.put()
+		location = '/group?group=%s&msg=%s' % (membership.group.key(), 'Properties changed!')
+		redirectPage(self,location)
 		    
 	def isMember(self,membership):
 		user = users.get_current_user()
 		return membership.user == user 
 	
-	def isAliasTaken(self,alias):
+	def isAliasTaken(self, alias, group):
 		user = users.get_current_user()
-		return Membership.gql("WHERE user = :1 AND alias = :2", user, alias).count() > 0
+		return Membership.gql("WHERE user = :1 AND alias = :2 AND group != :3", user, alias, group).count() > 0

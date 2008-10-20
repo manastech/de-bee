@@ -1,17 +1,32 @@
 <div>
 	<form action="/groupChangeAlias" method="post" target="logic">
-			<label style="font-size:12">Change the alias of this group:</label> 
-			<input type="text" value="{{membership.name}}" name="alias"/>
+		<table>
 			<input type="hidden" value="{{membership.key}}" name="membership"/>
-			<input style="vertical-align:middle" type="image" src="/images/Button_Save.gif" alt="ChangeAlias" title="ChangeAlias">
+			<tr>
+				<td><label style="font-size:12">By which name you want to see this group:</label></td> 
+				<td><input type="text" value="{{membership.name}}" name="alias"/></td>
+			</tr>
+			<tr>
+				<td><label style="font-size:12">By which name you want others to see you in this group:</label></td> 
+				<td><input type="text" value="{{membership.nick}}" name="nickname"/></td>
+			</tr>	
+			<tr>
+				<td colspan="2" align="right"><input style="vertical-align:middle" type="image" src="/images/Button_Save.gif" alt="Save" title="Save"></td>
+			</tr>
+		</table>
 	</form>
 </div>
 <br>
 <div>
 	{% if balanceIsZero %}
 		<form action="/groupUnsubscription" method="post" target="logic">
-			<input type="hidden" name="group" value="{{membership.group.key}}" />
-			<input style="vertical-align:middle" type="image" src="/images/Button_UnregisterMe.gif" alt="Unsusbribe" title="Unsusbribe">
+		<input type="hidden" name="group" value="{{membership.group.key}}" />
+			<table>
+				<tr>
+					<td>If you want to leave this group, click this button:</td>
+					<td><input style="vertical-align:middle" type="image" src="/images/Button_UnregisterMe.gif" alt="Unsusbribe" title="Unsusbribe"></td>
+				</tr>
+			</table>
 		</form>
 	{% else %}
 		<small>At this moment you can not unsuscribe from this group, nobody must owe you and you must owe noone, 

@@ -48,7 +48,7 @@ class MainHandler(webapp.RequestHandler):
 	items = []
 	for m in self.getRelevantMemberships(user):
 		total += m.balance
-		items.append({'isZero': m.balance == 0.0, 'isOweToSelf' : m.balance > 0.0, 'amount' : abs(m.balance), 'group' : m.group, 'name' : m.name() })
+		items.append({'isZero': m.balance == 0.0, 'isOweToSelf' : m.balance > 0.0, 'amount' : abs(m.balance), 'group' : m.group, 'name' : m.name })
 	return { 'isZero': total == 0.0, 'isOweToSelf' : total > 0.0, 'total' : abs(total), 'items' : items, 'hasMoreThanOneItem' : len(items) > 1 }
 
   def getMemberships(self, user):

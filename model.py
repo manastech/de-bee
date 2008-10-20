@@ -7,13 +7,30 @@ class Membership(db.Model):
 	user = db.UserProperty(required=True)
 	group = db.ReferenceProperty(Group)
 	balance = db.FloatProperty(required=True)
-	alias = db.StringProperty(required=False)
 	
+	# The alias of the group name
+	alias = db.StringProperty()
+	
+	# The nickname of the user in the group
+	nickname = db.StringProperty()
+	
+	# The alias of the group name, or the group name if the
+	# alias is not defined
+	@property
 	def name(self):
 		if self.alias and self.alias != "":
 			return self.alias
 		else:
 			return self.group.name
+		
+	# The nickname of the user in the group, or the user's nickname
+	# if the membership's nickname is not defined 
+	@property
+	def nick(self):
+		if self.nickname and self.nickname != "":
+			return self.nickname
+		else:
+			return self.user.nickname()
     
 class Transaction(db.Model):
 	group = db.ReferenceProperty(Group)

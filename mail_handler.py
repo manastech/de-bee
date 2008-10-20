@@ -92,9 +92,9 @@ class DoRejectTransactionHandler(webapp.RequestHandler):
 							toMembership.put()
 							
 							if new_transaction.fromUser.email() != user.email():
-								MailSender().sendTransactionRejectNotice(new_transaction.fromUser.email(), fromMembership.name(), transaction, reason)
+								MailSender().sendTransactionRejectNotice(new_transaction.fromUser.email(), fromMembership.name, transaction, reason)
 							else:
-								MailSender().sendTransactionRejectNotice(new_transaction.toUser.email(), fromMembership.name(), transaction, reason)
+								MailSender().sendTransactionRejectNotice(new_transaction.toUser.email(), fromMembership.name, transaction, reason)
 							
 							msg = 'The transaction has been succesfully rejected!'
 							redirectPage(self, '/group?group=%s&msg=%s' % (transaction.group.key(), msg))
