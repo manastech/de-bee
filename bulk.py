@@ -46,7 +46,7 @@ class BulkDoHandler(webapp.RequestHandler):
 				else:
 					registerTransaction(group, creator, p1, p2, debt.money, debt.reason, 'debt', rejectPath)
 					
-			location = '/group?group=%s' % group.key()
+			location = '/group?group=%s&msg=%s' % (group.key(), 'Debts loaded!')
 			redirectPage(self,location)
 
 class BulkSummaryHandler(webapp.RequestHandler):

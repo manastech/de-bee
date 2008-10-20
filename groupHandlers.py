@@ -103,6 +103,7 @@ class GroupHandler(webapp.RequestHandler):
 		# Get all members
 		members = Membership.gql("WHERE user != :1 AND group = :2", user, group)
 		members = members.fetch(100000)
+		members.sort(cmp = compareMembersByNick)
 		
 		hasMembers = len(members) > 0
 		
@@ -141,7 +142,7 @@ class GroupHandler(webapp.RequestHandler):
 			'transactions': transactions,
 			'validationError': validationError,
 			'validationMessage': validationMessage,
-			'memberships': self.getMemberships(user),
+			'memberships': memberships,
 			'hasMemberships': hasMemberships,
 			'message': self.request.get("msg"),
 			'goToHistoryTab': goToHistoryTab, 
@@ -161,12 +162,29 @@ class GroupHandler(webapp.RequestHandler):
 		actualGroup = Group.get(self.request.get("group"))
 		memberships = Membership.gql("WHERE user = :1 AND group != :2", user, actualGroup)
 		memberships = memberships.fetch(100000)
+		memberships.sort(cmp = compareMembersByAlias)
 		return memberships
 		
 def compareTransactionsByDate(x, y):
 	if x.date > y.date:
 		return -1
 	elif x.date < y.date:
+	 	return 1
+	else:
+		return 0
+	
+def compareMembersByNick(x, y):
+	if x.nick.lower() < y.nick.lower():
+		return -1
+	elif x.nick.lower() > y.nick.lower():
+	 	return 1
+	else:
+		return 0
+	
+def compareMembersByAlias(x, y):
+	if x.name.lower() < y.name.lower():
+		return -1
+	elif x.name.lower() > y.name.lower():
 	 	return 1
 	else:
 		return 0

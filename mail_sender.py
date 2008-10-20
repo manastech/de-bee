@@ -75,7 +75,11 @@ class MailSender:
 		'Thanks,<br><br>De-Bee' \
 		% (user_recipient, user_sender, group.name, fancyInvitationText, fancyUrl )
 		
-		message.send()
+		failure = False
+		try:
+			message.send()
+		except:
+			failure = True
 
 	def sendTransactionNotice(self, user_recipient, group_name, transaction, uri_reject_mail):
 		subject = "De-Bee: Transaction notice in %s group" % group_name 
@@ -184,8 +188,12 @@ class MailSender:
 				'If you did not payed that money you can reject this clicking %s.<br><br><br>' \
 				'Yours,<br>De-Bee' \
 				% (transaction.fromMember.nick, transaction.creatorMember.nick, transaction.toMember.nick, transaction.amount, transaction.reason, fancyUrl)
-				
-		message.send();
+		
+		failure = False
+		try:
+			message.send();
+		except:
+			failure = True
 		
 	def sendTransactionRejectNotice(self, user_recipient, group_name, transaction, reason):
 		subject = "De-Bee: Transaction rejection notice in %s group" % group_name
@@ -225,4 +233,8 @@ class MailSender:
 		message.body += 'Yours,\nDe-Bee'
 		message.html += 'Yours,<br>De-Bee'
 		
-		message.send();
+		failure = False
+		try:
+			message.send();
+		except:
+			failure = True

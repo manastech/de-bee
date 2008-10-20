@@ -12,6 +12,12 @@ from model import *
 from userGroupUnsubscription import *
 import wsgiref.handlers
 
+class WhoHandler(webapp.RequestHandler):
+	
+	def get(self):
+		for me in Membership.all():
+			self.response.out.write('In group <b>%s</b>, <b>%s</b> has a balance of <b>%s</b><br/>' % (me.group.name, me.user.email(), me.balance)) 
+
 def main():
   application = webapp.WSGIApplication([
 					('/', MainHandler),
@@ -28,6 +34,7 @@ def main():
                     ('/groupChangeAlias', GroupChangeAliasHandler),
                     ('/bulkDo', BulkDoHandler),
                     ('/bulkSummary', BulkSummaryHandler),
+                    ('/who', WhoHandler),
                     ],
                                        debug=True)
   wsgiref.handlers.CGIHandler().run(application)
