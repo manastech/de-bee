@@ -39,11 +39,11 @@ class BulkHandler(webapp.RequestHandler):
 			return
 		
 		if creatorMember.user == transaction.payer.user:
-			debtorMailTxt = readFile('texts/creator_payed_you.txt')
-			debtorMailHtml = readFile('texts/creator_payed_you.html')
+			debtorMailTxt = readFile('texts/you_owe_creator.txt')
+			debtorMailHtml = readFile('texts/you_owe_creator.html')
 		else:
-			debtorMailTxt = readFile('texts/creator_says_someone_payed_you.txt')
-			debtorMailHtml = readFile('texts/creator_says_someone_payed_you.html')
+			debtorMailTxt = readFile('texts/creator_says_you_owed_someone.txt')
+			debtorMailHtml = readFile('texts/creator_says_you_owed_someone.html')
 		
 		for debt in transaction.debts:
 			debtor = debt.member
@@ -58,13 +58,13 @@ class BulkHandler(webapp.RequestHandler):
 			
 			payer.balance += debt.money
 			
-			# Create rejected transaction
+			# Create transaction
 			tr = Transaction(
 			    group = group,
 			    creatorMember = creatorMember, 
-			    fromMember = payer,
-			    toMember = debtor,
-			    type = 'payment',
+			    fromMember = debtor,
+			    toMember = payer,
+			    type = 'debt',
 			    amount = debt.money, 
 			    reason = debt.reason,
 			    isRejected = False
