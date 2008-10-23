@@ -1,14 +1,14 @@
 <div>
-	<form action="/groupChangeAlias" method="post" target="logic">
+	<form action="/changeGroupProperties" method="post" target="logic">
 		<table>
-			<input type="hidden" value="{{membership.key}}" name="membership"/>
+			<input type="hidden" value="{{userMembership.key}}" name="userMembership"/>
 			<tr>
 				<td><label style="font-size:12">By which name you want to see this group:</label></td> 
-				<td><input type="text" value="{{membership.name}}" name="alias"/></td>
+				<td><input type="text" value="{{userMembership.groupNick}}" name="groupNick"/></td>
 			</tr>
 			<tr>
 				<td><label style="font-size:12">By which name you want others to see you in this group:</label></td> 
-				<td><input type="text" value="{{membership.nick}}" name="nickname"/></td>
+				<td><input type="text" value="{{userMembership.userNick}}" name="userNick"/></td>
 			</tr>	
 			<tr>
 				<td colspan="2" align="right"><input style="vertical-align:middle" type="image" src="/images/Button_Save.gif" alt="Save" title="Save"></td>
@@ -19,8 +19,8 @@
 <br>
 <div>
 	{% if balanceIsZero %}
-		<form action="/groupUnsubscription" method="post" target="logic">
-		<input type="hidden" name="group" value="{{membership.group.key}}" />
+		<form action="/unsubscribe" method="post" target="logic">
+		<input type="hidden" name="group" value="{{userMembership.group.key}}" />
 			<table>
 				<tr>
 					<td>If you want to leave this group, click this button:</td>

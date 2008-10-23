@@ -1,5 +1,5 @@
-<div style="color:#005E00">
-{% if hasMoreThanOneItem %}
+<div class="benefical">
+{% if hasMoreThanOneBalanceItem %}
 	This group owes you a total of ${{ balance }}:<br>
 	<ul>
 	{% for i in result %}
@@ -7,7 +7,7 @@
 	{% endfor %}
 	</ul>
 {% else %}
-	{% for i in result %}
+	{% for i in balanceItems %}
 		{{ i.user }} owes you $ {{ i.amount }}
 	{% endfor %}
 {% endif %}

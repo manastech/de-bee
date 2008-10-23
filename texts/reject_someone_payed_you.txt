@@ -1,0 +1,6 @@
+Hi %s!
+
+%s rejected a transaction that said that he/she payed you $%s because of %s.
+%s
+Yours,
+De-Bee

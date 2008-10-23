@@ -16,7 +16,11 @@ transactions <input style="vertical-align:middle" type="image" src="/images/Butt
 
 	<ul>
 		{% for tr in transactions %}
-			<li>{{tr}}</li>
+			{% if tr.benefical %}
+				<li class="benefical">{{tr.message}}</li>
+			{% else %}
+				<li class="detrimental">{{tr.message}}</li>
+			{% endif %}
 		{% endfor %}
 	</ul>
 

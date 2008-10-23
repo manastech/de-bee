@@ -1,0 +1,7 @@
+Hi %s!
+
+%s told me that you payed:
+
+%s
+Yours,
+De-Bee

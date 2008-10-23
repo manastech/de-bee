@@ -1,7 +1,7 @@
 {% extends "master.html" %}
 {% block top %} 
 	<div style="text-align: right"> 
-	<span id="hello">Hello</span> <span id="username">{{currentUser.nickname}}!</span><br>  
+	<span id="hello">Hello</span> <span id="username">{{username}}!</span><br>  
 	<a href="{{signout_url}}" id="logout">Logout</a>
 	</div>
 {% endblock %}
@@ -16,21 +16,24 @@
 	</div>
 {% endblock %}
 {% block content %}
-		{{ message }}
-		{% if hasMemberships %}
+		{% if hasUserMemberships %}
 			<div style="float: right">
 				<form action="/group" method="get">
 					Group:
 					<select name="group" onchange="selectGroup(this,form);">
 						<option value="">-- select another group --</option>
-					{% for membership in memberships %}
-					<option value="{{ membership.group.key }}">{{ membership.name }}</option>
+					{% for membership in userMemberships %}
+					<option value="{{ membership.group.key }}">{{ membership.groupNick }}</option>
 					{% endfor %}
 					</select>
 				</form>
 			</div>
 		{% endif %}
-		<h3>Group {{ membership.name }}</h3>
+		<h3>Group {{ userMembership.groupNick }}</h3>
+		
+		{% if hasMessage %}
+			<div id="message">{{ message }}</div>
+		{% endif %}
 		
 		<div style="margin-bottom: 40px;">
 			<a href="javascript:showGroupTab('groupHome')" {% if not goToHistoryTab %} class="active" {% endif %} id="groupHomeButton"></a>
@@ -57,7 +60,7 @@
 		<h3>Owe or Pay</h3>
 	
 		<div>
-		{% include "enterTransaction.html" %}
+		{% include "groupAction.html" %}
 		</div>
 		
 		<h3>Someone pays, the others owe him/her</h3>
@@ -67,13 +70,13 @@
 		</div>
 		
 		<div id="groupInvite" style="display:none">
-			{% include "enterInvite.html" %}
+			{% include "groupInvite.html" %}
 		</div>
 		
 		<div id="groupHistory" {% if not goToHistoryTab %} style="display:none" {% endif %} >
 			<h3>History</h3>
 			
-			{% include "transactionHistory.html" %}
+			{% include "groupHistory.html" %}
 		</div>
 		
 		<div id="groupProperties" style="display:none">

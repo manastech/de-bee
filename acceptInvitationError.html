@@ -1,0 +1,30 @@
+{% extends "master.html" %}
+
+{% block top %} 
+	<div style="text-align: right"> 
+	<font size="5">{{currentUser.nickname}}</font><br>  
+	(<a href="{{signout_url}}">sign out</a>)
+	</div>
+{% endblock %}
+{% block navigation %}
+	<div id="menuGroupsActive">
+		
+	</div>
+	<div id="menuHome">
+		<a href="/">
+			<span/>
+		</a>
+	</div>
+{% endblock %}
+
+{% block content %}
+
+{% if isValidInvitation %}
+	{% if not isValidUser %}
+		This invitation is not for you.
+	{% endif %}
+{% else %}
+	Invitation is invalid
+{% endif %}
+
+{% endblock %}

@@ -1,0 +1,8 @@
+Hi %s!
+
+%s told me that %s payed you $%s because of %s.
+
+If this is not correct and you want to reject it, copy and paste this text in your browser: %s
+
+Yours,
+De-Bee

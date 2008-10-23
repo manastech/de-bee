@@ -35,7 +35,7 @@ def alertMessage(request,message):
 def redirectPage(request,location):
     out(request, script(redirect(location)))
     
-def authenticatedUser(request):
+def userIsLoggedIn(request):
     user = users.get_current_user()
     if user is None:
         error = 'You must be logged in to do this.'

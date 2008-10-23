@@ -6,7 +6,7 @@
 	</div>
 {% endblock %}
 {% block navigation %}
-	{% if hasgroups %}
+	{% if hasUserMemberships %}
 		<div id="menuGroups">
 			<a href="/group?group={{ group.key }}">
 				<span/>
@@ -22,26 +22,26 @@
 {% block content %}		
 		<br/>
 		<br/>
-		
-		{% if hasMessage %}
-			<div>
-				{{message}}
-			</div>
-			<br/>
-		{% endif %}
 
-		{% if isregistered %}
+		{% if hasUserMemberships %}
 		<div style="float: right">
 			<form action="/group" method="get">
 				Go to group:
 				<select name="group" onchange="selectGroup(this,form);">
 					<option value="">-- select group --</option>
-				{% for membership in memberships %}
-					<option value="{{ membership.group.key }}">{{ membership.name }}</option>
+				{% for membership in userMemberships %}
+					<option value="{{ membership.group.key }}">{{ membership.groupNick }}</option>
 				{% endfor %}
 				</select>
 			</form>
 		</div>
+		
+		{% if hasMessage %}
+			<div id="message">
+				{{message}}
+			</div>
+			<br/>
+		{% endif %}
 		
 		<div class="debts_summary">
 			{% if debts.isZero %}
@@ -49,9 +49,9 @@
 			{% else %}
 				{% if debts.hasMoreThanOneItem %}
 					{% if debts.isOweToSelf %}
-						<span style="color:#005E00">They owe you a total of ${{debts.total}}.</span>
+						<span class="benefical">They owe you a total of ${{debts.total}}.</span>
 					{% else %}
-						<span style="color:#5C0101">You owe a total of ${{debts.total}}.</span>
+						<span class="detrimental">You owe a total of ${{debts.total}}.</span>
 					{% endif %}
 				{% endif %}
 			{% endif %}
@@ -73,7 +73,7 @@
 			<br /><br /><br /><br />
 			<img src="/images/NewGroup.gif" /> 
 			<br />
-			<form action="/groupCreation" method="post" target="logic">
+			<form action="/createGroup" method="post" target="logic">
 				<label style="font-size:12">Name:</label> 
 				<br />
 				<input type="text" value="" name="name"/>

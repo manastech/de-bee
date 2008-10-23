@@ -1,43 +1,35 @@
 #!/usr/bin/env python
 
 from google.appengine.ext import webapp
-from handlers import *
-from registerTransactionHandler import *
-from registerInviteHandler import *
-from groupInvitationHandler import *
-from mail_handler import *
-from groupHandlers import *
-from bulk import *
-from model import *
-from userGroupUnsubscription import *
-import wsgiref.handlers
-
-class WhoHandler(webapp.RequestHandler):
-	
-	def get(self):
-		for me in Membership.all():
-			self.response.out.write('In group <b>%s</b>, <b>%s</b> has a balance of <b>%s</b><br/>' % (me.group.name, me.user.email(), me.balance)) 
+from wsgiref.handlers import CGIHandler
+from index import IndexHandler
+from group import GroupHandler
+from createGroup import CreateGroupHandler
+from changeGroupProperties import ChangeGroupPropertiesHandler
+from invite import InviteHandler
+from invite import AcceptInvitationHandler
+from action import ActionHandler
+from bulk import BulkHandler
+from reject import RejectHandler
+from reject import CommitRejectHandler
+from unsubscribe import UnsubscribeHandler
 
 def main():
   application = webapp.WSGIApplication([
-					('/', MainHandler),
-					('/registerTransaction', RegisterTransactionHandler),
-                    ('/registerInvite', RegisterInviteHandler),
-                    ('/groupCreation', GroupCreationHandler),
+					('/', IndexHandler),
                     ('/group',GroupHandler),
-                    ('/reject', RejectTransactionHandler),
-                    ('/doReject', DoRejectTransactionHandler),
-                    ('/enterUnsubscription', EnterUnsubscriptionHandler),
-                    ('/groupUnsubscription', UnsubscriptionHandler),
-					('/groupInvitation', GroupInvitationHandler),
-                    ('/groupJoin', GroupJoinHandler),
-                    ('/groupChangeAlias', GroupChangeAliasHandler),
-                    ('/bulkDo', BulkDoHandler),
-                    ('/bulkSummary', BulkSummaryHandler),
-                    ('/who', WhoHandler),
+                    ('/createGroup', CreateGroupHandler),
+                    ('/changeGroupProperties', ChangeGroupPropertiesHandler),
+                    ('/invite', InviteHandler),
+                    ('/acceptInvitation', AcceptInvitationHandler),
+                    ('/action', ActionHandler),
+                    ('/bulk', BulkHandler),
+                    ('/unsubscribe', UnsubscribeHandler),
+                    ('/reject', RejectHandler),
+                    ('/commitReject', CommitRejectHandler),
                     ],
-                                       debug=True)
-  wsgiref.handlers.CGIHandler().run(application)
+                    debug=True)
+  CGIHandler().run(application)
 
 if __name__ == '__main__':
   main()

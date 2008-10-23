@@ -28,7 +28,7 @@ class OrderParser:
 		i = 0
 		
 		for member in members:
-			if (member.nick.lower() == name.lower()):
+			if (member.userNick.lower() == name.lower()):
 				return member
 		return None
 	
@@ -61,7 +61,7 @@ class OrderParser:
 				transaction.cancel = True
 			elif firstSplits[0].strip().lower() == "pays":
 				if transaction.payer:
-					transaction.error = "Error in line %s: payer has already been specified (%s)" % (linnum, transaction.payer.nick);
+					transaction.error = "Error in line %s: payer has already been specified (%s)" % (linnum, transaction.payer.userNick);
 					return transaction
 				
 				name = firstSplits[1].strip()
@@ -193,8 +193,8 @@ if __name__ == '__main__':
 	if transaction.error:
 		print transaction.error
 	else:
-		print "Payer: %s" % transaction.payer.nick
+		print "Payer: %s" % transaction.payer.userNick
 		print "Cancel: %s" % transaction.cancel
 		for debt in transaction.debts:
-			print "%s bought '%s' for $%s" % (debt.member.nick, debt.reason, debt.money)
+			print "%s bought '%s' for $%s" % (debt.member.userNick, debt.reason, debt.money)
 	

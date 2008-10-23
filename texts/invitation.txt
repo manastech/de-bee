@@ -1,0 +1,30 @@
+Hello %s!
+
+%s has invited you to join %s group in De-Bee.
+
+%sCurrently joined to the group are:
+
+%s
+To sign up please copy and paste this link in your browser: %s
+
+De-Bee gives you a new way to deal with money change and debts.
+Any exchange money situation with friends or any acquaintance can be resolved with De-Bee.
+
+You can:
+
+ * Create groups and invite your friends to join them.
+ * Join other groups your friends had invited you to.
+
+De-Bee is totally secure. No one can fool you assigning you a debt without your consent.
+
+There are four common actions you will use:
+
+ * Register a payment you have made to someone
+ * Register a debt you have with someone
+ * Register a payment someone has made to you
+ * Register a debt someone has with you
+
+De-Bee informs you about your summarized situation for all your groups and for each group in particular.
+
+Thanks,
+De-Bee

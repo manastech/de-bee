@@ -1,20 +1,19 @@
-{% if hasMembers %}
+{% if hasGroupMemberships %}
 
 <table style="hspace">
 	
 <!--I Owe =========================================================== -->
-<tr style="color:#5C0101">
-<form action="/registerTransaction" method="post" target="logic">
-	<input type="hidden" name="group" value="{{membership.group.key}}" />
-	<input type="hidden" name="fromUser" value="{{currentUser.email}}" />
+<tr class="detrimental">
+<form action="/action" method="post" target="logic">
 	<input type="hidden" name="type" value="debt" />
+	<input type="hidden" name="fromMember" value="{{userMembership.key}}" />	
 <td style="padding: 0px 10px 4px 10px" align="center">
 	I owe
 </td>
-<td style="padding: 0px 10px 4px 10px">
-	<select name="toUser">
-		{% for member in members %}
-			<option value="{{member.user.email}}">{{member.nick}}</option>
+<td style="padding: 0px 10px 4px 10px" align="center">
+	<select name="toMember">
+		{% for member in groupMemberships %}
+			<option value="{{member.key}}">{{member.userNick}}</option>
 		{% endfor %}
 	</select>
 </td>
@@ -32,16 +31,15 @@
 </form>
 </tr>
 <!--I Payed =========================================================== -->
-<tr style="color:#005E00">
-<form action="/registerTransaction" method="post" target="logic">
-	<input type="hidden" name="group" value="{{membership.group.key}}" />
-	<input type="hidden" name="fromUser" value="{{currentUser.email}}" />
+<tr class="benefical">
+<form action="/action" method="post" target="logic">
 	<input type="hidden" name="type" value="payment" />
+	<input type="hidden" name="fromMember" value="{{userMembership.key}}" />	
 <td style="padding: 4px 10px 4px 10px" align="center">I payed</td>
-<td style="padding: 4px 10px 4px 10px">
-	<select name="toUser">
-		{% for member in members %}
-			<option value="{{member.user.email}}">{{member.nick}}</option>
+<td style="padding: 4px 10px 4px 10px" align="center">
+	<select name="toMember">
+		{% for member in groupMemberships %}
+			<option value="{{member.key}}">{{member.userNick}}</option>
 		{% endfor %}
 	</select>
 </td>
@@ -59,15 +57,14 @@
 </form>
 </tr>
 <!--Someone owes me =========================================================== -->
-<tr style="color:#005E00">
-<form action="/registerTransaction" method="post" target="logic">
-	<input type="hidden" name="group" value="{{membership.group.key}}" />
-	<input type="hidden" name="toUser" value="{{currentUser.email}}" />
+<tr class="benefical">
+<form action="/action" method="post" target="logic">
 	<input type="hidden" name="type" value="debt" />
-<td style="padding: 4px 10px 4px 10px">
-	<select name="fromUser">
-		{% for member in members %}
-			<option value="{{member.user.email}}">{{member.nick}}</option>
+	<input type="hidden" name="toMember" value="{{userMembership.key}}" />	
+<td style="padding: 4px 10px 4px 10px" align="center">
+	<select name="fromMember">
+		{% for member in groupMemberships %}
+			<option value="{{member.key}}">{{member.userNick}}</option>
 		{% endfor %}
 	</select>
 </td>
@@ -88,16 +85,15 @@
 </form>
 </tr>
 <!--Someone payed me =========================================================== -->
-<tr style="color:#5C0101">
-<form action="/registerTransaction" method="post" target="logic">
-	<input type="hidden" name="group" value="{{membership.group.key}}" />
-	<input type="hidden" name="toUser" value="{{currentUser.email}}" />
+<tr class="detrimental">
+<form action="/action" method="post" target="logic">
 	<input type="hidden" name="type" value="payment" />
+	<input type="hidden" name="toMember" value="{{userMembership.key}}" />
 
-<td style="padding: 4px 10px 4px 10px">
-	<select name="fromUser">
-		{% for member in members %}
-			<option value="{{member.user.email}}">{{member.nick}}</option>
+<td style="padding: 4px 10px 4px 10px" align="center">
+	<select name="fromMember">
+		{% for member in groupMemberships %}
+			<option value="{{member.key}}">{{member.userNick}}</option>
 		{% endfor %}
 	</select>
 </td>

@@ -1,5 +1,5 @@
-<div style="color:#5C0101">
-{% if hasMoreThanOneItem %}
+<div class="detrimental">
+{% if hasMoreThanOneBalanceItem %}
 	You owe a total of ${{ balance }}:<br>
 	<ul>
 	{% for i in result %}
@@ -7,7 +7,7 @@
 	{% endfor %}	
 	</ul>
 {% else %}
-	{% for i in result %}
+	{% for i in balanceItems %}
 		You owe $ {{ i.amount }} to {{ i.user }}
 	{% endfor %}
 {% endif %}

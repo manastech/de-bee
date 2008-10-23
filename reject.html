@@ -17,14 +17,18 @@
 {% endblock %}
 {% block content %}
 	<h3>Group {{ group.name }}</h3>
+	
+	<p>You are rejecting a transaction that says that:</p>
+	
+	<p>{{transactionDescription}}</p>
 
 	<p>
-	<form action="/doReject" method="post" target="logic">
+	<form action="/commitReject" method="post" target="logic">
 	<input type="hidden" name="key" value="{{key}}" />
 	<input type="hidden" name="h" value="{{h}}" />
 	<table>
 		<tr>
-			<td>Please enter the reason why you are rejecting the transaction:</td>
+			<td>Please enter the reason why you are rejecting it:</td>
 		</tr>
 		<tr>
 			<td><textarea name="reason" rows="5" cols="60"></textarea></td>

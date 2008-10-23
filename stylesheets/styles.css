@@ -319,44 +319,20 @@ hd3
 	font-family: verdana;
 }
 
-/*
-esto se usa para los botones de las acciones sobre el grupo.
-#groupHomeImage 
+#message
 {
-	background:url(/images/s_Actions_OFF.gif) no-repeat;
-	width:150px;		
-	height:49px;
-	display:table;
+	border: 2px dashed black;
+	background: #FFF975;
+	padding: 10px;
+	margin-bottom:20px;
 }
 
-#groupHomeImage:hover
+.benefical 
 {
-	background:url(/images/s_Actions_OVER.gif) no-repeat;
-}	
-
-#groupInviteImage
-{
-	background:url(/images/s_InvitePeople_OFF.gif) no-repeat;
-	width:224px;		
-	height:49px;
-	display:table;
+	color: #005E00;
 }
 
-#groupInviteImage:hover
+.detrimental 
 {
-	background:url(/images/s_InvitePeople_OVER.gif) no-repeat;
+	color: #5C0101;
 }
-	
-#groupHistoryImage
-{
-	background:url(/images/s_History_OFF.gif) no-repeat;
-	width:134px;		
-	height:49px;
-	display:table;
-}
-
-#groupHistoryImage:hover
-{
-	background:url(/images/s_History_OVER.gif) no-repeat;
-}
-*/

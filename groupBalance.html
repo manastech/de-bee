@@ -1,10 +1,10 @@
 {% if hasDebtors %}
 	<ul>
 	{% for i in groupDebtors %}
-		<li><span style="color:#5C0101">{{ i.user }} owes $ {{ i.amount }}</span></li>
+		<li><span class="detrimental">{{ i.user }} owes $ {{ i.amount }}</span></li>
 	{% endfor %}
 	{% for i in groupCreditors %}
-		<li><span style="color:#005E00">{{ i.user }} has $ {{ i.amount }} of credit</span></li>
+		<li><span class="benefical">{{ i.user }} has $ {{ i.amount }} of credit</span></li>
 	{% endfor %}
 	</ul>
 {% else %}

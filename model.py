@@ -1,7 +1,14 @@
 from google.appengine.ext import db
+from hashlib import sha224
 
 class Group(db.Model):
 	name = db.StringProperty(required=True)
+	
+	# All memberships of a group in no particular order
+	@property
+	def memberships(self):
+		ret = Membership.gql("WHERE group = :1", self)
+		return ret.fetch(10000)
     
 class Membership(db.Model):
 	user = db.UserProperty(required=True)
@@ -17,7 +24,7 @@ class Membership(db.Model):
 	# The alias of the group name, or the group name if the
 	# alias is not defined
 	@property
-	def name(self):
+	def groupNick(self):
 		if self.alias and self.alias != "":
 			return self.alias
 		else:
@@ -26,7 +33,7 @@ class Membership(db.Model):
 	# The nickname of the user in the group, or the user's nickname
 	# if the membership's nickname is not defined 
 	@property
-	def nick(self):
+	def userNick(self):
 		if self.nickname and self.nickname != "":
 			return self.nickname
 		else:
@@ -43,8 +50,6 @@ class Transaction(db.Model):
 	creatorMember = db.ReferenceProperty(Membership, collection_name="creatorMember_collection_name")
 	fromMember = db.ReferenceProperty(Membership, collection_name="fromMember_collection_name")
 	toMember = db.ReferenceProperty(Membership, collection_name="toMember_collection_name")
-	
-	updated = db.BooleanProperty()
 	
 	@property
 	def creator(self):
@@ -66,3 +71,40 @@ class Transaction(db.Model):
 			return self.toMember.user
 		else:
 			return None
+		
+	@property
+	def hash(self):
+		m = sha224()
+		m.update(str(self.key()))
+		m.update(self.creator.email())
+		m.update(self.fromUser.email())
+		m.update(self.toUser.email())
+		m.update(self.type)
+		m.update(str(self.date))
+		return m.hexdigest()
+	
+	def isValidHash(self, hash):
+		return self.hash == hash
+	
+	def getCompensateFor(self, user):
+		if user == self.fromUser:
+			creatorMember = self.fromMember
+		else:
+			creatorMember = self.toMember
+        
+		return Transaction(
+			group = self.group,
+			type = self.getCompensateType(self.type),
+			amount = self.amount,
+		    reason = self.reason,
+		    isRejected = False,
+		    creatorMember = creatorMember,
+		    fromMember = self.fromMember,
+		    toMember = self.toMember 
+		    )
+		
+	def getCompensateType(self, type):
+		if type == 'debt':
+			return 'rejectedDebt'
+		else:
+			return 'rejectedPayment'
