@@ -25,22 +25,27 @@
 	{% else %}
 		<p class="detrimental">{{transactionDescription}}</p>
 	{% endif %}
+	
+	{% if alreadyRejected %}
+		<p>But that transaccion was already rejected.</p> 
+	{% else %}
 
-	<p>
-	<form action="/commitReject" method="post" target="logic">
-	<input type="hidden" name="key" value="{{key}}" />
-	<input type="hidden" name="h" value="{{h}}" />
-	<table>
-		<tr>
-			<td>Please enter the reason why you are rejecting it:</td>
-		</tr>
-		<tr>
-			<td><textarea name="reason" rows="5" cols="60"></textarea></td>
-		</tr>
-		<tr>
-			<td align="right"><input type="submit" value="Reject transaction" /></td>
-		</tr>
-	</table>
-	</form>
-	</p>
+		<p>
+		<form action="/commitReject" method="post" target="logic">
+		<input type="hidden" name="key" value="{{key}}" />
+		<input type="hidden" name="h" value="{{h}}" />
+		<table>
+			<tr>
+				<td>Please enter the reason why you are rejecting it:</td>
+			</tr>
+			<tr>
+				<td><textarea name="reason" rows="5" cols="60"></textarea></td>
+			</tr>
+			<tr>
+				<td align="right"><input type="submit" value="Reject transaction" /></td>
+			</tr>
+		</table>
+		</form>
+		</p>
+	{% endif %}
 {% endblock %}

@@ -34,6 +34,7 @@ class RejectHandler(webapp.RequestHandler):
                 'username' : user.nickname(),
                 'transactionDescription': descriptionOfTransaction(tr, user),
                 'transactionIsBenefical': transactionIsBenefical(tr, user),
+                'alreadyRejected': tr.isRejected,
             }
                    
         path = os.path.join(os.path.dirname(__file__), 'reject.html')
