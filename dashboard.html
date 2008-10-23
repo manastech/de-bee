@@ -19,10 +19,7 @@
 		</a>
 	</div>
 {% endblock %}
-{% block content %}		
-		<br/>
-		<br/>
-
+{% block content %}
 		{% if hasUserMemberships %}
 		<div style="float: right">
 			<form action="/group" method="get">
@@ -35,6 +32,8 @@
 				</select>
 			</form>
 		</div>
+		
+		<h3>&nbsp;</h3>
 		
 		{% if hasMessage %}
 			<div id="message">
