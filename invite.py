@@ -5,6 +5,7 @@ from google.appengine.ext.webapp import template
 from google.appengine.ext.webapp.util import login_required
 from ajax import userIsLoggedIn
 from ajax import redirectPage
+from ajax import alertMessage
 from model import Group
 from model import Membership
 from util import UrlBuilder
@@ -43,6 +44,12 @@ class InviteHandler(webapp.RequestHandler):
         emails = self.request.get('emails')
         emails = emails.split(',')
         urlBuilder = UrlBuilder(self.request)
+        
+        # Check that all emails are valid
+        for email in emails:
+        	if not mail.is_email_valid(email.strip()):
+        		alertMessage(self, '%s is not a valid email address' % email)
+        		return
         
         for email in emails:
             self.sendInvitation(user, email.strip(), group, invitationText, urlBuilder)

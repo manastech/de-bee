@@ -179,7 +179,7 @@ class GroupHandler(webapp.RequestHandler):
         groupMemberships.sort(cmp = compareMembershipsByBalance)
         
         for member in groupMemberships:
-            tuple = {'user': member.userNick, 'amount': -member.balance}
+            tuple = {'user': member.userNick, 'amount': abs(member.balance)}
             if member.balance < 0.0:
                 debtors.append(tuple)
             elif member.balance > 0.0:
