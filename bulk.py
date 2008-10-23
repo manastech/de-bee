@@ -7,8 +7,8 @@ from ajax import redirectPage
 from model import Membership
 from model import Transaction
 from model import Group
-from email import DeBeeEmail
-from email import transactionNoticeSubject
+from emails import DeBeeEmail
+from emails import transactionNoticeSubject
 from util import UrlBuilder
 from util import readFile
 from orderParser import OrderParser

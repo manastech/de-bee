@@ -6,8 +6,8 @@ from ajax import alertMessage
 from ajax import redirectPage
 from model import Membership
 from model import Transaction
-from email import DeBeeEmail
-from email import transactionNoticeSubject
+from emails import DeBeeEmail
+from emails import transactionNoticeSubject
 from util import UrlBuilder
 from util import readFile
 from util import descriptionOfTransaction

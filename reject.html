@@ -20,7 +20,11 @@
 	
 	<p>You are rejecting a transaction that says that:</p>
 	
-	<p>{{transactionDescription}}</p>
+	{% if transactionIsBenefical %}
+		<p class="benefical">{{transactionDescription}}</p>
+	{% else %}
+		<p class="detrimental">{{transactionDescription}}</p>
+	{% endif %}
 
 	<p>
 	<form action="/commitReject" method="post" target="logic">

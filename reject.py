@@ -6,10 +6,11 @@ from google.appengine.ext.webapp.util import login_required
 from ajax import redirectPage
 from ajax import userIsLoggedIn
 from model import Transaction
-from email import DeBeeEmail
-from email import transactionNoticeSubject
+from emails import DeBeeEmail
+from emails import transactionNoticeSubject
 from util import readFile
 from util import descriptionOfTransaction
+from util import transactionIsBenefical
 import os
 
 class RejectHandler(webapp.RequestHandler):
@@ -32,6 +33,7 @@ class RejectHandler(webapp.RequestHandler):
                 'group' : tr.group,
                 'username' : user.nickname(),
                 'transactionDescription': descriptionOfTransaction(tr, user),
+                'transactionIsBenefical': transactionIsBenefical(tr, user),
             }
                    
         path = os.path.join(os.path.dirname(__file__), 'reject.html')
