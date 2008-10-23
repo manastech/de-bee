@@ -105,9 +105,12 @@ class BulkHandler(webapp.RequestHandler):
 			debtorsTxt = ''
 			debtorsHtml = '<ul>'
 			
+			total = 0.0
+			
 			for debt in transaction.debts:
 				debtorsTxt += ' * $%s to %s because of %s\n' % (debt.money, debt.member.userNick, debt.reason)
 				debtorsHtml += '<li>$%s to %s because of %s</li>' % (debt.money, debt.member.userNick, debt.reason)
+				total += debt.money
 				
 			debtorsHtml += '</ul>'
 			
@@ -117,8 +120,8 @@ class BulkHandler(webapp.RequestHandler):
 			                to = transaction.payer.user.email(), 
 			                subject = transactionNoticeSubject(transaction.payer))
 			
-			message.body = readFile('texts/creator_says_you_payed_for_them.txt') % (transaction.payer.userNick, creatorMember.userNick, debtorsTxt)
-			message.html = readFile('texts/creator_says_you_payed_for_them.html') % (transaction.payer.userNick, creatorMember.userNick, debtorsHtml)
+			message.body = readFile('texts/creator_says_you_payed_for_them.txt') % (transaction.payer.userNick, creatorMember.userNick, debtorsTxt, total)
+			message.html = readFile('texts/creator_says_you_payed_for_them.html') % (transaction.payer.userNick, creatorMember.userNick, debtorsHtml, total)
 			
 			try:
 				message.send()
