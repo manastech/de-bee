@@ -56,7 +56,7 @@ class GroupHandler(webapp.RequestHandler):
             validationMessage = '(This should be a number)'
             
         # Get debtors and creditors used in the "Bal" tab
-        [groupDebtors, groupCreditors] = self.getDebtorsAndCreditors(groupMemberships)
+        [groupDebtors, groupCreditors, groupZero] = self.getDebtorsAndCreditors(groupMemberships)
         
         # Get members for autocomplete used in the bulk-operation box
         autocompleteMembers = self.getAutocompleteMembers(groupMemberships)
@@ -90,8 +90,11 @@ class GroupHandler(webapp.RequestHandler):
             'userMemberships': userMemberships,
             'hasMessage': not message is None and len(message) > 0,
             'message': message,
+            'groupHasBalance': len(groupDebtors) > 0 or len(groupCreditors) > 0,
             'hasDebtors': len(groupDebtors) > 0,
             'groupDebtors': groupDebtors,
+            'hasGroupZero': len(groupZero) > 0,
+            'groupZero': groupZero,
             'hasCreditors': len(groupCreditors) > 0,
             'groupCreditors': groupCreditors,            
             'autocompleteMembers': autocompleteMembers
@@ -167,20 +170,24 @@ class GroupHandler(webapp.RequestHandler):
     
     # Returns an array of two elements, each of them being an array
     # with properties 'user' and 'amount'. The first returned element
-    # is the debtors, the second is the creditors.
+    # is the debtors, the second is the creditors, the third are others
     def getDebtorsAndCreditors(self, groupMemberships):
         debtors = []
         creditors = []
+        others = []
         
         groupMemberships.sort(cmp = compareMembershipsByBalance)
         
         for member in groupMemberships:
-            if member.balance <= 0.0:
-                debtors.append({'user': member.userNick, 'amount': -member.balance})
-            elif member.balance >= 0.0:
-                creditors.append({'user': member.userNick, 'amount': member.balance})
+            tuple = {'user': member.userNick, 'amount': -member.balance}
+            if member.balance < 0.0:
+                debtors.append(tuple)
+            elif member.balance > 0.0:
+                creditors.append(tuple)
+            else:
+                others.append(tuple)
         
-        return [debtors, creditors]
+        return [debtors, creditors, others]
     
     # Returns a string like 'member1', 'member2', ..., 'memberN'
     # to use in autocomplete for javascript.

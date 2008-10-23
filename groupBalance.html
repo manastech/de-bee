@@ -1,7 +1,10 @@
-{% if hasDebtors %}
+{% if groupHasBalance %}
 	<ul>
 	{% for i in groupDebtors %}
 		<li><span class="detrimental">{{ i.user }} owes $ {{ i.amount }}</span></li>
+	{% endfor %}
+	{% for i in groupZero %}
+		<li><span>{{ i.user }} owes no one, and no one owes him/her</span></li>
 	{% endfor %}
 	{% for i in groupCreditors %}
 		<li><span class="benefical">{{ i.user }} has $ {{ i.amount }} of credit</span></li>
