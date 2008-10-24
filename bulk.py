@@ -7,10 +7,14 @@ from ajax import redirectPage
 from model import Membership
 from model import Transaction
 from model import Group
-from emails import DeBeeEmail
-from emails import transactionNoticeSubject
+from emails import youOwedSomeone
+from emails import creatorSaysYouOwedSomeone
+from emails import createActionMail
+from emails import createThirdPartyActionMail
+from emails import createBulkMail
+from emails import sendEmail
 from util import UrlBuilder
-from util import readFile
+from util import descriptionOfBalance
 from orderParser import OrderParser
 
 class BulkHandler(webapp.RequestHandler):
@@ -37,13 +41,8 @@ class BulkHandler(webapp.RequestHandler):
 		if transaction.error:
 			alertMessage(self, transaction.error)
 			return
-		
-		if creatorMember.user == transaction.payer.user:
-			debtorMailTxt = readFile('texts/you_owe_creator.txt')
-			debtorMailHtml = readFile('texts/you_owe_creator.html')
-		else:
-			debtorMailTxt = readFile('texts/creator_says_you_owed_someone.txt')
-			debtorMailHtml = readFile('texts/creator_says_you_owed_someone.html')
+			
+		descriptionOfPayersBalanceBefore = descriptionOfBalance(transaction.payer, before = True)
 		
 		for debt in transaction.debts:
 			debtor = debt.member
@@ -52,11 +51,15 @@ class BulkHandler(webapp.RequestHandler):
 			if debtor.user.email().lower() == payer.user.email().lower():
 				continue
 			
+			descriptionOfDebtorsBalanceBefore = descriptionOfBalance(debtor, before = True)
+			
 			# Adjust balance
 			debtor.balance -= debt.money
 			debtor.put()
 			
 			payer.balance += debt.money
+			
+			descriptionOfDebtorsBalanceNow = descriptionOfBalance(debtor, before = False)
 			
 			# Create transaction
 			tr = Transaction(
@@ -81,52 +84,21 @@ class BulkHandler(webapp.RequestHandler):
 			rejectUrl += "?key=%s&h=%s" % (str(tr.key()), tr.hash)
 			
 			# Try send email to the debtor
-			message = mail.EmailMessage(
-			                sender = DeBeeEmail,
-			                to = debtor.user.email(), 
-			                subject = transactionNoticeSubject(debtor))
-			
 			if creatorMember.user == transaction.payer.user:
-				message.body = debtorMailTxt % (debtor.userNick, payer.userNick, debt.money, debt.reason, rejectUrl)
-				message.html = debtorMailHtml % (debtor.userNick, payer.userNick, debt.money, debt.reason, rejectUrl)
+				message = createActionMail(payer, debtor, debt.money, debt.reason, descriptionOfDebtorsBalanceBefore, descriptionOfDebtorsBalanceNow, rejectUrl, youOwedSomeone()) 
 			else:
-				message.body = debtorMailTxt % (debtor.userNick, creatorMember.userNick, payer.userNick, debt.money, debt.reason, rejectUrl)
-				message.html = debtorMailHtml % (debtor.userNick, creatorMember.userNick, payer.userNick, debt.money, debt.reason, rejectUrl)
-				
-			try:
-				message.send()
-			except:
-				iHateGoogleAppEngineMailQuotaRules = True
+				message = createThirdPartyActionMail(creatorMember, payer, debtor, debt.money, debt.reason, descriptionOfDebtorsBalanceBefore, descriptionOfDebtorsBalanceNow, rejectUrl, creatorSaysYouOwedSomeone())
+			
+			sendEmail(message)
 				
 		transaction.payer.put()
 		
+		descriptionOfPayersBalanceNow = descriptionOfBalance(transaction.payer, before = False)
+		
 		# Now try send email to the payer with a summary
 		if not creatorMember.user == transaction.payer.user:
-			debtorsTxt = ''
-			debtorsHtml = '<ul>'
-			
-			total = 0.0
-			
-			for debt in transaction.debts:
-				debtorsTxt += ' * $%s to %s because of %s\n' % (debt.money, debt.member.userNick, debt.reason)
-				debtorsHtml += '<li>$%s to %s because of %s</li>' % (debt.money, debt.member.userNick, debt.reason)
-				total += debt.money
-				
-			debtorsHtml += '</ul>'
-			
-			# Try send email to the debtor
-			message = mail.EmailMessage(
-			                sender = DeBeeEmail,
-			                to = transaction.payer.user.email(), 
-			                subject = transactionNoticeSubject(transaction.payer))
-			
-			message.body = readFile('texts/creator_says_you_payed_for_them.txt') % (transaction.payer.userNick, creatorMember.userNick, debtorsTxt, total)
-			message.html = readFile('texts/creator_says_you_payed_for_them.html') % (transaction.payer.userNick, creatorMember.userNick, debtorsHtml, total)
-			
-			try:
-				message.send()
-			except:
-				iHateGoogleAppEngineMailQuotaRules = True
+			message = createBulkMail(transaction, creatorMember, descriptionOfPayersBalanceBefore, descriptionOfPayersBalanceNow)
+			sendEmail(message)
 				
 		location = '/group?group=%s&msg=%s' % (group.key(), 'Debts saved!')
 		redirectPage(self,location)

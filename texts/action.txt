@@ -1,6 +1,8 @@
 Hi %s!
 
-%s told me that he/she owes you $%s because of %s.
+%s
+
+Before this transaction %s in %s, now %s.
 
 If this is not correct and you want to reject it, copy and paste this text in your browser: %s
 

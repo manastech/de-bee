@@ -6,11 +6,15 @@ from ajax import alertMessage
 from ajax import redirectPage
 from model import Membership
 from model import Transaction
-from emails import DeBeeEmail
-from emails import transactionNoticeSubject
+from emails import someoneOwedYou
+from emails import youOwedSomeone
+from emails import someonePayedYou
+from emails import youPayedSomeone
+from emails import createActionMail
+from emails import sendEmail
 from util import UrlBuilder
-from util import readFile
 from util import descriptionOfTransaction
+from util import descriptionOfBalance
 
 class ActionHandler(webapp.RequestHandler):
     
@@ -48,6 +52,16 @@ class ActionHandler(webapp.RequestHandler):
             alertMessage(self, error)
             return
         
+        # See who is me, and who is someone
+        if creatorMember == fromMember:
+            me = fromMember
+            someone = toMember
+        else:
+            me = toMember
+            someone = fromMember
+        
+        descriptionOfBalanceBefore = descriptionOfBalance(someone, before = True)
+        
         # ========================================================= #
         # See what's the type of the transaction and adjust balance
         # ========================================================= #
@@ -59,10 +73,10 @@ class ActionHandler(webapp.RequestHandler):
             
             if creatorMember.user == fromMember.user:
                 # I owe someone
-                mailFile = 'creator_owes_you'
+                mailBody = someoneOwedYou()
             else:
                 # Someone owes me
-                mailFile = 'you_owe_creator'
+                mailBody = youOwedSomeone()
         elif type == 'payment':
             # If it's a payment, fromMember always wins
             fromMember.balance += amount
@@ -70,16 +84,18 @@ class ActionHandler(webapp.RequestHandler):
             
             if creatorMember.user == fromMember.user:
                 # I payed someone
-                mailFile = 'creator_payed_you'
+                mailBody = someonePayedYou()
             else:
                 # Someone payed me
-                mailFile = 'you_payed_creator'
+                mailBody = youPayedSomeone()
         else:
             # Can't happen, only with hackery
             return
         
         fromMember.put()
         toMember.put()
+        
+        descriptionOfBalanceNow = descriptionOfBalance(someone, before = False)
         
         # ============================================= #
         # Create the transaction and save it in history
@@ -105,27 +121,9 @@ class ActionHandler(webapp.RequestHandler):
         rejectUrl = UrlBuilder(self.request).buildUrl('/reject')
         rejectUrl += "?key=%s&h=%s" % (str(tr.key()), tr.hash)
         
-        # See who is me, and who is someone
-        if creatorMember == fromMember:
-            me = fromMember
-            someone = toMember
-        else:
-            me = toMember
-            someone = fromMember
-        
         # Try send mail
-        message = mail.EmailMessage(
-                            sender = DeBeeEmail, 
-                            to = someone.user.email(), 
-                            subject = transactionNoticeSubject(someone))
-        
-        message.body = readFile('texts/%s.txt' % mailFile) % (someone.userNick, me.userNick, amount, reason, rejectUrl)
-        message.html = readFile('texts/%s.html' % mailFile) % (someone.userNick, me.userNick, amount, reason, rejectUrl)
-        
-        try:
-            message.send()
-        except:
-            iHateGoogleAppEngineMailQuotaRules = True
+        message = createActionMail(me, someone, amount, reason,  descriptionOfBalanceBefore, descriptionOfBalanceNow, rejectUrl, mailBody)
+        sendEmail(message)
         
         location = '/group?group=%s&msg=%s' % (creatorMember.group.key(), descriptionOfTransaction(tr, user))
         redirectPage(self,location)

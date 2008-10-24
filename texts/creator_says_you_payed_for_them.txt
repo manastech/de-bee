@@ -5,5 +5,7 @@ Hi %s!
 %s
 That is, you payed a total of $%s.
 
+Before this transaction %s in %s, now %s.
+
 Yours,
 De-Bee

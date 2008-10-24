@@ -6,11 +6,15 @@ from google.appengine.ext.webapp.util import login_required
 from ajax import redirectPage
 from ajax import userIsLoggedIn
 from model import Transaction
-from emails import DeBeeEmail
-from emails import transactionNoticeSubject
-from util import readFile
+from emails import someoneOwedYou
+from emails import youOwedSomeone
+from emails import someonePayedYou
+from emails import youPayedSomeone
+from emails import createRejectionMail
+from emails import sendEmail
 from util import descriptionOfTransaction
 from util import transactionIsBenefical
+from util import descriptionOfBalance
 import os
 
 class RejectHandler(webapp.RequestHandler):
@@ -67,6 +71,16 @@ class CommitRejectHandler(webapp.RequestHandler):
         tr.isRejected = True
         
         compensateTr = tr.getCompensateFor(user)
+        
+        # See who is me, and who is someone
+        if compensateTr.creatorMember == compensateTr.fromMember:
+            me = compensateTr.fromMember
+            someone = compensateTr.toMember
+        else:
+            me = compensateTr.toMember
+            someone = compensateTr.fromMember
+            
+        descriptionOfBalanceBefore = descriptionOfBalance(someone, before = True)
 
         # ========================================================= #
         # See what's the type of the transaction and adjust balance
@@ -79,10 +93,10 @@ class CommitRejectHandler(webapp.RequestHandler):
             
             if compensateTr.creatorMember.user == tr.fromMember.user:
                 # I owe someone
-                mailFile = 'reject_someone_owed_you'
+                mailBody = someoneOwedYou(reject = True)
             else:
                 # Someone owes me
-                mailFile = 'reject_you_owed_someone'
+                mailBody = youOwedSomeone(reject = True)
         elif tr.type == 'payment':
             # If it's a payment, fromMember always looses
             tr.fromMember.balance -= tr.amount
@@ -90,10 +104,10 @@ class CommitRejectHandler(webapp.RequestHandler):
             
             if compensateTr.creatorMember.user == tr.fromMember.user:
                 # I payed someone
-                mailFile = 'reject_someone_payed_you'
+                mailBody = someonePayedYou(reject = True)
             else:
                 # Someone payed me
-                mailFile = 'reject_you_payed_someone'
+                mailBody = youPayedSomeone(reject = True)
         else:
             # Can't happen, only with hackery
             return
@@ -102,38 +116,16 @@ class CommitRejectHandler(webapp.RequestHandler):
         tr.toMember.put()
         tr.put()
         compensateTr.put()
+        
+        descriptionOfBalanceNow = descriptionOfBalance(someone, before = False)
 
         # ========================== #
         # Try send notification mail #
-        # ========================== #
-        
-        # See who is me, and who is someone
-        if compensateTr.creatorMember == compensateTr.fromMember:
-            me = compensateTr.fromMember
-            someone = compensateTr.toMember
-        else:
-            me = compensateTr.toMember
-            someone = compensateTr.fromMember
+        # ========================== #        
         
         # Try send mail
-        message = mail.EmailMessage(
-                            sender = DeBeeEmail, 
-                            to = someone.user.email(), 
-                            subject = transactionNoticeSubject(someone))
-        
-        reasonTxt = ""
-        reasonHtml = ""
-        if reason != "":
-            reasonTxt = '\n%s\n' % reason 
-            reasonHtml = '%s<br><br>' % reason
-        
-        message.body = readFile('texts/%s.txt' % mailFile) % (someone.userNick, me.userNick, tr.amount, tr.reason, reasonTxt)
-        message.html = readFile('texts/%s.html' % mailFile) % (someone.userNick, me.userNick, tr.amount, tr.reason, reasonHtml)
-        
-        try:
-            message.send()
-        except:
-            iHateGoogleAppEngineMailQuotaRules = True
+        message = createRejectionMail(me, someone, tr, reason, descriptionOfBalanceBefore, descriptionOfBalanceNow, mailBody)
+        sendEmail(message)
         
         location = '/group?group=%s&msg=%s' % (tr.group.key(), 'You rejected the transaction')
         redirectPage(self,location)

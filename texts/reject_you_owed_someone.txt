@@ -1,6 +1,0 @@
-Hi %s!
-
-%s rejected a transaction that said that you owed him/her $%s because of %s.
-%s
-Yours,
-De-Bee

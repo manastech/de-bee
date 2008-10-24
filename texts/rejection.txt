@@ -1,0 +1,8 @@
+Hi %s!
+
+%s
+%s
+Before this rejection %s in %s, now %s.
+
+Yours,
+De-Bee

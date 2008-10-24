@@ -100,3 +100,16 @@ def transactionIsBenefical(tr, user):
         return tr.fromUser == user
     if (tr.type == "rejectedPayment"):
         return tr.toUser == user
+    
+def descriptionOfBalance(member, before):
+    if before:
+        owe = 'owed'
+    else:
+        owe = 'owe'
+    
+    if member.balance == 0.0:
+        return '%s no one, and no one %s you' % (owe, owe)
+    elif member.balance > 0.0:
+        return 'they %s you $%s' % (owe, member.balance)
+    else:
+        return 'you %s $%s' % (owe, member.balance)
