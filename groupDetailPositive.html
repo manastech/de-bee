@@ -2,7 +2,7 @@
 {% if hasMoreThanOneBalanceItem %}
 	This group owes you a total of ${{ balance }}:<br>
 	<ul>
-	{% for i in result %}
+	{% for i in balanceItems %}
 		<li>{{ i.user }} owes you $ {{ i.amount }}</li>
 	{% endfor %}
 	</ul>
