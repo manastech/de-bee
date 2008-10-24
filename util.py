@@ -108,7 +108,7 @@ def descriptionOfBalance(member, before):
         owe = 'owe'
     
     if member.balance == 0.0:
-        return '%s no one, and no one %s you' % (owe, owe)
+        return 'you %s no one, and no one %s you' % (owe, owe)
     elif member.balance > 0.0:
         return 'they %s you $%s' % (owe, abs(member.balance))
     else:
