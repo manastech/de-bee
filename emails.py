@@ -59,7 +59,7 @@ def youPayedSomeone(reject = False):
 def creatorSaysYouOwedSomeone():
     return {
             'txt': '%s told me that you owe %s $%s because of %s.',
-            'html': '<b>%s<b> told me that <b>you owe %s $%s<b> because of %s.'
+            'html': '<b>%s told me</b> that <b>you owe %s $%s</b> because of %s.'
             }
 
 def createActionMail(me, someone, amount, reason, descriptionOfBalanceBefore, descriptionOfBalanceNow, rejectUrl, mailBody):

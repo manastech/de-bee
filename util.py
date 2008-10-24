@@ -79,7 +79,7 @@ def descriptionOfTransaction(tr, user):
             if tr.fromUser == user:
                 message = "You rejected that you payed " + tr.toMember.userNick + " $" + str(tr.amount)
             else:
-                message = "2You rejected from " + tr.toMember.userNick + " a payment of $" + str(tr.amount)
+                message = "You rejected from " + tr.toMember.userNick + " a payment of $" + str(tr.amount)
         else:
             if tr.fromUser == user:
                 message = tr.fromMember.userNick + " rejected that you payed him/her $" + str(tr.amount)
@@ -110,6 +110,6 @@ def descriptionOfBalance(member, before):
     if member.balance == 0.0:
         return '%s no one, and no one %s you' % (owe, owe)
     elif member.balance > 0.0:
-        return 'they %s you $%s' % (owe, member.balance)
+        return 'they %s you $%s' % (owe, abs(member.balance))
     else:
-        return 'you %s $%s' % (owe, member.balance)
+        return 'you %s $%s' % (owe, abs(member.balance))
