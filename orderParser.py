@@ -51,7 +51,11 @@ class OrderParser:
 			firstSplits = line.split(':');
 			
 			if len(firstSplits) > 2:
-				transaction.error = "Error in line %s: more than two colons (:) found" % linnum;
+				transaction.error = "Error in line %s: more than one colon (:) found" % linnum;
+				return transaction
+			
+			if len(firstSplits) < 2:
+				transaction.error = "Error in line %s: expecting colon (:)" % linnum;
 				return transaction
 			
 			if firstSplits[0].strip().lower() == "cancel":

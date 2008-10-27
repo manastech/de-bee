@@ -63,9 +63,13 @@
 		{% include "groupAction.html" %}
 		</div>
 		
-		<h3>Someone pays, the others owe him/her</h3>
+		{% if hasGroupMemberships %}
 		
-		{% include "groupBulk.html" %}
+			<h3>Someone pays, the others owe him/her</h3>
+			
+			{% include "groupBulk.html" %}
+			
+		{% endif %}
 		
 		</div>
 		

@@ -18,7 +18,7 @@ def someoneOwedYou(reject = False):
     else:
         return {
                 'txt': '%s told me that he/she owed you $%s because of %s.',
-                'html': '<b>%s</b> told me that <b>he/she owed you $%s</b> because of %s.' 
+                'html': '<b>%s</b> told me that <b style="color:#005E00">he/she owed you $%s</b> because of %s.' 
                 }
     
 def youOwedSomeone(reject = False):
@@ -30,7 +30,7 @@ def youOwedSomeone(reject = False):
     else:
         return {
                 'txt': '%s told me that you owed him/her $%s because of %s.',
-                'html': '<b>%s</b> told me that <b>you owed him/her $%s</b> because of %s.' 
+                'html': '<b>%s</b> told me that <b style="color:#5C0101">you owed him/her $%s</b> because of %s.' 
                 }
     
 def someonePayedYou(reject = False):
@@ -42,7 +42,7 @@ def someonePayedYou(reject = False):
     else:
         return {
                 'txt': '%s told me that he/she payed you $%s because of %s.',
-                'html': '<b>%s</b> told me that <b>he/she payed you $%s</b> because of %s.' 
+                'html': '<b>%s</b> told me that <b style="color:#5C0101">he/she payed you $%s</b> because of %s.' 
                 }
     
 def youPayedSomeone(reject = False):
@@ -54,44 +54,42 @@ def youPayedSomeone(reject = False):
     else:
         return {
                 'txt': '%s told me that you payed him/her $%s because of %s.',
-                'html': '<b>%s</b> told me that <b>you payed him/her $%s</b> because of %s.' 
+                'html': '<b>%s</b> told me that <b style="color:#005E00">you payed him/her $%s</b> because of %s.' 
                 }
 def creatorSaysYouOwedSomeone():
     return {
-            'txt': '%s told me that you owe %s $%s because of %s.',
-            'html': '<b>%s told me</b> that <b>you owe %s $%s</b> because of %s.'
+            'txt': '%s told me that you owed %s $%s because of %s.',
+            'html': '<b>%s told me</b> that <b style="color:#5C0101">you owed %s $%s</b> because of %s.'
             }
 
-def createActionMail(me, someone, amount, reason, descriptionOfBalanceBefore, descriptionOfBalanceNow, rejectUrl, mailBody):
+def createActionMail(me, someone, amount, reason, balanceBefore, balanceNow, rejectUrl, mailBody):
     message = mail.EmailMessage(
                             sender = DeBeeEmail, 
                             to = someone.user.email(), 
                             subject = transactionNoticeSubject(someone))
-    message.body = actionMessageTxt(me, someone, amount, reason,  descriptionOfBalanceBefore, descriptionOfBalanceNow, rejectUrl, mailBody['txt'])
-    message.html = actionMessageHtml(me, someone, amount, reason,  descriptionOfBalanceBefore, descriptionOfBalanceNow, rejectUrl, mailBody['html'])
+    message.body = actionMessageTxt(me, someone, amount, reason,  balanceBefore, balanceNow, rejectUrl, mailBody['txt'])
+    message.html = actionMessageHtml(me, someone, amount, reason,  balanceBefore, balanceNow, rejectUrl, mailBody['html'])
     return message
 
-def createRejectionMail(me, someone, tr, reason, descriptionOfBalanceBefore, descriptionOfBalanceNow, mailBody):
+def createRejectionMail(me, someone, tr, reason, balanceBefore, balanceNow, mailBody):
     message = mail.EmailMessage(
                             sender = DeBeeEmail, 
                             to = someone.user.email(), 
                             subject = transactionNoticeSubject(someone))
-    message.body = rejectionMessageTxt(me, someone, tr, reason,  descriptionOfBalanceBefore, descriptionOfBalanceNow, mailBody['txt'])
-    message.html = rejectionMessageHtml(me, someone, tr, reason,  descriptionOfBalanceBefore, descriptionOfBalanceNow, mailBody['html'])
+    message.body = rejectionMessageTxt(me, someone, tr, reason,  balanceBefore, balanceNow, mailBody['txt'])
+    message.html = rejectionMessageHtml(me, someone, tr, reason,  balanceBefore, balanceNow, mailBody['html'])
     return message
 
-def createThirdPartyActionMail(creator, me, someone, amount, reason, descriptionOfBalanceBefore, descriptionOfBalanceNow, rejectUrl, mailBody):
+def createThirdPartyActionMail(creator, me, someone, amount, reason, balanceBefore, balanceNow, rejectUrl, mailBody):
     message = mail.EmailMessage(
                             sender = DeBeeEmail, 
                             to = someone.user.email(), 
                             subject = transactionNoticeSubject(someone))
-    message.body = thirdPartyActionMessageTxt(creator, me, someone, amount, reason,  descriptionOfBalanceBefore, descriptionOfBalanceNow, rejectUrl, mailBody['txt'])
-    message.html = thirdPartyActionMessageHtml(creator, me, someone, amount, reason,  descriptionOfBalanceBefore, descriptionOfBalanceNow, rejectUrl, mailBody['html'])
+    message.body = thirdPartyActionMessageTxt(creator, me, someone, amount, reason,  balanceBefore, balanceNow, rejectUrl, mailBody['txt'])
+    message.html = thirdPartyActionMessageHtml(creator, me, someone, amount, reason,  balanceBefore, balanceNow, rejectUrl, mailBody['html'])
     return message
 
-def createBulkMail(transaction, creatorMember, descriptionOfPayersBalanceBefore, descriptionOfPayersBalanceNow):
-    descriptionOfPayersBalanceNow = descriptionOfBalance(transaction.payer, before = False)
-    
+def createBulkMail(transaction, creatorMember, balanceBefore, balanceNow):
     debtorsTxt = ''
     debtorsHtml = '<ul>'
     
@@ -110,29 +108,29 @@ def createBulkMail(transaction, creatorMember, descriptionOfPayersBalanceBefore,
                     to = transaction.payer.user.email(), 
                     subject = transactionNoticeSubject(transaction.payer))
     
-    message.body = readFile('texts/creator_says_you_payed_for_them.txt') % (transaction.payer.userNick, creatorMember.userNick, debtorsTxt, total, descriptionOfPayersBalanceBefore, transaction.payer.groupNick, descriptionOfPayersBalanceNow)
-    message.html = readFile('texts/creator_says_you_payed_for_them.html') % (transaction.payer.userNick, creatorMember.userNick, debtorsHtml, total, descriptionOfPayersBalanceBefore, transaction.payer.groupNick, descriptionOfPayersBalanceNow)
+    message.body = readFile('texts/creator_says_you_payed_for_them.txt') % (transaction.payer.userNick, creatorMember.userNick, debtorsTxt, total, descriptionOfBalance(balanceBefore, before = True), transaction.payer.groupNick, descriptionOfBalance(balanceNow, before = False))
+    message.html = readFile('texts/creator_says_you_payed_for_them.html') % (transaction.payer.userNick, creatorMember.userNick, debtorsHtml, total, descriptionOfBalanceHtml(balanceBefore, before = True), transaction.payer.groupNick, descriptionOfBalanceHtml(balanceNow, before = False))
     return message
 
-def actionMessageTxt(me, someone, amount, reason, descriptionOfBalanceBefore, descriptionOfBalanceNow, rejectUrl, body):
+def actionMessageTxt(me, someone, amount, reason, balanceBefore, balanceNow, rejectUrl, body):
     realBody = body % (me.userNick, amount, reason)
     
     global actionTxt
     if actionTxt is None:
         actionTxt = readFile('texts/action.txt')
          
-    return actionTxt % (someone.userNick, realBody, descriptionOfBalanceBefore, someone.groupNick, descriptionOfBalanceNow, rejectUrl)
+    return actionTxt % (someone.userNick, realBody, descriptionOfBalance(balanceBefore, before = True), someone.groupNick, descriptionOfBalance(balanceNow, before = False), rejectUrl)
 
-def actionMessageHtml(me, someone, amount, reason, descriptionOfBalanceBefore, descriptionOfBalanceNow, rejectUrl, body):
+def actionMessageHtml(me, someone, amount, reason, balanceBefore, balanceNow, rejectUrl, body):
     realBody = body % (me.userNick, amount, reason)
     
     global actionHtml
     if actionHtml is None:
         actionHtml = readFile('texts/action.html')
         
-    return actionHtml % (someone.userNick, realBody, descriptionOfBalanceBefore, someone.groupNick, descriptionOfBalanceNow, rejectUrl)
+    return actionHtml % (someone.userNick, realBody, descriptionOfBalanceHtml(balanceBefore, before = True), someone.groupNick, descriptionOfBalanceHtml(balanceNow, before = False), rejectUrl)
 
-def rejectionMessageTxt(me, someone, tr, reason, descriptionOfBalanceBefore, descriptionOfBalanceNow, body):
+def rejectionMessageTxt(me, someone, tr, reason, balanceBefore, balanceNow, body):
     if reason != "":
         reason = '\n%s\n' % reason
     
@@ -142,9 +140,9 @@ def rejectionMessageTxt(me, someone, tr, reason, descriptionOfBalanceBefore, des
     if rejectionTxt is None:
         rejectionTxt = readFile('texts/rejection.txt')
         
-    return rejectionTxt % (someone.userNick, realBody, reason, descriptionOfBalanceBefore, someone.groupNick, descriptionOfBalanceNow)
+    return rejectionTxt % (someone.userNick, realBody, reason, descriptionOfBalance(balanceBefore, before = True), someone.groupNick, descriptionOfBalance(balanceNow, before = False))
 
-def rejectionMessageHtml(me, someone, tr, reason, descriptionOfBalanceBefore, descriptionOfBalanceNow, body):
+def rejectionMessageHtml(me, someone, tr, reason, balanceBefore, balanceNow, body):
     if reason != "":
         reason = '%s<br><br>' % reason
     
@@ -154,28 +152,36 @@ def rejectionMessageHtml(me, someone, tr, reason, descriptionOfBalanceBefore, de
     if rejectionHtml is None:
         rejectionHtml = readFile('texts/rejection.html')
         
-    return rejectionHtml % (someone.userNick, realBody, reason, descriptionOfBalanceBefore, someone.groupNick, descriptionOfBalanceNow)
+    return rejectionHtml % (someone.userNick, realBody, reason, descriptionOfBalanceHtml(balanceBefore, before = True), someone.groupNick, descriptionOfBalanceHtml(balanceNow, before = False))
 
-def thirdPartyActionMessageTxt(creator, me, someone, amount, reason, descriptionOfBalanceBefore, descriptionOfBalanceNow, rejectUrl, body):
+def thirdPartyActionMessageTxt(creator, me, someone, amount, reason, balanceBefore, balanceNow, rejectUrl, body):
     realBody = body % (creator.userNick, me.userNick, amount, reason)
     
     global actionTxt
     if actionTxt is None:
         actionTxt = readFile('texts/action.txt')
          
-    return actionTxt % (someone.userNick, realBody, descriptionOfBalanceBefore, someone.groupNick, descriptionOfBalanceNow, rejectUrl)
+    return actionTxt % (someone.userNick, realBody, descriptionOfBalance(balanceBefore, before = True), someone.groupNick, descriptionOfBalance(balanceNow, before = False), rejectUrl)
     
-def thirdPartyActionMessageHtml(creator, me, someone, amount, reason, descriptionOfBalanceBefore, descriptionOfBalanceNow, rejectUrl, body):
+def thirdPartyActionMessageHtml(creator, me, someone, amount, reason, balanceBefore, balanceNow, rejectUrl, body):
     realBody = body % (creator.userNick, me.userNick, amount, reason)
     
     global actionHtml
     if actionHtml is None:
         actionHtml = readFile('texts/action.html')
         
-    return actionHtml % (someone.userNick, realBody, descriptionOfBalanceBefore, someone.groupNick, descriptionOfBalanceNow, rejectUrl)
+    return actionHtml % (someone.userNick, realBody, descriptionOfBalanceHtml(balanceBefore, before = True), someone.groupNick, descriptionOfBalanceHtml(balanceNow, before = False), rejectUrl)
 
 def transactionNoticeSubject(member):
     return "[De-Bee] Transaction notice in %s on %s" % (member.groupNick, datetime.now().strftime("%d %B %Y"))
+   
+def descriptionOfBalanceHtml(balance, before):
+	desc = descriptionOfBalance(balance, before)
+	if balance > 0.0:
+		desc = '<span style="color:#005E00">%s</span>' % desc
+	elif balance < 0.0:
+		desc = '<span style="color:#5C0101">%s</span>' % desc
+	return desc
 
 def sendEmail(email):
     try:

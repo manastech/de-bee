@@ -14,7 +14,6 @@ from emails import createActionMail
 from emails import sendEmail
 from util import UrlBuilder
 from util import descriptionOfTransaction
-from util import descriptionOfBalance
 
 class ActionHandler(webapp.RequestHandler):
     
@@ -60,7 +59,7 @@ class ActionHandler(webapp.RequestHandler):
             me = toMember
             someone = fromMember
         
-        descriptionOfBalanceBefore = descriptionOfBalance(someone, before = True)
+        balanceBefore = someone.balance
         
         # ========================================================= #
         # See what's the type of the transaction and adjust balance
@@ -95,7 +94,7 @@ class ActionHandler(webapp.RequestHandler):
         fromMember.put()
         toMember.put()
         
-        descriptionOfBalanceNow = descriptionOfBalance(someone, before = False)
+        balanceNow = someone.balance
         
         # ============================================= #
         # Create the transaction and save it in history
@@ -122,7 +121,7 @@ class ActionHandler(webapp.RequestHandler):
         rejectUrl += "?key=%s&h=%s" % (str(tr.key()), tr.hash)
         
         # Try send mail
-        message = createActionMail(me, someone, amount, reason,  descriptionOfBalanceBefore, descriptionOfBalanceNow, rejectUrl, mailBody)
+        message = createActionMail(me, someone, amount, reason,  balanceBefore, balanceNow, rejectUrl, mailBody)
         sendEmail(message)
         
         location = '/group?group=%s&msg=%s' % (creatorMember.group.key(), descriptionOfTransaction(tr, user))

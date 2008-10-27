@@ -14,7 +14,6 @@ from emails import createRejectionMail
 from emails import sendEmail
 from util import descriptionOfTransaction
 from util import transactionIsBenefical
-from util import descriptionOfBalance
 import os
 
 class RejectHandler(webapp.RequestHandler):
@@ -80,7 +79,7 @@ class CommitRejectHandler(webapp.RequestHandler):
             me = compensateTr.toMember
             someone = compensateTr.fromMember
             
-        descriptionOfBalanceBefore = descriptionOfBalance(someone, before = True)
+        balanceBefore = someone.balance
 
         # ========================================================= #
         # See what's the type of the transaction and adjust balance
@@ -117,14 +116,14 @@ class CommitRejectHandler(webapp.RequestHandler):
         tr.put()
         compensateTr.put()
         
-        descriptionOfBalanceNow = descriptionOfBalance(someone, before = False)
+        balanceNow = someone.balance
 
         # ========================== #
         # Try send notification mail #
         # ========================== #        
         
         # Try send mail
-        message = createRejectionMail(me, someone, tr, reason, descriptionOfBalanceBefore, descriptionOfBalanceNow, mailBody)
+        message = createRejectionMail(me, someone, tr, reason, balanceBefore, balanceNow, mailBody)
         sendEmail(message)
         
         location = '/group?group=%s&msg=%s' % (tr.group.key(), 'You rejected the transaction')

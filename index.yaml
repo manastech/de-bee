@@ -10,51 +10,51 @@ indexes:
 # automatically uploaded to the admin console when you next deploy
 # your application using appcfg.py.
 
-# Used 50 times in query history.
+# Unused in query history -- copied from input.
 - kind: Membership
   properties:
   - name: alias
   - name: user
   - name: group
 
-# Used 371 times in query history.
+# Used 311 times in query history.
 - kind: Membership
   properties:
   - name: group
   - name: balance
 
-# Used 99 times in query history.
+# Used 167 times in query history.
 - kind: Membership
   properties:
   - name: group
   - name: balance
     direction: desc
 
-# Used 402 times in query history.
+# Used 890 times in query history.
 - kind: Membership
   properties:
   - name: group
   - name: user
 
-# Used 38 times in query history.
+# Used 376 times in query history.
 - kind: Membership
   properties:
   - name: user
   - name: balance
 
-# Used 702 times in query history.
+# Used 736 times in query history.
 - kind: Membership
   properties:
   - name: user
   - name: group
 
-# Unused in query history -- copied from input.
+# Used once in query history.
 - kind: Transaction
   properties:
   - name: date
     direction: desc
 
-# Used 366 times in query history.
+# Used 35 times in query history.
 - kind: Transaction
   properties:
   - name: fromMember
@@ -62,7 +62,7 @@ indexes:
   - name: date
     direction: desc
 
-# Used 99 times in query history.
+# Used 208 times in query history.
 - kind: Transaction
   properties:
   - name: fromUser
@@ -70,14 +70,14 @@ indexes:
   - name: date
     direction: desc
 
-# Used 2 times in query history.
+# Used 3 times in query history.
 - kind: Transaction
   properties:
   - name: group
   - name: date
     direction: desc
 
-# Used 355 times in query history.
+# Used 35 times in query history.
 - kind: Transaction
   properties:
   - name: group
@@ -85,7 +85,7 @@ indexes:
   - name: date
     direction: desc
 
-# Used 99 times in query history.
+# Used 204 times in query history.
 - kind: Transaction
   properties:
   - name: group

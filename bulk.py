@@ -14,7 +14,6 @@ from emails import createThirdPartyActionMail
 from emails import createBulkMail
 from emails import sendEmail
 from util import UrlBuilder
-from util import descriptionOfBalance
 from orderParser import OrderParser
 
 class BulkHandler(webapp.RequestHandler):
@@ -42,7 +41,7 @@ class BulkHandler(webapp.RequestHandler):
 			alertMessage(self, transaction.error)
 			return
 			
-		descriptionOfPayersBalanceBefore = descriptionOfBalance(transaction.payer, before = True)
+		payersBalanceBefore = transaction.payer.balance
 		
 		for debt in transaction.debts:
 			debtor = debt.member
@@ -51,7 +50,7 @@ class BulkHandler(webapp.RequestHandler):
 			if debtor.user.email().lower() == payer.user.email().lower():
 				continue
 			
-			descriptionOfDebtorsBalanceBefore = descriptionOfBalance(debtor, before = True)
+			debtorsBalanceBefore = debtor.balance
 			
 			# Adjust balance
 			debtor.balance -= debt.money
@@ -59,7 +58,7 @@ class BulkHandler(webapp.RequestHandler):
 			
 			payer.balance += debt.money
 			
-			descriptionOfDebtorsBalanceNow = descriptionOfBalance(debtor, before = False)
+			debtorsBalanceNow = debtor.balance
 			
 			# Create transaction
 			tr = Transaction(
@@ -85,19 +84,19 @@ class BulkHandler(webapp.RequestHandler):
 			
 			# Try send email to the debtor
 			if creatorMember.user == transaction.payer.user:
-				message = createActionMail(payer, debtor, debt.money, debt.reason, descriptionOfDebtorsBalanceBefore, descriptionOfDebtorsBalanceNow, rejectUrl, youOwedSomeone()) 
+				message = createActionMail(payer, debtor, debt.money, debt.reason, debtorsBalanceBefore, debtorsBalanceNow, rejectUrl, youOwedSomeone()) 
 			else:
-				message = createThirdPartyActionMail(creatorMember, payer, debtor, debt.money, debt.reason, descriptionOfDebtorsBalanceBefore, descriptionOfDebtorsBalanceNow, rejectUrl, creatorSaysYouOwedSomeone())
+				message = createThirdPartyActionMail(creatorMember, payer, debtor, debt.money, debt.reason, debtorsBalanceBefore, debtorsBalanceNow, rejectUrl, creatorSaysYouOwedSomeone())
 			
 			sendEmail(message)
 				
 		transaction.payer.put()
 		
-		descriptionOfPayersBalanceNow = descriptionOfBalance(transaction.payer, before = False)
+		payersBalanceNow = transaction.payer.balance
 		
 		# Now try send email to the payer with a summary
 		if not creatorMember.user == transaction.payer.user:
-			message = createBulkMail(transaction, creatorMember, descriptionOfPayersBalanceBefore, descriptionOfPayersBalanceNow)
+			message = createBulkMail(transaction, creatorMember, payersBalanceBefore, payersBalanceNow)
 			sendEmail(message)
 				
 		location = '/group?group=%s&msg=%s' % (group.key(), 'Debts saved!')
