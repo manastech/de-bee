@@ -1,9 +1,9 @@
 Hi %s!
 
-%s told me that you payed:
+%s said that you paid:
 
 %s
-That is, you payed a total of $%s.
+That is, you paid a total of $%s.
 
 Before this transaction %s in %s, now %s.
 

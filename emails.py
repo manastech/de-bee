@@ -36,25 +36,25 @@ def youOwedSomeone(reject = False):
 def someonePayedYou(reject = False):
     if reject:
         return {
-                'txt': '%s rejected a transaction that said that he/she payed you $%s because of %s.',
-                'html': '%s rejected a transaction that said that he/she payed you $%s because of %s.' 
+                'txt': '%s rejected a transaction that said that he/she paid you $%s because of %s.',
+                'html': '%s rejected a transaction that said that he/she paid you $%s because of %s.' 
                 }
     else:
         return {
-                'txt': '%s told me that he/she payed you $%s because of %s.',
-                'html': '<b>%s</b> told me that <b style="color:#5C0101">he/she payed you $%s</b> because of %s.' 
+                'txt': '%s told me that he/she paid you $%s because of %s.',
+                'html': '<b>%s</b> told me that <b style="color:#5C0101">he/she paid you $%s</b> because of %s.' 
                 }
     
 def youPayedSomeone(reject = False):
     if reject:
         return {
-                'txt': '%s rejected a transaction that said that you payed him/her $%s because of %s.',
-                'html': '%s rejected a transaction that said that you payed him/her $%s because of %s.' 
+                'txt': '%s rejected a transaction that said that you paid him/her $%s because of %s.',
+                'html': '%s rejected a transaction that said that you paid him/her $%s because of %s.' 
                 }
     else:
         return {
-                'txt': '%s told me that you payed him/her $%s because of %s.',
-                'html': '<b>%s</b> told me that <b style="color:#005E00">you payed him/her $%s</b> because of %s.' 
+                'txt': '%s told me that you paid him/her $%s because of %s.',
+                'html': '<b>%s</b> told me that <b style="color:#005E00">you paid him/her $%s</b> because of %s.' 
                 }
 def creatorSaysYouOwedSomeone():
     return {

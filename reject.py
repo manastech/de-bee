@@ -102,10 +102,10 @@ class CommitRejectHandler(webapp.RequestHandler):
             tr.toMember.balance += tr.amount
             
             if compensateTr.creatorMember.user == tr.fromMember.user:
-                # I payed someone
+                # I paid someone
                 mailBody = someonePayedYou(reject = True)
             else:
-                # Someone payed me
+                # Someone paid me
                 mailBody = youPayedSomeone(reject = True)
         else:
             # Can't happen, only with hackery

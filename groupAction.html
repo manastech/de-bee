@@ -35,7 +35,7 @@
 <form action="/action" method="post" target="logic">
 	<input type="hidden" name="type" value="payment" />
 	<input type="hidden" name="fromMember" value="{{userMembership.key}}" />	
-<td style="padding: 4px 10px 4px 10px" align="center">I payed</td>
+<td style="padding: 4px 10px 4px 10px" align="center">I paid</td>
 <td style="padding: 4px 10px 4px 10px" align="center">
 	<select name="toMember">
 		{% for member in groupMemberships %}
@@ -84,7 +84,7 @@
 </td>	
 </form>
 </tr>
-<!--Someone payed me =========================================================== -->
+<!--Someone paid me =========================================================== -->
 <tr class="detrimental">
 <form action="/action" method="post" target="logic">
 	<input type="hidden" name="type" value="payment" />
@@ -98,7 +98,7 @@
 	</select>
 </td>
 <td style="padding: 4px 10px 4px 10px" align="center">
-	payed me
+	paid me
 </td>
 <td style="padding: 4px 2px 4px 2px"> $ </td>
 <td style="padding: 4px 10px 4px 2px"><input type="text" value="" name="amount"/></td>

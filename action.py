@@ -82,10 +82,10 @@ class ActionHandler(webapp.RequestHandler):
             toMember.balance -= amount
             
             if creatorMember.user == fromMember.user:
-                # I payed someone
+                # I paid someone
                 mailBody = someonePayedYou()
             else:
-                # Someone payed me
+                # Someone paid me
                 mailBody = youPayedSomeone()
         else:
             # Can't happen, only with hackery
