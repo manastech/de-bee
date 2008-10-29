@@ -96,9 +96,10 @@ def createBulkMail(transaction, creatorMember, balanceBefore, balanceNow):
     total = 0.0
     
     for debt in transaction.debts:
-        debtorsTxt += ' * $%s to %s because of %s\n' % (debt.money, debt.member.userNick, debt.reason)
-        debtorsHtml += '<li>$%s to %s because of %s</li>' % (debt.money, debt.member.userNick, debt.reason)
-        total += debt.money
+    	if creatorMember.user != debt.member.user:
+	        debtorsTxt += ' * $%s to %s because of %s\n' % (debt.money, debt.member.userNick, debt.reason)
+	        debtorsHtml += '<li>$%s to %s because of %s</li>' % (debt.money, debt.member.userNick, debt.reason)
+	        total += debt.money
         
     debtorsHtml += '</ul>'
     
