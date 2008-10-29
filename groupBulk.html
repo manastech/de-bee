@@ -43,7 +43,10 @@ say "Pays: that one", and we specify what consumed each of us.</p>
 				</td>
 			</tr>
 			<tr>
-				<td><input type="submit" value="Save"></td>
+				<td align="right">
+					<input type="submit" value="View summary" onclick="javascript:this.form.action='/bulkSummary'" style="margin-right:10px">
+					<input type="submit" value="Save" onclick="javascript:this.form.action='/bulk'">
+				</td>
 			</tr>
 		</table>
 		</form>

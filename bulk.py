@@ -15,6 +15,7 @@ from emails import createBulkMail
 from emails import sendEmail
 from util import UrlBuilder
 from orderParser import OrderParser
+from orderParser import quantity
 
 class BulkHandler(webapp.RequestHandler):
 	
@@ -101,3 +102,47 @@ class BulkHandler(webapp.RequestHandler):
 				
 		location = '/group?group=%s&msg=%s' % (group.key(), 'Debts saved!')
 		redirectPage(self,location)
+		
+class BulkSummaryHandler(webapp.RequestHandler):
+	
+	def post(self):
+		if not userIsLoggedIn(self):
+			return
+			
+		user = users.get_current_user();
+		group = Group.get(self.request.get("group"))
+		
+		creatorMember = Membership.gql("WHERE group = :1 AND user = :2", group, user)[0]
+		if not creatorMember:
+			return
+		
+		command = self.request.get("command")
+		members = group.memberships
+		
+		parser = OrderParser()
+		transaction = parser.parse(members, command)
+		
+		if transaction.error:
+			alertMessage(self, transaction.error)
+			return
+		
+		elems = {}
+		total = 0.0
+		
+		for debt in transaction.debts:
+			total += debt.money
+			razon = debt.reason
+			comidas = razon.split(',')
+			for comida in comidas:
+				comida = comida.strip()
+				[cantidad, comida2] = quantity(comida)
+				elems[comida2] = elems.get(comida2, 0) + cantidad
+				
+		result = ''
+		for comida, cantidad in elems.items():
+			result += ' - %s %s\\n' % (cantidad, comida)
+			
+		result += '\\n';
+		result += 'Total: $%s'% total;
+		
+		alertMessage(self, result)
