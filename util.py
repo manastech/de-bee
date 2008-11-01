@@ -55,38 +55,38 @@ def descriptionOfTransaction(tr, user):
     message = ''
     if (tr.type == "debt"):
          if (tr.fromUser == user):
-             message = "You owed " + tr.toMember.userNick + " $" + str(tr.amount)
+             message = "You owed %s $%s" % (tr.toMember.userNick, tr.amount)
          else:
-             message = tr.fromMember.userNick + " owed you $" + str(tr.amount)
+             message = "%s owed you $%s" % (tr.fromMember.userNick, tr.amount)
     if (tr.type == "payment"):
          if (tr.fromUser == user):
-             message = "You paid " + tr.toMember.userNick + " $" + str(tr.amount)
+             message = "You paid %s $%s" % (tr.toMember.userNick, tr.amount)
          else:
-             message = tr.fromMember.userNick + " paid you $" + str(tr.amount)
+             message = "%s paid you $%s" % (tr.fromMember.userNick, tr.amount)
     if (tr.type == "rejectedDebt"):
         if (tr.creator == user):
             if tr.fromUser == user:
-                message = "You rejected that you owed " + tr.toMember.userNick + " $" + str(tr.amount)
+                message = "You rejected that you owed %s $%s" % (tr.toMember.userNick, tr.amount)
             else:
-                message = "You rejected that " + tr.toMember.userNick + " owed you $" + str(tr.amount)
+                message = "You rejected that %s owed you $%s" % (tr.toMember.userNick, tr.amount)
         else:
             if tr.fromUser == user:
-                message = tr.fromMember.userNick + " rejected that you owed him/her $" + str(tr.amount)
+                message = "%s rejected that you owed him/her $%s" % (tr.fromMember.userNick, tr.amount)
             else:
-                message = tr.fromMember.userNick + " rejected that he/she owed you $" + str(tr.amount)
+                message = "%s rejected that he/she owed you $" % (tr.fromMember.userNick, tr.amount)
     if (tr.type == "rejectedPayment"):
         if (tr.creator == user):
             if tr.fromUser == user:
-                message = "You rejected that you paid " + tr.toMember.userNick + " $" + str(tr.amount)
+                message = "You rejected that you paid %s $%s" % (tr.toMember.userNick, tr.amount)
             else:
-                message = "You rejected from " + tr.toMember.userNick + " a payment of $" + str(tr.amount)
+                message = "You rejected from %s a payment of $" % (tr.toMember.userNick, tr.amount)
         else:
             if tr.fromUser == user:
-                message = tr.fromMember.userNick + " rejected that you paid him/her $" + str(tr.amount)
+                message = "%s rejected that you paid him/her $%s" % (tr.fromMember.userNick, tr.amount)
             else:
-                message = tr.fromMember.userNick + " rejected that he/she paid you $" + str(tr.amount)
+                message = "%s rejected that he/she paid you $%s" % (tr.fromMember.userNick, tr.amount)
     if len(tr.reason) > 0:
-         message = message + " due to " + tr.reason
+         message += " due to %s" % tr.reason
     return message
 
 # Determines if a transaction is benefical for a user

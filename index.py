@@ -4,6 +4,10 @@ from google.appengine.ext.webapp import template
 from model import Membership
 from util import membershipsOfUser
 from comparators import compareMembershipsByGroupNick
+from i18n import getDefaultLanguage
+from i18n import getLanguage
+from i18n import addMasterKeys
+from i18n import _
 import os
 
 class IndexHandler(webapp.RequestHandler):
@@ -12,6 +16,8 @@ class IndexHandler(webapp.RequestHandler):
     user = users.get_current_user()
 
     if user:
+        lang = getLanguage(self.request, user)
+        
         userMemberships = membershipsOfUser(user)
         userMemberships.sort(cmp = compareMembershipsByGroupNick)
         
@@ -28,21 +34,41 @@ class IndexHandler(webapp.RequestHandler):
         hasMessage = len(message) > 0
         
         model = { 
-            'username' : user.nickname(),
-            'signout_url' : users.create_logout_url("/"),
-            'debts' : debts,
-            'hasUserMemberships' : hasUserMemberships,
-            'userMemberships' : userMemberships,
-            'group' : group,
-            'hasMessage' : hasMessage,
-            'message' : message,
+            'username': user.nickname(),
+            'signout_url': users.create_logout_url("/"),
+            'debts': debts,
+            'hasUserMemberships': hasUserMemberships,
+            'userMemberships': userMemberships,
+            'group': group,
+            'hasMessage': hasMessage,
+            'message': message,
+            
+            # i18n
+            'lang': lang,
+            'Hello': _('Hello', lang),
+            'Logout': _('Logout', lang),
+            'DontBelong': _("You don't belong to any group. You can create your own and invite your friends.", lang),
+            'Name': _('Name', lang),
             }
+        
+        addMasterKeys(model, lang)
         
         path = os.path.join(os.path.dirname(__file__), 'dashboard.html')
         self.response.out.write(template.render(path, model))
             
     else:
-        model = {'loginurl': users.create_login_url("/")}
+        lang = getDefaultLanguage(self.request)
+        
+        model = {
+                 'loginurl': users.create_login_url("/"),
+                 
+                 # i18n
+                 'lang': lang,
+                 'introduction': _('introduction', lang),
+            }
+        
+        addMasterKeys(model, lang)
+        
         path = os.path.join(os.path.dirname(__file__), 'introduction.html')
         self.response.out.write(template.render(path, model))
     

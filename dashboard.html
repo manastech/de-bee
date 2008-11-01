@@ -1,8 +1,8 @@
 {% extends "master.html" %}
 {% block top %}
 	<div style="text-align: right"> 
-	<span id="hello">Hello</span> <span id="username">{{username}}!</span><br>  
-	<a href="{{signout_url}}" id="logout">Logout</a>
+	<span id="hello">{{Hello}}</span> <span id="username">{{username}}!</span><br>  
+	<a href="{{signout_url}}" id="logout">{{Logout}}</a>
 	</div>
 {% endblock %}
 {% block navigation %}
@@ -65,18 +65,18 @@
 			</ul>
 		</div>
 		{% else %}
-		<div>You don't belong to any group. You can create your own and invite your friends.</div><br>
+		<div>{{DontBelong}}</div><br>
 		{% endif %}
 
 		<div>
 			<br /><br /><br /><br />
-			<img src="/images/NewGroup.gif" /> 
+			<img src="/images/{{lang}}/NewGroup.gif" /> 
 			<br />
 			<form action="/createGroup" method="post" target="logic">
-				<label style="font-size:12">Name:</label> 
+				<label style="font-size:12">{{Name}}:</label> 
 				<br />
 				<input type="text" value="" name="name"/>
-				<input style="vertical-align:middle" type="image" src="/images/Button_CreateGroup.gif" alt="CreateGroup" title="CreateGroup">
+				<input style="vertical-align:middle" type="image" src="/images/{{lang}}/Button_CreateGroup.gif" alt="CreateGroup" title="CreateGroup">
 			</form>
 		</div>
 		

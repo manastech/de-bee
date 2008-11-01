@@ -2,6 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 	<link href="stylesheets/styles.css" rel="stylesheet" type="text/css" />
+	<link href="stylesheets/{{lang}}/styles.css" rel="stylesheet" type="text/css" />
 	<link href="images/favicon.png" rel="icon" type="image/png" />
 	<script type="text/javascript" src="scripts/autocomplete.js"></script>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -15,9 +16,9 @@
 			<div id="logo"><a href="http://www.de-bee.com" style="text-decoration: none"><img src="images/De-Bee_logo.gif" alt="" border="0"/></a></div>
 			<div id="welcome" style="text-align: right; position:relative; top:-40px">
 			{% block top %}
-				<img src="images/Welcome.gif" alt="" />
-				<a href="{{ loginurl }}"><img src="images/Button_Login.gif" alt="" border="0" /></a>
-				<br>(You need a Google Account)
+				<img src="images/{{lang}}/Welcome.gif" alt="" />
+				<a href="{{ loginurl }}"><img src="images/{{lang}}/Button_Login.gif" alt="" border="0" /></a>
+				<br>({{YouNeedAGoogleAccount}})
 			{% endblock %}
 			</div>
 		</div>
@@ -35,10 +36,10 @@
 			</div></div>
 		</div>
 		<div id="footer">
-			<div id="copyright">2008 De-Bee. All rights reserved.</div>
+			<div id="copyright">2008 De-Bee. {{AllRightsReserved}}.</div>
 			<div id="powered">
-				Developed by <a href="http://www.manas.com.ar/">Manas Technology Solutions</a>.
-				Original idea by <a href="http://weblogs.manas.com.ar/ary">Ary Borenszweig</a>
+				{{DevelopedBy}} <a href="http://www.manas.com.ar/">Manas Technology Solutions</a>.
+				{{OriginalIdeaBy}} <a href="http://weblogs.manas.com.ar/ary">Ary Borenszweig</a>
 			</div>
 		</div>
 	</div>
