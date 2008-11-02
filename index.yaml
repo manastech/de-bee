@@ -54,7 +54,7 @@ indexes:
   - name: date
     direction: desc
 
-# Used 389 times in query history.
+# Used 453 times in query history.
 - kind: Transaction
   properties:
   - name: fromMember
@@ -77,7 +77,7 @@ indexes:
   - name: date
     direction: desc
 
-# Used 378 times in query history.
+# Used 442 times in query history.
 - kind: Transaction
   properties:
   - name: group

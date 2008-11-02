@@ -8,7 +8,7 @@
 	<input type="hidden" name="type" value="debt" />
 	<input type="hidden" name="fromMember" value="{{userMembership.key}}" />	
 <td style="padding: 0px 10px 4px 10px" align="center">
-	I owe
+	{{IOwed}}
 </td>
 <td style="padding: 0px 10px 4px 10px" align="center">
 	<select name="toMember">
@@ -20,13 +20,13 @@
 <td style="padding: 0px 2px 4px 2px"> $ </td>
 <td style="padding: 0px 10px 4px 2px"><input type="text" value="" name="amount"/></td>
 <td style="padding: 0px 10px 4px 10px">
-	due to
+	{{DueTo}}
 </td>
 <td style="padding: 0px 10px 4px 10px">
 	<input type="text" value="" name="reason"/>
 </td>
 <td style="padding: 0px 10px 4px 10px">
-	<input style="vertical-align:middle" type="image" src="/images/Button_Save.gif" alt="Save" title="Save">
+	<input style="vertical-align:middle" type="image" src="/images/{{lang}}/Button_Save.gif" alt="Save" title="Save">
 </td>	
 </form>
 </tr>
@@ -35,7 +35,7 @@
 <form action="/action" method="post" target="logic">
 	<input type="hidden" name="type" value="payment" />
 	<input type="hidden" name="fromMember" value="{{userMembership.key}}" />	
-<td style="padding: 4px 10px 4px 10px" align="center">I paid</td>
+<td style="padding: 4px 10px 4px 10px" align="center">{{IPaid}}</td>
 <td style="padding: 4px 10px 4px 10px" align="center">
 	<select name="toMember">
 		{% for member in groupMemberships %}
@@ -46,13 +46,13 @@
 <td style="padding: 4px 2px 4px 2px"> $ </td>
 <td style="padding: 4px 10px 4px 2px"><input type="text" value="" name="amount"/> </td>
 <td style="padding: 4px 10px 4px 10px" align="center">	
-	due to  
+	{{DueTo}}
 </td>
 <td style="padding: 4px 10px 4px 10px">
 	<input type="text" value="" name="reason"/>
 </td>
 <td style="padding: 4px 10px 4px 10px">
-	<input style="vertical-align:middle" type="image" src="/images/Button_Save.gif" alt="Save" title="Save">
+	<input style="vertical-align:middle" type="image" src="/images/{{lang}}/Button_Save.gif" alt="Save" title="Save">
 </td>	
 </form>
 </tr>
@@ -69,18 +69,18 @@
 	</select>
 </td>
 <td style="padding: 4px 10px 4px 10px" align="center">
-	owes me
+	{{OwedMe}}
 </td>
 <td style="padding: 4px 2px 4px 2px"> $ </td>
 <td style="padding: 4px 10px 4px 2px"><input type="text" value="" name="amount"/></td>
 <td style="padding: 4px 10px 4px 10px" align="center">
-	due to  
+	{{DueTo}}
 </td>
 <td style="padding: 4px 10px 4px 10px">
 	<input type="text" value="" name="reason"/>
 </td>
 <td style="padding: 4px 10px 4px 10px">
-	<input style="vertical-align:middle" type="image" src="/images/Button_Save.gif" alt="Save" title="Save">
+	<input style="vertical-align:middle" type="image" src="/images/{{lang}}/Button_Save.gif" alt="Save" title="Save">
 </td>	
 </form>
 </tr>
@@ -98,18 +98,18 @@
 	</select>
 </td>
 <td style="padding: 4px 10px 4px 10px" align="center">
-	paid me
+	{{PaidMe}}
 </td>
 <td style="padding: 4px 2px 4px 2px"> $ </td>
 <td style="padding: 4px 10px 4px 2px"><input type="text" value="" name="amount"/></td>
 <td style="padding: 4px 10px 4px 10px" align="center">
-	due to
+	{{DueTo}}
 </td>
 <td style="padding: 4px 10px 4px 10px">
 	<input type="text" value="" name="reason"/>
 </td>
 <td style="padding: 4px 10px 4px 10px">
-	<input style="vertical-align:middle" type="image" src="/images/Button_Save.gif" alt="Save" title="Save">
+	<input style="vertical-align:middle" type="image" src="/images/{{lang}}/Button_Save.gif" alt="Save" title="Save">
 </td>
 </form>
 </tr>
@@ -118,6 +118,6 @@
 
 {% else %}
 
-You are the only member in this group. <a href="javascript:showGroupTab('groupInvite')">Go invite someone!</a>
+{{YouAreTheOnlyMemberInThisGroup}}. <a href="javascript:showGroupTab('groupInvite')">{{GoInviteSomeone}}</a>
 
 {% endif %}

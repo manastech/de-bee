@@ -1,6 +1,6 @@
 from google.appengine.api import mail
 from datetime import datetime
-from util import readFile
+from io import readFile
 from util import descriptionOfBalance
 
 DeBeeEmail = "info@de-bee.com"

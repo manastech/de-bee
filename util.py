@@ -1,6 +1,7 @@
 from model import Membership
 from datetime import datetime
 from re import compile
+from i18n import _
 
 class UrlBuilder:
     def __init__(self, webrequest):
@@ -41,13 +42,6 @@ def findMembershipForUser(memberships, user):
             return membership
     return None
 
-# Reads the entire contents of a file, given its path
-def readFile(path):
-    f = open(path)
-    text = f.read()
-    f.close()
-    return text
-
 # Returns the description of a transaction according to
 # a users's point of view. This does not include the date
 # of the transaction.
@@ -55,36 +49,36 @@ def descriptionOfTransaction(tr, user):
     message = ''
     if (tr.type == "debt"):
          if (tr.fromUser == user):
-             message = "You owed %s $%s" % (tr.toMember.userNick, tr.amount)
+             message = "You owed %(user)s $%(amount)s" % {'user': tr.toMember.userNick, 'amount': tr.amount}
          else:
-             message = "%s owed you $%s" % (tr.fromMember.userNick, tr.amount)
+             message = "%(user)s owed you $%(amount)s" % {'user': tr.fromMember.userNick, 'amount': tr.amount}
     if (tr.type == "payment"):
          if (tr.fromUser == user):
-             message = "You paid %s $%s" % (tr.toMember.userNick, tr.amount)
+             message = "You paid %(user)s $%(amount)s" % {'user': tr.toMember.userNick, 'amount': tr.amount}
          else:
-             message = "%s paid you $%s" % (tr.fromMember.userNick, tr.amount)
+             message = "%(user)s paid you $%(amount)s" % {'user': tr.fromMember.userNick, 'amount': tr.amount}
     if (tr.type == "rejectedDebt"):
         if (tr.creator == user):
             if tr.fromUser == user:
-                message = "You rejected that you owed %s $%s" % (tr.toMember.userNick, tr.amount)
+                message = "You rejected that you owed %(user)s $%(amount)s" % {'user': tr.toMember.userNick, 'amount': tr.amount}
             else:
-                message = "You rejected that %s owed you $%s" % (tr.toMember.userNick, tr.amount)
+                message = "You rejected that %(user)s owed you $%(amount)s" % {'user': tr.toMember.userNick, 'amount': tr.amount}
         else:
             if tr.fromUser == user:
-                message = "%s rejected that you owed him/her $%s" % (tr.fromMember.userNick, tr.amount)
+                message = "%(user)s rejected that you owed him/her $%(amount)s" % {'user': tr.fromMember.userNick, 'amount': tr.amount}
             else:
-                message = "%s rejected that he/she owed you $" % (tr.fromMember.userNick, tr.amount)
+                message = "%(user)s rejected that he/she owed you $%(amount)s" % {'user': tr.fromMember.userNick, 'amount': tr.amount}
     if (tr.type == "rejectedPayment"):
         if (tr.creator == user):
             if tr.fromUser == user:
-                message = "You rejected that you paid %s $%s" % (tr.toMember.userNick, tr.amount)
+                message = "You rejected that you paid %(user)s $%(amount)s" % {'user': tr.toMember.userNick, 'amount': tr.amount}
             else:
-                message = "You rejected from %s a payment of $" % (tr.toMember.userNick, tr.amount)
+                message = "You rejected from %(user)s a payment of $%(amount)s" % {'user': tr.toMember.userNick, 'amount': tr.amount}
         else:
             if tr.fromUser == user:
-                message = "%s rejected that you paid him/her $%s" % (tr.fromMember.userNick, tr.amount)
+                message = "%(user)s rejected that you paid him/her $%(amount)s" % {'user': tr.fromMember.userNick, 'amount': tr.amount}
             else:
-                message = "%s rejected that he/she paid you $%s" % (tr.fromMember.userNick, tr.amount)
+                message = "%(user)s rejected that he/she paid you $%(amount)s" % {'user': tr.fromMember.userNick, 'amount': tr.amount}
     if len(tr.reason) > 0:
          message += " due to %s" % tr.reason
     return message
@@ -103,13 +97,32 @@ def transactionIsBenefical(tr, user):
     
 def descriptionOfBalance(balance, before):
     if before:
-        owe = 'owed'
+        if balance == 0.0:
+            return 'you owed no one, and no one owed you'
+        elif balance > 0.0:
+            return 'they owed you $%s' % abs(balance)
+        else:
+            return 'you owed $%s' % abs(balance)
     else:
-        owe = 'owe'
-    
+        if balance == 0.0:
+            return 'you owe no one, and no one owes you'
+        elif balance > 0.0:
+            return 'they owe you $%s' % abs(balance)
+        else:
+            return 'you owe $%s' % abs(balance)
+
+def descriptionOfTotalBalance(balance, lang):
     if balance == 0.0:
-        return 'you %s no one, and no one %s you' % (owe, owe)
-    elif balance > 0.0:
-        return 'they %s you $%s' % (owe, abs(balance))
+        return _('You owe nobody, and nobody owes you. Hurray!', lang)
+    elif balance < 0.0:
+        return _('You owe a total of $%s', lang) % -balance
     else:
-        return 'you %s $%s' % (owe, abs(balance))
+        return _('They owe you a total of $%s', lang) % balance
+
+def descriptionOfBalanceInGroup(membership, link, lang):
+    if membership.balance < 0.0:
+        return _('You owe $%(amount)s in <a href="%(link)s">%(group)s</a>', lang) % {'amount': -membership.balance, 'group': membership.groupNick, 'link': link}
+    elif membership.balance > 0.0:
+        return _('They owe you $%(amount)s in <a href="%(link)s">%(group)s</a>', lang) % {'amount': membership.balance, 'group': membership.groupNick, 'link': link}
+    else:
+        raise "Don't invoke this method with m.balance == 0.0"

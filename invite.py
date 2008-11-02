@@ -9,7 +9,7 @@ from ajax import alertMessage
 from model import Group
 from model import Membership
 from util import UrlBuilder
-from util import readFile
+from io import readFile
 from emails import DeBeeEmail
 from cgi import escape
 from hashlib import sha224

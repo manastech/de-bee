@@ -14,6 +14,7 @@ from bulk import BulkSummaryHandler
 from reject import RejectHandler
 from reject import CommitRejectHandler
 from unsubscribe import UnsubscribeHandler
+from i18n import ChangeLanguageHandler
 
 def main():
   application = webapp.WSGIApplication([
@@ -29,6 +30,7 @@ def main():
                     ('/unsubscribe', UnsubscribeHandler),
                     ('/reject', RejectHandler),
                     ('/commitReject', CommitRejectHandler),
+                    ('/changeLanguage', ChangeLanguageHandler),
                     ],
                     debug=True)
   CGIHandler().run(application)

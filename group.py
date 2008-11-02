@@ -15,6 +15,10 @@ from util import membershipsOfUser
 from util import niceDate
 from util import descriptionOfTransaction
 from util import transactionIsBenefical
+from i18n import getDefaultLanguage
+from i18n import getLanguage
+from i18n import addMasterKeys
+from i18n import _
 import os
 
 class GroupHandler(webapp.RequestHandler):
@@ -23,6 +27,7 @@ class GroupHandler(webapp.RequestHandler):
     def get(self):
         # Get user, group and user membership
         user = users.get_current_user()
+        lang = getLanguage(self, user)
         group = Group.get(self.request.get("group"))   
         groupMemberships = group.memberships
         userMembership = findMembershipForUser(groupMemberships, user)
@@ -53,7 +58,7 @@ class GroupHandler(webapp.RequestHandler):
             transactionCount = 0
             transactions = []
             validationError = True
-            validationMessage = '(This should be a number)'
+            validationMessage = '(' + _('This should be a number', lang) + ')'
             
         # Get debtors and creditors used in the "Bal" tab
         [groupDebtors, groupCreditors, groupZero] = self.getDebtorsAndCreditors(groupMemberships)
@@ -97,8 +102,27 @@ class GroupHandler(webapp.RequestHandler):
             'groupZero': groupZero,
             'hasCreditors': len(groupCreditors) > 0,
             'groupCreditors': groupCreditors,            
-            'autocompleteMembers': autocompleteMembers
-             }
+            'autocompleteMembers': autocompleteMembers,
+            
+            # i18n
+            'GoToGroup': _('Go to group', lang),
+            'SelectAnotherGroup': _('select another group', lang),
+            'Group': _('Group', lang),
+            'YourBalance': _('Your balance', lang),
+            'YouOweNobody': _('You owe nobody, and nobody owes you. Hurray!', lang),
+            'OweOrPay': _('Owe or Pay', lang),
+            'SomeonePaysTheOthersOweHim': _('Someone pays, the others owe him/her', lang),
+            'IOwed': _('I owed', lang),
+            'DueTo': _('due to', lang),
+            'IPaid': _('I paid', lang),
+            'OwedMe': _('owed me', lang),
+            'PaidMe': _('paid me', lang),
+            'YouAreTheOnlyMemberInThisGroup': _('You are the only member in this group', lang),
+            'GoInviteSomeone': _('Go invite someone!', lang),
+            'TheresNoOneOwingNoOne': _('There\'s no one owing no one. Hooray!', lang),
+        }
+        
+        addMasterKeys(template_values, lang)
         
         path = os.path.join(os.path.dirname(__file__), 'group.html')
         self.response.out.write(template.render(path, template_values))

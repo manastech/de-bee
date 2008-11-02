@@ -14,6 +14,22 @@
 	<div id="container">
 		<div id="header">
 			<div id="logo"><a href="http://www.de-bee.com" style="text-decoration: none"><img src="images/De-Bee_logo.gif" alt="" border="0"/></a></div>
+			<div id="lang">
+			<form action="/changeLanguage" method="get" target="logic">
+			<select name="lang" onChange="this.form.submit()">
+				<option value="en"
+					{% if enSelected %}
+					selected
+					{% endif %}
+				>English</option>
+				<option value="es"
+					{% if esSelected %}
+					selected
+					{% endif %}
+				>Español</option>
+			</select>
+			</form>
+			</div>
 			<div id="welcome" style="text-align: right; position:relative; top:-40px">
 			{% block top %}
 				<img src="images/{{lang}}/Welcome.gif" alt="" />

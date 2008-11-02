@@ -1,8 +1,8 @@
 {% extends "master.html" %}
 {% block top %} 
 	<div style="text-align: right"> 
-	<span id="hello">Hello</span> <span id="username">{{username}}!</span><br>  
-	<a href="{{signout_url}}" id="logout">Logout</a>
+	<span id="hello">{{Hello}}</span> <span id="username">{{username}}!</span><br>  
+	<a href="{{signout_url}}" id="logout">{{Logout}}</a>
 	</div>
 {% endblock %}
 {% block navigation %}
@@ -19,9 +19,9 @@
 		{% if hasUserMemberships %}
 			<div style="float: right">
 				<form action="/group" method="get">
-					Group:
+					{{GoToGroup}}:
 					<select name="group" onchange="selectGroup(this,form);">
-						<option value="">-- select another group --</option>
+						<option value="">-- {{SelectAnotherGroup}} --</option>
 					{% for membership in userMemberships %}
 					<option value="{{ membership.group.key }}">{{ membership.groupNick }}</option>
 					{% endfor %}
@@ -29,7 +29,7 @@
 				</form>
 			</div>
 		{% endif %}
-		<h3>Group {{ userMembership.groupNick }}</h3>
+		<h3>{{Group}} {{ userMembership.groupNick }}</h3>
 		
 		{% if hasMessage %}
 			<div id="message">{{ message }}</div>
@@ -45,10 +45,10 @@
 		<h3>&nbsp;</h3>
 
 		<div id="groupHome" {% if goToHistoryTab %} style="display:none" {% endif%} >
-		<h3>Your balance</h3>
+		<h3>{{YourBalance}}</h3>
 	
 		{% if balanceIsZero %}
-			You owe nobody, and nobody owes you. Hooray!
+			{{YouOweNobody}}
 		{% else %}
 			{% if balancePositive %}
 				{% include "groupDetailPositive.html" %}
@@ -57,7 +57,7 @@
 			{% endif %}
 		{% endif %}
 		
-		<h3>Owe or Pay</h3>
+		<h3>{{OweOrPay}}</h3>
 	
 		<div>
 		{% include "groupAction.html" %}
@@ -65,7 +65,7 @@
 		
 		{% if hasGroupMemberships %}
 		
-			<h3>Someone pays, the others owe him/her</h3>
+			<h3>{{SomeonePaysTheOthersOweHim}}</h3>
 			
 			{% include "groupBulk.html" %}
 			

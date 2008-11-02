@@ -23,9 +23,9 @@
 		{% if hasUserMemberships %}
 		<div style="float: right">
 			<form action="/group" method="get">
-				Go to group:
+				{{GoToGroup}}:
 				<select name="group" onchange="selectGroup(this,form);">
-					<option value="">-- select group --</option>
+					<option value="">-- {{SelectGroup}} --</option>
 				{% for membership in userMemberships %}
 					<option value="{{ membership.group.key }}">{{ membership.groupNick }}</option>
 				{% endfor %}
@@ -44,22 +44,22 @@
 		
 		<div class="debts_summary">
 			{% if debts.isZero %}
-				You owe nobody, and nobody owes you. Hurray!
+				{{YouOweNobody}}
 			{% else %}
 				{% if debts.hasMoreThanOneItem %}
 					{% if debts.isOweToSelf %}
-						<span class="benefical">They owe you a total of ${{debts.total}}.</span>
+						<span class="benefical">{{debts.desc}}.</span>
 					{% else %}
-						<span class="detrimental">You owe a total of ${{debts.total}}.</span>
+						<span class="detrimental">{{debts.desc}}.</span>
 					{% endif %}
 				{% endif %}
 			{% endif %}
 			<ul>
     		{% for debt in debts.items %}
 				{% if debt.isOweToSelf %}
-					<li style="color:#005E00">They owe you ${{debt.amount}} in <a href="/group?group={{debt.group.key}}">{{debt.group.name}}</a></li>
+					<li style="color:#005E00">{{debt.desc}}</li>
 				{% else %}					
-					<li style="color:#5C0101">You owe ${{debt.amount}} in <a href="/group?group={{debt.group.key}}">{{debt.name}}</a></li>
+					<li style="color:#5C0101">{{debt.desc}}</li>
 				{% endif %}
 			{% endfor %}
 			</ul>

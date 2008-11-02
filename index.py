@@ -3,6 +3,8 @@ from google.appengine.api import users
 from google.appengine.ext.webapp import template
 from model import Membership
 from util import membershipsOfUser
+from util import descriptionOfBalanceInGroup
+from util import descriptionOfTotalBalance
 from comparators import compareMembershipsByGroupNick
 from i18n import getDefaultLanguage
 from i18n import getLanguage
@@ -16,7 +18,7 @@ class IndexHandler(webapp.RequestHandler):
     user = users.get_current_user()
 
     if user:
-        lang = getLanguage(self.request, user)
+        lang = getLanguage(self, user)
         
         userMemberships = membershipsOfUser(user)
         userMemberships.sort(cmp = compareMembershipsByGroupNick)
@@ -28,7 +30,7 @@ class IndexHandler(webapp.RequestHandler):
         else:
             group = 0
             
-        debts = self.getDebts(user, userMemberships)
+        debts = self.getDebts(user, userMemberships, lang)
         
         message = self.request.get('msg')
         hasMessage = len(message) > 0
@@ -44,12 +46,12 @@ class IndexHandler(webapp.RequestHandler):
             'message': message,
             
             # i18n
-            'lang': lang,
-            'Hello': _('Hello', lang),
-            'Logout': _('Logout', lang),
             'DontBelong': _("You don't belong to any group. You can create your own and invite your friends.", lang),
             'Name': _('Name', lang),
-            }
+            'YouOweNobody': _('You owe nobody, and nobody owes you. Hurray!', lang),
+            'GoToGroup': _('Go to group', lang),
+            'SelectGroup': _('select group', lang),
+        }
         
         addMasterKeys(model, lang)
         
@@ -57,13 +59,12 @@ class IndexHandler(webapp.RequestHandler):
         self.response.out.write(template.render(path, model))
             
     else:
-        lang = getDefaultLanguage(self.request)
+        lang = getDefaultLanguage(self)
         
         model = {
                  'loginurl': users.create_login_url("/"),
                  
                  # i18n
-                 'lang': lang,
                  'introduction': _('introduction', lang),
             }
         
@@ -72,25 +73,24 @@ class IndexHandler(webapp.RequestHandler):
         path = os.path.join(os.path.dirname(__file__), 'introduction.html')
         self.response.out.write(template.render(path, model))
     
-  def getDebts(self, user, memberships):    
+  def getDebts(self, user, memberships, lang):    
     total = 0
     items = []
     for m in memberships:
         if m.balance == 0.0:
             continue
         
+        link = '/group?group=%s' % m.group.key()
         total += m.balance
         items.append({
-            'isZero': m.balance == 0.0, 
             'isOweToSelf' : m.balance > 0.0, 
-            'amount' : abs(m.balance), 
-            'group' : m.group, 
-            'name' : m.groupNick, 
+            'desc': descriptionOfBalanceInGroup(m, link, lang)
             })
+    
     return {
             'isZero': total == 0.0, 
             'isOweToSelf' : total > 0.0, 
-            'total' : abs(total), 
-            'items' : items, 
+            'items' : items,
+            'desc': descriptionOfTotalBalance(total, lang),
             'hasMoreThanOneItem' : len(items) > 1,
             }
