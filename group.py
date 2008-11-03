@@ -50,7 +50,7 @@ class GroupHandler(webapp.RequestHandler):
         # Get user's transaction history for the "History" tab
         try:
             transactionCount = int(self.request.get('transactionCount', default_value=10))
-            transactions = self.getTransactionHistory(transactionCount, userMembership)
+            transactions = self.getTransactionHistory(transactionCount, userMembership, lang)
             transactionCount = len(transactions)
             validationError = False
             validationMessage = ''
@@ -120,6 +120,19 @@ class GroupHandler(webapp.RequestHandler):
             'YouAreTheOnlyMemberInThisGroup': _('You are the only member in this group', lang),
             'GoInviteSomeone': _('Go invite someone!', lang),
             'TheresNoOneOwingNoOne': _('There\'s no one owing no one. Hooray!', lang),
+            'WhatsThisFor': _('What\'s this for?', lang),
+            'ViewSummary': _('View summary', lang),
+            'Save': _('Save', lang),
+            'EnterTheEmails': _('Enter the emails of the people you want to invite, separated by commas', lang),
+            'YouCanAddAnInvitationText': _('You can add an invitation text', lang),
+            'PleaseJoin': _('Please join this group and try the De-Bee experience!', lang),
+            'History': _('History', lang),
+            'ShowLast': _('Show last', lang),
+            'Transactions': _('transactions', lang),
+            'NameByWhichYouWantToSeeThisGroup': _('Name by which you want to see this group', lang),
+            'NameByWhichYouWantOthersToSeeYouInThisGroup': _('Name by which you want others to see you in this group', lang),
+            'CantUnsubscribe': _('At this moment you can not unsuscribe from this group, nobody must owe you and you must owe no one, your balance in the group must be zero.', lang),
+            'IfYouWantToLeave': _('If you want to leave this group, click this button', lang),
         }
         
         addMasterKeys(template_values, lang)
@@ -166,7 +179,7 @@ class GroupHandler(webapp.RequestHandler):
     # Each returned entry is:
     #  - message: a message to display in the UI.
     #  - benefical: whether the transaction is benefical for the user or not
-    def getTransactionHistory(self, transactionCount, userMembership):
+    def getTransactionHistory(self, transactionCount, userMembership, lang):
         transactions_query_from = Transaction.gql("WHERE group = :1 AND fromMember = :2 ORDER BY date DESC", userMembership.group, userMembership)
         transactions_from = transactions_query_from.fetch(transactionCount)
         
@@ -183,8 +196,8 @@ class GroupHandler(webapp.RequestHandler):
             if not tr.fromUser or not tr.toUser or not tr.creator:
                 continue
             
-            message = descriptionOfTransaction(tr, userMembership.user)
-            message = '%s %s' % (niceDate(tr.date), message)
+            message = descriptionOfTransaction(tr, userMembership.user, lang)
+            message = '%s %s' % (niceDate(tr.date, lang), message)
             messages.append({
                 'message': message, 
                 'benefical': transactionIsBenefical(tr, userMembership.user)

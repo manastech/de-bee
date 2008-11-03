@@ -1,0 +1,11 @@
+Hola %s!
+
+%s dijo que pagaste:
+
+%s
+Es decir, pagaste un total de $%s.
+
+Antes de esta transacción %s en %s, ahora %s.
+
+Saludos,
+De-Bee

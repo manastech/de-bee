@@ -20,10 +20,8 @@ def getDefaultLanguage(handler):
     for lang in langs:
         for availableLang in availableLanguages:
             if lang == availableLang:
-                handler.response.headers['Set-Cookie'] = str('lang=%s; path=/;' % lang)
                 return lang
     
-    handler.response.headers['Set-Cookie'] = str('lang=en; path=/;')
     return 'en'
 
 # Returns the preferred language of the current logged user, defaulting
@@ -67,8 +65,8 @@ def _initializeLanguageData(language):
     props = {}
     lines = readFile('locale/%s.properties' % language).split('\n')
     for line in lines:
-        [key, value] = line.split('==', 1)
-        props[key] = value.strip().decode('utf-8')
+        [key, value] = line.split(':=', 1)
+        props[key] = value.strip()
     languageData[language] = props
     
 def addMasterKeys(model, lang):

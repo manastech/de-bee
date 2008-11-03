@@ -2,9 +2,9 @@
 <input type="hidden" name="group" value="{{userMembership.group.key}}"/>
 <input type="hidden" name="goToHistoryTab" value="true"/>
 
-Show last <input
+{{ShowLast}} <input
 	type="text" name="transactionCount" value="{{transactionCount}}">
-transactions <input style="vertical-align:middle" type="image" src="/images/Button_Refresh.gif" alt="Refresh" title="Refresh">
+{{Transactions}} <input style="vertical-align:middle" type="image" src="/images/{{lang}}/Button_Refresh.gif" alt="Refresh" title="Refresh">
 	{% if validationError %}
 		{{validationMessage}}
 	{%endif%} 

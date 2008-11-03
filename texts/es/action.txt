@@ -1,0 +1,10 @@
+Hola %s!
+
+%s
+
+Antes de esta transacción %s en %s, ahora %s.
+
+Si esto no es correcto y quer�s rechazarlo, copiá y pegá este texto en tu navegador: %s
+
+Saludos,
+De-Bee

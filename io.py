@@ -3,4 +3,4 @@ def readFile(path):
     f = open(path)
     text = f.read()
     f.close()
-    return text
+    return text.decode('utf-8')

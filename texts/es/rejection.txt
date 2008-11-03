@@ -1,0 +1,8 @@
+Hola %s!
+
+%s
+%s
+Antes de este rechazo %s en %s, ahora %s.
+
+Saludos,
+De-Bee

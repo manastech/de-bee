@@ -14,6 +14,7 @@ from emails import createActionMail
 from emails import sendEmail
 from util import UrlBuilder
 from util import descriptionOfTransaction
+from i18n import getLanguage
 
 class ActionHandler(webapp.RequestHandler):
     
@@ -22,6 +23,7 @@ class ActionHandler(webapp.RequestHandler):
             return
         
         user = users.get_current_user()
+        lang = getLanguage(self, user)
         type = self.request.get('type')
         fromMember = Membership.get(self.request.get('fromMember'))
         toMember = Membership.get(self.request.get('toMember'))
@@ -58,6 +60,8 @@ class ActionHandler(webapp.RequestHandler):
         else:
             me = toMember
             someone = fromMember
+            
+        someoneLang = getLanguage(self, someone.user)
         
         balanceBefore = someone.balance
         
@@ -72,10 +76,10 @@ class ActionHandler(webapp.RequestHandler):
             
             if creatorMember.user == fromMember.user:
                 # I owe someone
-                mailBody = someoneOwedYou()
+                mailBody = someoneOwedYou(someoneLang)
             else:
                 # Someone owes me
-                mailBody = youOwedSomeone()
+                mailBody = youOwedSomeone(someoneLang)
         elif type == 'payment':
             # If it's a payment, fromMember always wins
             fromMember.balance += amount
@@ -83,10 +87,10 @@ class ActionHandler(webapp.RequestHandler):
             
             if creatorMember.user == fromMember.user:
                 # I paid someone
-                mailBody = someonePayedYou()
+                mailBody = someonePayedYou(someoneLang)
             else:
                 # Someone paid me
-                mailBody = youPayedSomeone()
+                mailBody = youPayedSomeone(someoneLang)
         else:
             # Can't happen, only with hackery
             return
@@ -121,8 +125,8 @@ class ActionHandler(webapp.RequestHandler):
         rejectUrl += "?key=%s&h=%s" % (str(tr.key()), tr.hash)
         
         # Try send mail
-        message = createActionMail(me, someone, amount, reason,  balanceBefore, balanceNow, rejectUrl, mailBody)
+        message = createActionMail(me, someone, amount, reason,  balanceBefore, balanceNow, rejectUrl, mailBody, someoneLang)
         sendEmail(message)
         
-        location = '/group?group=%s&msg=%s' % (creatorMember.group.key(), descriptionOfTransaction(tr, user))
+        location = '/group?group=%s&msg=%s' % (creatorMember.group.key(), descriptionOfTransaction(tr, user, lang))
         redirectPage(self,location)

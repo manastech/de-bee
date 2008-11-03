@@ -16,7 +16,7 @@ class CreateGroupHandler(webapp.RequestHandler):
             return
         
         user = users.get_current_user()
-        lang = getLanguage(self.request, user)
+        lang = getLanguage(self, user)
         
         groupName = self.request.get('name').strip()
         escapedGroupName = escape(groupName)

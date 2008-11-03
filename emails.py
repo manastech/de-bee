@@ -2,103 +2,107 @@ from google.appengine.api import mail
 from datetime import datetime
 from io import readFile
 from util import descriptionOfBalance
+from i18n import _
 
 DeBeeEmail = "info@de-bee.com"
-actionTxt = None
-actionHtml = None
-rejectionTxt = None
-rejectionHtml = None
+actionTxt = {}
+actionHtml = {}
+rejectionTxt = {}
+rejectionHtml = {}
 
-def someoneOwedYou(reject = False):
+def someoneOwedYou(lang, reject = False):
     if reject:
         return {
-                'txt': '%s rejected a transaction that said that he/she owed you $%s because of %s.',
-                'html': '%s rejected a transaction that said that he/she owed you $%s because of %s.' 
+                'txt': _('%(user)s rejected a transaction that said that he/she owed you $%(amount)s because of %(reason)s.', lang),
+                'html': _('%(user)s rejected a transaction that said that he/she owed you $%(amount)s because of %(reason)s.', lang) 
                 }
     else:
         return {
-                'txt': '%s told me that he/she owed you $%s because of %s.',
-                'html': '<b>%s</b> told me that <b style="color:#005E00">he/she owed you $%s</b> because of %s.' 
+                'txt': _('%(user)s said that he/she owed you $%(amount)s because of %(reason)s.', lang),
+                'html': _('<b>%(user)s</b> said that <b style="color:#005E00">he/she owed you $%(amount)s</b> because of %(reason)s.', lang) 
                 }
     
-def youOwedSomeone(reject = False):
+def youOwedSomeone(lang, reject = False):
     if reject:
         return {
-                'txt': '%s rejected a transaction that said that you owed him/her $%s because of %s.',
-                'html': '%s rejected a transaction that said that you owed him/her $%s because of %s.', 
+                'txt': _('%(user)s rejected a transaction that said that you owed him/her $%(amount)s because of %(reason)s.', lang),
+                'html': _('%(user)s rejected a transaction that said that you owed him/her $%(amount)s because of %(reason)s.', lang) 
                 }
     else:
         return {
-                'txt': '%s told me that you owed him/her $%s because of %s.',
-                'html': '<b>%s</b> told me that <b style="color:#5C0101">you owed him/her $%s</b> because of %s.' 
+                'txt': _('%(user)s said that you owed him/her $%(amount)s because of %(reason)s.', lang),
+                'html': _('<b>%(user)s</b> said that <b style="color:#5C0101">you owed him/her $%(amount)s</b> because of %(reason)s.', lang) 
                 }
     
-def someonePayedYou(reject = False):
+def someonePayedYou(lang, reject = False):
     if reject:
         return {
-                'txt': '%s rejected a transaction that said that he/she paid you $%s because of %s.',
-                'html': '%s rejected a transaction that said that he/she paid you $%s because of %s.' 
+                'txt': _('%(user)s rejected a transaction that said that he/she paid you $%(amount)s because of %(reason)s.', lang),
+                'html': _('%(user)s rejected a transaction that said that he/she paid you $%(amount)s because of %(reason)s.', lang) 
                 }
     else:
         return {
-                'txt': '%s told me that he/she paid you $%s because of %s.',
-                'html': '<b>%s</b> told me that <b style="color:#5C0101">he/she paid you $%s</b> because of %s.' 
+                'txt': _('%(user)s said that he/she paid you $%(amount)s because of %(reason)s.', lang),
+                'html': _('<b>%(user)s</b> said that <b style="color:#5C0101">he/she paid you $%(amount)s</b> because of %s.', lang) 
                 }
     
-def youPayedSomeone(reject = False):
+def youPayedSomeone(lang, reject = False):
     if reject:
         return {
-                'txt': '%s rejected a transaction that said that you paid him/her $%s because of %s.',
-                'html': '%s rejected a transaction that said that you paid him/her $%s because of %s.' 
+                'txt': _('%(user)s rejected a transaction that said that you paid him/her $%(amount)s because of %(reason)s.', lang),
+                'html': _('%(user)s rejected a transaction that said that you paid him/her $%(amount)s because of %(reason)s.', lang) 
                 }
     else:
         return {
-                'txt': '%s told me that you paid him/her $%s because of %s.',
-                'html': '<b>%s</b> told me that <b style="color:#005E00">you paid him/her $%s</b> because of %s.' 
+                'txt': _('%(user)s said that you paid him/her $%(amount)s because of %(reason)s.', lang),
+                'html': _('<b>%(user)s</b> said that <b style="color:#005E00">you paid him/her $%(amount)s</b> because of %(reason)s.', lang) 
                 }
-def creatorSaysYouOwedSomeone():
+def creatorSaysYouOwedSomeone(lang):
     return {
-            'txt': '%s told me that you owed %s $%s because of %s.',
-            'html': '<b>%s told me</b> that <b style="color:#5C0101">you owed %s $%s</b> because of %s.'
+            'txt': _('%(creator)s said that you owed %(user)s $%(amount)s because of %(reason)s.', lang),
+            'html': _('<b>%(creator)s said</b> that <b style="color:#5C0101">you owed %(user)s $%(amount)s</b> because of %(reason)s.', lang)
             }
 
-def createActionMail(me, someone, amount, reason, balanceBefore, balanceNow, rejectUrl, mailBody):
+def createActionMail(me, someone, amount, reason, balanceBefore, balanceNow, rejectUrl, mailBody, lang):
     message = mail.EmailMessage(
                             sender = DeBeeEmail, 
                             to = someone.user.email(), 
-                            subject = transactionNoticeSubject(someone))
-    message.body = actionMessageTxt(me, someone, amount, reason,  balanceBefore, balanceNow, rejectUrl, mailBody['txt'])
-    message.html = actionMessageHtml(me, someone, amount, reason,  balanceBefore, balanceNow, rejectUrl, mailBody['html'])
+                            subject = transactionNoticeSubject(someone, lang))
+    message.body = actionMessageTxt(me, someone, amount, reason,  balanceBefore, balanceNow, rejectUrl, mailBody['txt'], lang)
+    message.html = actionMessageHtml(me, someone, amount, reason,  balanceBefore, balanceNow, rejectUrl, mailBody['html'], lang)
     return message
 
-def createRejectionMail(me, someone, tr, reason, balanceBefore, balanceNow, mailBody):
+def createRejectionMail(me, someone, tr, reason, balanceBefore, balanceNow, mailBody, lang):
     message = mail.EmailMessage(
                             sender = DeBeeEmail, 
                             to = someone.user.email(), 
-                            subject = transactionNoticeSubject(someone))
-    message.body = rejectionMessageTxt(me, someone, tr, reason,  balanceBefore, balanceNow, mailBody['txt'])
-    message.html = rejectionMessageHtml(me, someone, tr, reason,  balanceBefore, balanceNow, mailBody['html'])
+                            subject = transactionNoticeSubject(someone, lang))
+    message.body = rejectionMessageTxt(me, someone, tr, reason,  balanceBefore, balanceNow, mailBody['txt'], lang)
+    message.html = rejectionMessageHtml(me, someone, tr, reason,  balanceBefore, balanceNow, mailBody['html'], lang)
     return message
 
-def createThirdPartyActionMail(creator, me, someone, amount, reason, balanceBefore, balanceNow, rejectUrl, mailBody):
+def createThirdPartyActionMail(creator, me, someone, amount, reason, balanceBefore, balanceNow, rejectUrl, mailBody, lang):
     message = mail.EmailMessage(
                             sender = DeBeeEmail, 
                             to = someone.user.email(), 
-                            subject = transactionNoticeSubject(someone))
-    message.body = thirdPartyActionMessageTxt(creator, me, someone, amount, reason,  balanceBefore, balanceNow, rejectUrl, mailBody['txt'])
-    message.html = thirdPartyActionMessageHtml(creator, me, someone, amount, reason,  balanceBefore, balanceNow, rejectUrl, mailBody['html'])
+                            subject = transactionNoticeSubject(someone, lang))
+    message.body = thirdPartyActionMessageTxt(creator, me, someone, amount, reason,  balanceBefore, balanceNow, rejectUrl, mailBody['txt'], lang)
+    message.html = thirdPartyActionMessageHtml(creator, me, someone, amount, reason,  balanceBefore, balanceNow, rejectUrl, mailBody['html'], lang)
     return message
 
-def createBulkMail(transaction, creatorMember, balanceBefore, balanceNow):
+def createBulkMail(transaction, creatorMember, balanceBefore, balanceNow, lang):
     debtorsTxt = ''
     debtorsHtml = '<ul>'
+    item = _('$%s to %s because of %s', lang)
+    itemTxt = ' * %s\n' % item
+    itemHtml = '<li>%s</li>' % item
     
     total = 0.0
     
     for debt in transaction.debts:
     	if creatorMember.user != debt.member.user:
-	        debtorsTxt += ' * $%s to %s because of %s\n' % (debt.money, debt.member.userNick, debt.reason)
-	        debtorsHtml += '<li>$%s to %s because of %s</li>' % (debt.money, debt.member.userNick, debt.reason)
+	        debtorsTxt += itemTxt % (debt.money, debt.member.userNick, debt.reason)
+	        debtorsHtml += itemHtml % (debt.money, debt.member.userNick, debt.reason)
 	        total += debt.money
         
     debtorsHtml += '</ul>'
@@ -107,77 +111,79 @@ def createBulkMail(transaction, creatorMember, balanceBefore, balanceNow):
     message = mail.EmailMessage(
                     sender = DeBeeEmail,
                     to = transaction.payer.user.email(), 
-                    subject = transactionNoticeSubject(transaction.payer))
+                    subject = transactionNoticeSubject(transaction.payer, lang))
     
-    message.body = readFile('texts/creator_says_you_payed_for_them.txt') % (transaction.payer.userNick, creatorMember.userNick, debtorsTxt, total, descriptionOfBalance(balanceBefore, before = True), transaction.payer.groupNick, descriptionOfBalance(balanceNow, before = False))
-    message.html = readFile('texts/creator_says_you_payed_for_them.html') % (transaction.payer.userNick, creatorMember.userNick, debtorsHtml, total, descriptionOfBalanceHtml(balanceBefore, before = True), transaction.payer.groupNick, descriptionOfBalanceHtml(balanceNow, before = False))
+    message.body = readFile('texts/%s/creator_says_you_payed_for_them.txt' % lang) % (transaction.payer.userNick, creatorMember.userNick, debtorsTxt, total, descriptionOfBalance(balanceBefore, True, lang), transaction.payer.groupNick, descriptionOfBalance(balanceNow, False, lang))
+    message.html = readFile('texts/%s/creator_says_you_payed_for_them.html' % lang) % (transaction.payer.userNick, creatorMember.userNick, debtorsHtml, total, descriptionOfBalanceHtml(balanceBefore, True, lang), transaction.payer.groupNick, descriptionOfBalanceHtml(balanceNow, False, lang))
     return message
 
-def actionMessageTxt(me, someone, amount, reason, balanceBefore, balanceNow, rejectUrl, body):
-    realBody = body % (me.userNick, amount, reason)
+def actionMessageTxt(me, someone, amount, reason, balanceBefore, balanceNow, rejectUrl, body, lang):
+    realBody = body % {'user': me.userNick, 'amount': amount, 'reason': reason}
     
     global actionTxt
-    if actionTxt is None:
-        actionTxt = readFile('texts/action.txt')
-         
-    return actionTxt % (someone.userNick, realBody, descriptionOfBalance(balanceBefore, before = True), someone.groupNick, descriptionOfBalance(balanceNow, before = False), rejectUrl)
+    if not (lang in actionTxt):
+        actionTxt[lang] = readFile('texts/%s/action.txt' % lang)
+    
+    return actionTxt[lang] % (someone.userNick, realBody, 
+                              descriptionOfBalance(balanceBefore, True, lang), someone.groupNick, 
+                              descriptionOfBalance(balanceNow, False, lang), rejectUrl)
 
-def actionMessageHtml(me, someone, amount, reason, balanceBefore, balanceNow, rejectUrl, body):
-    realBody = body % (me.userNick, amount, reason)
+def actionMessageHtml(me, someone, amount, reason, balanceBefore, balanceNow, rejectUrl, body, lang):
+    realBody = body % {'user': me.userNick, 'amount': amount, 'reason': reason}
     
     global actionHtml
-    if actionHtml is None:
-        actionHtml = readFile('texts/action.html')
+    if not (lang in actionHtml):
+        actionHtml[lang] = readFile('texts/%s/action.html' % lang)
         
-    return actionHtml % (someone.userNick, realBody, descriptionOfBalanceHtml(balanceBefore, before = True), someone.groupNick, descriptionOfBalanceHtml(balanceNow, before = False), rejectUrl)
+    return actionHtml[lang] % (someone.userNick, realBody, descriptionOfBalanceHtml(balanceBefore, True, lang), someone.groupNick, descriptionOfBalanceHtml(balanceNow, False, lang), rejectUrl)
 
-def rejectionMessageTxt(me, someone, tr, reason, balanceBefore, balanceNow, body):
+def rejectionMessageTxt(me, someone, tr, reason, balanceBefore, balanceNow, body, lang):
     if reason != "":
         reason = '\n%s\n' % reason
     
-    realBody = body % (me.userNick, tr.amount, tr.reason)
+    realBody = body % {'user': me.userNick, 'amount': tr.amount, 'reason': tr.reason}
     
     global rejectionTxt
-    if rejectionTxt is None:
-        rejectionTxt = readFile('texts/rejection.txt')
+    if not (lang in rejectionTxt):
+        rejectionTxt[lang] = readFile('texts/%s/rejection.txt' % lang)
         
-    return rejectionTxt % (someone.userNick, realBody, reason, descriptionOfBalance(balanceBefore, before = True), someone.groupNick, descriptionOfBalance(balanceNow, before = False))
+    return rejectionTxt[lang] % (someone.userNick, realBody, reason, descriptionOfBalance(balanceBefore, True, lang), someone.groupNick, descriptionOfBalance(balanceNow, False, lang))
 
-def rejectionMessageHtml(me, someone, tr, reason, balanceBefore, balanceNow, body):
+def rejectionMessageHtml(me, someone, tr, reason, balanceBefore, balanceNow, body, lang):
     if reason != "":
         reason = '%s<br><br>' % reason
     
-    realBody = body % (me.userNick, tr.amount, tr.reason)
+    realBody = body % {'user': me.userNick, 'amount': tr.amount, 'reason': tr.reason}
     
     global rejectionHtml
-    if rejectionHtml is None:
-        rejectionHtml = readFile('texts/rejection.html')
+    if not (lang in rejectionHtml):
+        rejectionHtml[lang] = readFile('texts/%s/rejection.html' % lang)
         
-    return rejectionHtml % (someone.userNick, realBody, reason, descriptionOfBalanceHtml(balanceBefore, before = True), someone.groupNick, descriptionOfBalanceHtml(balanceNow, before = False))
+    return rejectionHtml[lang] % (someone.userNick, realBody, reason, descriptionOfBalanceHtml(balanceBefore, True, lang), someone.groupNick, descriptionOfBalanceHtml(balanceNow, False, lang))
 
-def thirdPartyActionMessageTxt(creator, me, someone, amount, reason, balanceBefore, balanceNow, rejectUrl, body):
-    realBody = body % (creator.userNick, me.userNick, amount, reason)
+def thirdPartyActionMessageTxt(creator, me, someone, amount, reason, balanceBefore, balanceNow, rejectUrl, body, lang):
+    realBody = body % {'creator': creator.userNick, 'user': me.userNick, 'amount': amount, 'reason': reason}
     
     global actionTxt
-    if actionTxt is None:
-        actionTxt = readFile('texts/action.txt')
+    if not (lang in actionTxt):
+        actionTxt[lang] = readFile('texts/%s/action.txt' % lang)
          
-    return actionTxt % (someone.userNick, realBody, descriptionOfBalance(balanceBefore, before = True), someone.groupNick, descriptionOfBalance(balanceNow, before = False), rejectUrl)
+    return actionTxt[lang] % (someone.userNick, realBody, descriptionOfBalance(balanceBefore, True, lang), someone.groupNick, descriptionOfBalance(balanceNow, False, lang), rejectUrl)
     
-def thirdPartyActionMessageHtml(creator, me, someone, amount, reason, balanceBefore, balanceNow, rejectUrl, body):
-    realBody = body % (creator.userNick, me.userNick, amount, reason)
+def thirdPartyActionMessageHtml(creator, me, someone, amount, reason, balanceBefore, balanceNow, rejectUrl, body, lang):
+    realBody = body % {'creator': creator.userNick, 'user': me.userNick, 'amount': amount, 'reason': reason}
     
     global actionHtml
-    if actionHtml is None:
-        actionHtml = readFile('texts/action.html')
+    if not (lang in actionHtml):
+        actionHtml[lang] = readFile('texts/%s/action.html' % lang)
         
-    return actionHtml % (someone.userNick, realBody, descriptionOfBalanceHtml(balanceBefore, before = True), someone.groupNick, descriptionOfBalanceHtml(balanceNow, before = False), rejectUrl)
+    return actionHtml[lang] % (someone.userNick, realBody, descriptionOfBalanceHtml(balanceBefore, True, lang), someone.groupNick, descriptionOfBalanceHtml(balanceNow, False, lang), rejectUrl)
 
-def transactionNoticeSubject(member):
-    return "[De-Bee] Transaction notice in %s on %s" % (member.groupNick, datetime.now().strftime("%d %B %Y"))
+def transactionNoticeSubject(member, lang):
+    return _('[De-Bee] Transaction notice in %s on %s', lang) % (member.groupNick, datetime.now().strftime("%d %B %Y"))
    
-def descriptionOfBalanceHtml(balance, before):
-	desc = descriptionOfBalance(balance, before)
+def descriptionOfBalanceHtml(balance, before, lang):
+	desc = descriptionOfBalance(balance, before, lang)
 	if balance > 0.0:
 		desc = '<span style="color:#005E00">%s</span>' % desc
 	elif balance < 0.0:

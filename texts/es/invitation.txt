@@ -1,0 +1,30 @@
+Hola %s!
+
+%s te invitó a unirte al grupo %s en De-Bee.
+
+%sActualmente en el grupo están:
+
+%s
+Para registrarte, por favor copiá y pegá este link en tu navegador: %s
+
+De-Bee te da una nueva manera de administrar el cambio de dinero y deudas.
+Cualquiera situación de intercambio de dinero con amigos o conocidos puede ser resuelta con De-Bee.
+
+Pod�s:
+
+ * Crear grupos e invitar a tus amigos a participar de ellos.
+ * Unirte a otros grupos que tus amigos te hayan invitado.
+
+De-Bee es totalmente seguro. Nadie puede engañarte asignandote una deuda sin tu consentimiento.
+
+Hay cuatro acciones que usualmente vas a usar:
+
+ * Registrar un pago que le hiciste a alguien
+ * Registrar una deuda que tenés con alguien
+ * Registrar un pago que alguien te hizo
+ * Registrar una deuda que alguien tiene contigo
+
+De-bee te informa acerca de situación resumida en todos tus grupos y en cada grupo en particular.
+
+Gracias,
+De-Bee

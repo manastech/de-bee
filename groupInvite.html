@@ -1,10 +1,10 @@
-Enter the emails of the people you want to invite, separated by commas:
+{{EnterTheEmails}}:
 <form action="/invite" method="post" target="logic">
 <input type="hidden" name="group" value="{{userMembership.group.key}}" />
 <div><textarea name="emails" rows="4" cols="70"></textarea></div>
 <br/>
-You can add an invitation text:
-<div><textarea name="invitationText" rows="4" cols="70">Please join this group and try the De-Bee experience!</textarea></div>
+{{YouCanAddAnInvitationText}}:
+<div><textarea name="invitationText" rows="4" cols="70">{{PleaseJoin}}</textarea></div>
 <br/>
-<input style="vertical-align:middle" type="image" src="/images/Button_InvitePeople.gif" alt="Invite them!" title="Invite them!">
+<input style="vertical-align:middle" type="image" src="/images/{{lang}}/Button_InvitePeople.gif" alt="Invite them!" title="Invite them!">
 </form>

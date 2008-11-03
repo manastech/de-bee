@@ -14,6 +14,7 @@ from emails import createRejectionMail
 from emails import sendEmail
 from util import descriptionOfTransaction
 from util import transactionIsBenefical
+from i18n import getLanguage
 import os
 
 class RejectHandler(webapp.RequestHandler):
@@ -23,6 +24,7 @@ class RejectHandler(webapp.RequestHandler):
         key = self.request.get('key')
         hash = self.request.get('h')
         user = users.get_current_user()
+        lang = getLanguage(self, user)
         
         # Check that all is ok
         tr = isValidTransaction(key, hash, user)
@@ -35,7 +37,7 @@ class RejectHandler(webapp.RequestHandler):
                 'h' : hash,
                 'group' : tr.group,
                 'username' : user.nickname(),
-                'transactionDescription': descriptionOfTransaction(tr, user),
+                'transactionDescription': descriptionOfTransaction(tr, user, lang),
                 'transactionIsBenefical': transactionIsBenefical(tr, user),
                 'alreadyRejected': tr.isRejected,
             }
@@ -79,6 +81,8 @@ class CommitRejectHandler(webapp.RequestHandler):
             me = compensateTr.toMember
             someone = compensateTr.fromMember
             
+        someoneLang = getLanguage(self, someone.user)
+            
         balanceBefore = someone.balance
 
         # ========================================================= #
@@ -92,10 +96,10 @@ class CommitRejectHandler(webapp.RequestHandler):
             
             if compensateTr.creatorMember.user == tr.fromMember.user:
                 # I owe someone
-                mailBody = someoneOwedYou(reject = True)
+                mailBody = someoneOwedYou(someoneLang, reject = True)
             else:
                 # Someone owes me
-                mailBody = youOwedSomeone(reject = True)
+                mailBody = youOwedSomeone(someoneLang, reject = True)
         elif tr.type == 'payment':
             # If it's a payment, fromMember always looses
             tr.fromMember.balance -= tr.amount
@@ -103,10 +107,10 @@ class CommitRejectHandler(webapp.RequestHandler):
             
             if compensateTr.creatorMember.user == tr.fromMember.user:
                 # I paid someone
-                mailBody = someonePayedYou(reject = True)
+                mailBody = someonePayedYou(someoneLang, reject = True)
             else:
                 # Someone paid me
-                mailBody = youPayedSomeone(reject = True)
+                mailBody = youPayedSomeone(someoneLang, reject = True)
         else:
             # Can't happen, only with hackery
             return
@@ -123,7 +127,7 @@ class CommitRejectHandler(webapp.RequestHandler):
         # ========================== #        
         
         # Try send mail
-        message = createRejectionMail(me, someone, tr, reason, balanceBefore, balanceNow, mailBody)
+        message = createRejectionMail(me, someone, tr, reason, balanceBefore, balanceNow, mailBody, someoneLang)
         sendEmail(message)
         
         location = '/group?group=%s&msg=%s' % (tr.group.key(), 'You rejected the transaction')

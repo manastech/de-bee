@@ -25,11 +25,11 @@ def membershipsOfUser(user):
     return memberships.fetch(10000)
 
 # Returns a date formatted nicely, comparing it to the current date.
-def niceDate(t):
+def niceDate(t, lang):
     now = datetime.now()
     if now.year == t.year:
         if now.month == t.month and now.day == t.day:
-            return t.strftime("Today at %H:%S")
+            return t.strftime(str(_('Today at %H:%S', lang)))
         return t.strftime("On %b %d")
     else:
         return t.strftime("On %D")
@@ -45,42 +45,43 @@ def findMembershipForUser(memberships, user):
 # Returns the description of a transaction according to
 # a users's point of view. This does not include the date
 # of the transaction.
-def descriptionOfTransaction(tr, user):
+def descriptionOfTransaction(tr, user, lang):
     message = ''
-    if (tr.type == "debt"):
+    if (tr.type == 'debt'):
          if (tr.fromUser == user):
-             message = "You owed %(user)s $%(amount)s" % {'user': tr.toMember.userNick, 'amount': tr.amount}
+             message = _('You owed %(user)s $%(amount)s', lang) % {'user': tr.toMember.userNick, 'amount': tr.amount}
          else:
-             message = "%(user)s owed you $%(amount)s" % {'user': tr.fromMember.userNick, 'amount': tr.amount}
-    if (tr.type == "payment"):
+             message = _('%(user)s owed you $%(amount)s', lang) % {'user': tr.fromMember.userNick, 'amount': tr.amount}
+    if (tr.type == 'payment'):
          if (tr.fromUser == user):
-             message = "You paid %(user)s $%(amount)s" % {'user': tr.toMember.userNick, 'amount': tr.amount}
+             message = _('You paid %(user)s $%(amount)s', lang) % {'user': tr.toMember.userNick, 'amount': tr.amount}
          else:
-             message = "%(user)s paid you $%(amount)s" % {'user': tr.fromMember.userNick, 'amount': tr.amount}
-    if (tr.type == "rejectedDebt"):
+             message = _('%(user)s paid you $%(amount)s', lang) % {'user': tr.fromMember.userNick, 'amount': tr.amount}
+    if (tr.type == 'rejectedDebt'):
         if (tr.creator == user):
             if tr.fromUser == user:
-                message = "You rejected that you owed %(user)s $%(amount)s" % {'user': tr.toMember.userNick, 'amount': tr.amount}
+                message = _('You rejected that you owed %(user)s $%(amount)s', lang) % {'user': tr.toMember.userNick, 'amount': tr.amount}
             else:
-                message = "You rejected that %(user)s owed you $%(amount)s" % {'user': tr.toMember.userNick, 'amount': tr.amount}
+                message = _('You rejected that %(user)s owed you $%(amount)s', lang) % {'user': tr.toMember.userNick, 'amount': tr.amount}
         else:
             if tr.fromUser == user:
-                message = "%(user)s rejected that you owed him/her $%(amount)s" % {'user': tr.fromMember.userNick, 'amount': tr.amount}
+                message = _('%(user)s rejected that you owed him/her $%(amount)s', lang) % {'user': tr.fromMember.userNick, 'amount': tr.amount}
             else:
-                message = "%(user)s rejected that he/she owed you $%(amount)s" % {'user': tr.fromMember.userNick, 'amount': tr.amount}
+                message = _('%(user)s rejected that he/she owed you $%(amount)s', lang) % {'user': tr.fromMember.userNick, 'amount': tr.amount}
     if (tr.type == "rejectedPayment"):
         if (tr.creator == user):
             if tr.fromUser == user:
-                message = "You rejected that you paid %(user)s $%(amount)s" % {'user': tr.toMember.userNick, 'amount': tr.amount}
+                message = _('You rejected that you paid %(user)s $%(amount)s', lang) % {'user': tr.toMember.userNick, 'amount': tr.amount}
             else:
-                message = "You rejected from %(user)s a payment of $%(amount)s" % {'user': tr.toMember.userNick, 'amount': tr.amount}
+                message = _('You rejected from %(user)s a payment of $%(amount)s', lang) % {'user': tr.toMember.userNick, 'amount': tr.amount}
         else:
             if tr.fromUser == user:
-                message = "%(user)s rejected that you paid him/her $%(amount)s" % {'user': tr.fromMember.userNick, 'amount': tr.amount}
+                message = _('%(user)s rejected that you paid him/her $%(amount)s', lang) % {'user': tr.fromMember.userNick, 'amount': tr.amount}
             else:
-                message = "%(user)s rejected that he/she paid you $%(amount)s" % {'user': tr.fromMember.userNick, 'amount': tr.amount}
+                message = _('%(user)s rejected that he/she paid you $%(amount)s', lang) % {'user': tr.fromMember.userNick, 'amount': tr.amount}
     if len(tr.reason) > 0:
-         message += " due to %s" % tr.reason
+         message += ' '
+         message += _('due to %s', lang) % tr.reason
     return message
 
 # Determines if a transaction is benefical for a user
@@ -95,21 +96,21 @@ def transactionIsBenefical(tr, user):
     if (tr.type == "rejectedPayment"):
         return tr.toUser == user
     
-def descriptionOfBalance(balance, before):
+def descriptionOfBalance(balance, before, lang):
     if before:
         if balance == 0.0:
-            return 'you owed no one, and no one owed you'
+            return _('you owed no one, and no one owed you', lang)
         elif balance > 0.0:
-            return 'they owed you $%s' % abs(balance)
+            return _('they owed you $%s', lang) % abs(balance)
         else:
-            return 'you owed $%s' % abs(balance)
+            return _('you owed $%s', lang) % abs(balance)
     else:
         if balance == 0.0:
-            return 'you owe no one, and no one owes you'
+            return _('you owe no one, and no one owes you', lang)
         elif balance > 0.0:
-            return 'they owe you $%s' % abs(balance)
+            return _('they owe you $%s', lang) % abs(balance)
         else:
-            return 'you owe $%s' % abs(balance)
+            return _('you owe $%s', lang) % abs(balance)
 
 def descriptionOfTotalBalance(balance, lang):
     if balance == 0.0:

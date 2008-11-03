@@ -78,7 +78,7 @@
 		</div>
 		
 		<div id="groupHistory" {% if not goToHistoryTab %} style="display:none" {% endif %} >
-			<h3>History</h3>
+			<h3>{{History}}</h3>
 			
 			{% include "groupHistory.html" %}
 		</div>
@@ -112,7 +112,7 @@
 
 			function preloadImage(src) {
 				var img = new Image(100, 100);
-				img.src = "/images/" + src;
+				img.src = "/images/{{lang}}/" + src;
 			}
 		
 			function showGroupTab(id) {

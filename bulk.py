@@ -16,6 +16,7 @@ from emails import sendEmail
 from util import UrlBuilder
 from orderParser import OrderParser
 from orderParser import quantity
+from i18n import getLanguage
 
 class BulkHandler(webapp.RequestHandler):
 	
@@ -45,51 +46,52 @@ class BulkHandler(webapp.RequestHandler):
 		payersBalanceBefore = transaction.payer.balance
 		
 		for debt in transaction.debts:
-			debtor = debt.member
-			payer = transaction.payer
+		    debtor = debt.member
+		    payer = transaction.payer
+		    debtorLang = getLanguage(self, debtor.user)
 			
-			if debtor.user.email().lower() == payer.user.email().lower():
-				continue
+		    if debtor.user.email().lower() == payer.user.email().lower():
+		        continue
 			
-			debtorsBalanceBefore = debtor.balance
+		    debtorsBalanceBefore = debtor.balance
+		    
+		    # Adjust balance
+		    debtor.balance -= debt.money
+		    debtor.put()
+		    
+		    payer.balance += debt.money
+		    
+		    debtorsBalanceNow = debtor.balance
+		    
+		    # Create transaction
+		    tr = Transaction(
+		        group = group,
+		        creatorMember = creatorMember, 
+		        fromMember = debtor,
+		        toMember = payer,
+		        type = 'debt',
+		        amount = debt.money, 
+		        reason = debt.reason,
+		        isRejected = False
+		        )
+		    tr.put()
 			
-			# Adjust balance
-			debtor.balance -= debt.money
-			debtor.put()
-			
-			payer.balance += debt.money
-			
-			debtorsBalanceNow = debtor.balance
-			
-			# Create transaction
-			tr = Transaction(
-			    group = group,
-			    creatorMember = creatorMember, 
-			    fromMember = debtor,
-			    toMember = payer,
-			    type = 'debt',
-			    amount = debt.money, 
-			    reason = debt.reason,
-			    isRejected = False
-			    )
-			tr.put()
-			
-			# If the one that created this transaction is the one that owes,
-			# don't sent a mail to him/her
-			if creatorMember.user == debtor.user:
-				continue
-			
-			# Build the reject url
-			rejectUrl = UrlBuilder(self.request).buildUrl('/reject')
-			rejectUrl += "?key=%s&h=%s" % (str(tr.key()), tr.hash)
-			
-			# Try send email to the debtor
-			if creatorMember.user == transaction.payer.user:
-				message = createActionMail(payer, debtor, debt.money, debt.reason, debtorsBalanceBefore, debtorsBalanceNow, rejectUrl, youOwedSomeone()) 
-			else:
-				message = createThirdPartyActionMail(creatorMember, payer, debtor, debt.money, debt.reason, debtorsBalanceBefore, debtorsBalanceNow, rejectUrl, creatorSaysYouOwedSomeone())
-			
-			sendEmail(message)
+		    # If the one that created this transaction is the one that owes,
+		    # don't sent a mail to him/her
+		    if creatorMember.user == debtor.user:
+		    	continue
+		    
+		    # Build the reject url
+		    rejectUrl = UrlBuilder(self.request).buildUrl('/reject')
+		    rejectUrl += "?key=%s&h=%s" % (str(tr.key()), tr.hash)
+		    
+		    # Try send email to the debtor
+		    if creatorMember.user == transaction.payer.user:
+		    	message = createActionMail(payer, debtor, debt.money, debt.reason, debtorsBalanceBefore, debtorsBalanceNow, rejectUrl, youOwedSomeone(debtorLang), debtorLang) 
+		    else:
+		    	message = createThirdPartyActionMail(creatorMember, payer, debtor, debt.money, debt.reason, debtorsBalanceBefore, debtorsBalanceNow, rejectUrl, creatorSaysYouOwedSomeone(debtorLang), debtorLang)
+		    
+		    sendEmail(message)
 				
 		transaction.payer.put()
 		
@@ -97,8 +99,9 @@ class BulkHandler(webapp.RequestHandler):
 		
 		# Now try send email to the payer with a summary
 		if not creatorMember.user == transaction.payer.user:
-			message = createBulkMail(transaction, creatorMember, payersBalanceBefore, payersBalanceNow)
-			sendEmail(message)
+		    creatorLang = getLanguage(self, creatorMember.user)
+		    message = createBulkMail(transaction, creatorMember, payersBalanceBefore, payersBalanceNow, creatorLang)
+		    sendEmail(message)
 				
 		location = '/group?group=%s&msg=%s' % (group.key(), 'Debts saved!')
 		redirectPage(self,location)

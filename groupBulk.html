@@ -14,7 +14,7 @@ function whatIsBulkFor() {
 }
 </script>
 
-<a href="javascript:whatIsBulkFor()">What's this for?</a>
+<a href="javascript:whatIsBulkFor()">{{WhatsThisFor}}</a>
 
 <div id="whatIsBulkFor" style="display:none; margin-top:4px">
 <p>Say you go to lunch with your friends. It's easier if someone pays
@@ -44,8 +44,8 @@ say "Pays: that one", and we specify what consumed each of us.</p>
 			</tr>
 			<tr>
 				<td align="right">
-					<input type="submit" value="View summary" onclick="javascript:this.form.action='/bulkSummary'" style="margin-right:10px">
-					<input type="submit" value="Save" onclick="javascript:this.form.action='/bulk'">
+					<input type="submit" value="{{ViewSummary}}" onclick="javascript:this.form.action='/bulkSummary'" style="margin-right:10px">
+					<input type="submit" value="{{Save}}" onclick="javascript:this.form.action='/bulk'">
 				</td>
 			</tr>
 		</table>
@@ -54,11 +54,12 @@ say "Pays: that one", and we specify what consumed each of us.</p>
 		<td width="8">&nbsp;</td>
 		<td valign="baseline" style="font-size:14px">
 		<strong>Example</strong>:<br />
-
-		<span style="font-family: courier new"> Pays: SomeMember<br />
+		<span style="font-family: courier new">
+		Pays: SomeMember<br />
 		AnotherMember: stuff $8<br />
 		MemberOne, MemberTwo: something they both bought $12<br />
-		Buyer: one thing, another thing, and one more $20</span>
+		Buyer: one thing, another thing, and one more $20
+		</span>
 		</td>
 	</tr>
 </table>
