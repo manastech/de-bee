@@ -15,6 +15,9 @@ from util import membershipsOfUser
 from util import niceDate
 from util import descriptionOfTransaction
 from util import transactionIsBenefical
+from util import descriptionOfGeneralBalance
+from util import descriptionOfTotalBalance
+from util import descriptionOfTotalBalanceInThisGroup
 from i18n import getDefaultLanguage
 from i18n import getLanguage
 from i18n import addMasterKeys
@@ -45,7 +48,7 @@ class GroupHandler(webapp.RequestHandler):
         hasUserMemberships = len(userMemberships) > 0
         
         # Get user balance in this group
-        [balanceSign, balance] = self.getBalance(userMembership, groupMemberships)
+        [balanceSign, balance] = self.getBalance(userMembership, groupMemberships, lang)
         
         # Get user's transaction history for the "History" tab
         try:
@@ -61,7 +64,7 @@ class GroupHandler(webapp.RequestHandler):
             validationMessage = '(' + _('This should be a number', lang) + ')'
             
         # Get debtors and creditors used in the "Bal" tab
-        [groupDebtors, groupCreditors, groupZero] = self.getDebtorsAndCreditors(groupMemberships)
+        [groupDebtors, groupCreditors, groupZero] = self.getDebtorsAndCreditors(groupMemberships, lang)
         
         # Get members for autocomplete used in the bulk-operation box
         autocompleteMembers = self.getAutocompleteMembers(groupMemberships)
@@ -80,6 +83,7 @@ class GroupHandler(webapp.RequestHandler):
             'goToHistoryTab': self.request.get("goToHistoryTab"),
             'balance': userMembership.balance * balanceSign,
             'balancePositive': balanceSign > 0,
+            'balanceDesc': descriptionOfTotalBalanceInThisGroup(userMembership.balance, lang),
             'balanceIsZero': balanceSign == 0,
             'hasMoreThanOneBalanceItem': len(balance) > 1,
             'balanceItems': balance,
@@ -134,6 +138,14 @@ class GroupHandler(webapp.RequestHandler):
             'CantUnsubscribe': _('At this moment you can not unsuscribe from this group, nobody must owe you and you must owe no one, your balance in the group must be zero.', lang),
             'IfYouWantToLeave': _('If you want to leave this group, click this button', lang),
             'NoTransactionsToShow': _('No transactions to show.', lang),
+            'Pays': _('Pays', lang),
+            'Refresh': _('Refresh', lang),
+            'InviteThem': _('Invite them!', lang),
+            'Unsusbribe': _('Unsusbribe', lang),
+            'WhatIsBulkFor': _('WhatIsBulkFor', lang),
+            'Example': _('Example', lang),
+            'BulkExample': _('BulkExample', lang),
+            'InThisGroup': _('in this group', lang),
         }
         
         addMasterKeys(template_values, lang)
@@ -142,15 +154,12 @@ class GroupHandler(webapp.RequestHandler):
         self.response.out.write(template.render(path, template_values))
 
     # Returns an array where the first component has the sign of the
-    # balance of the given user, and the second component is an array
-    # of objects whose properties are:
-    #  user: the name of the user that owe/must pay
-    #  amount: the amount he/she owes/must pay
+    # balance of the given user, and the second component is a message.
     # If sign is:
     #  0: the balance of the user is zero
     #  > 0: the group members owe the user
     #  < 0: the user owe the group members 
-    def getBalance(self, userMembership, groupMemberships):
+    def getBalance(self, userMembership, groupMemberships, lang):
         if userMembership.balance == 0.0:
             return [0, []]
         
@@ -168,10 +177,14 @@ class GroupHandler(webapp.RequestHandler):
             if balance <= 0.0:
                 break
             
-            result.append({
-                           'user': member.userNick, 
-                           'amount': min(balance, member.balance * -sign)
-                           })
+            amount = min(balance, member.balance * -sign)
+            tuple = {'user': member.userNick, 'amount': amount}
+            
+            if sign == 1:
+                result.append(_('%(user)s owes you $%(amount)s', lang) % tuple)
+            else:
+                result.append(_('You owe %(user)s $%(amount)s', lang) % tuple)
+                
             balance -= member.balance * -sign
             
         return [sign, result]
@@ -207,9 +220,9 @@ class GroupHandler(webapp.RequestHandler):
         return messages
     
     # Returns an array of two elements, each of them being an array
-    # with properties 'user' and 'amount'. The first returned element
+    # of messages. The first returned element
     # is the debtors, the second is the creditors, the third are others
-    def getDebtorsAndCreditors(self, groupMemberships):
+    def getDebtorsAndCreditors(self, groupMemberships, lang):
         debtors = []
         creditors = []
         others = []
@@ -217,13 +230,13 @@ class GroupHandler(webapp.RequestHandler):
         groupMemberships.sort(cmp = compareMembershipsByBalance)
         
         for member in groupMemberships:
-            tuple = {'user': member.userNick, 'amount': abs(member.balance)}
+            desc = descriptionOfGeneralBalance(member, lang)
             if member.balance < 0.0:
-                debtors.append(tuple)
+                debtors.append(desc)
             elif member.balance > 0.0:
-                creditors.append(tuple)
+                creditors.append(desc)
             else:
-                others.append(tuple)
+                others.append(desc)
         
         return [debtors, creditors, others]
     

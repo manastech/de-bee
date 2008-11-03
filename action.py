@@ -15,6 +15,7 @@ from emails import sendEmail
 from util import UrlBuilder
 from util import descriptionOfTransaction
 from i18n import getLanguage
+from i18n import _
 
 class ActionHandler(webapp.RequestHandler):
     
@@ -43,13 +44,13 @@ class ActionHandler(webapp.RequestHandler):
         try:
           amount = float(amount)
         except BaseException, e:
-            error = 'Invalid amount: %s.' % amount
+            error = _('Invalid amount: %s.', lang) % amount
             alertMessage(self, error)
             return
         
         # Check that it is positive
         if amount <= 0:
-            error = 'Invalid amount: %s.' % amount
+            error = _('Invalid amount: %s.', lang) % amount
             alertMessage(self, error)
             return
         

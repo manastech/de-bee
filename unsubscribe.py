@@ -5,6 +5,8 @@ from model import Group
 from ajax import alertMessage
 from ajax import redirectPage
 from ajax import userIsLoggedIn
+from i18n import getLanguage
+from i18n import _
 from cgi import escape
 
 class UnsubscribeHandler(webapp.RequestHandler):
@@ -14,11 +16,12 @@ class UnsubscribeHandler(webapp.RequestHandler):
             return
         
         user = users.get_current_user()
+        lang = getLanguage(self, user)
         
         groupKey = self.request.get('group').strip()
         
         if groupKey == "":
-            error = 'Group is required'
+            error = _('Group is required', lang)
             alertMessage(self,error)
             return
         
@@ -26,13 +29,13 @@ class UnsubscribeHandler(webapp.RequestHandler):
         memberships = Membership.gql("WHERE group = :1 AND user = :2", group, user)
 
         if memberships.count() <> 1:
-            error = 'You are not registered in this group.'
+            error = _('You don\'t belong to this group.', lang)
             alertMessage(self,error)
             return
         
         membership = memberships.get()
         if not membership.balance == 0.0:
-            error = 'You cannot leave this group, your balance must be zero.'
+            error = _('You cannot leave this group, your balance must be zero.', lang)
             alertMessage(self,error)
             return
         
@@ -40,6 +43,6 @@ class UnsubscribeHandler(webapp.RequestHandler):
         if Membership.gql("WHERE group = :1", group).count() == 0:
             group.delete()
         
-        msg = 'You have been succesfully unsubscribed from the group ' + escape(group.name) + '!'
+        msg = _('You have been succesfully unsubscribed from the group %s!', lang) % escape(group.name)
         location = '/?msg=' + msg
         redirectPage(self,location)

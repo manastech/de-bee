@@ -15,6 +15,8 @@ from emails import sendEmail
 from util import descriptionOfTransaction
 from util import transactionIsBenefical
 from i18n import getLanguage
+from i18n import addMasterKeys
+from i18n import _
 import os
 
 class RejectHandler(webapp.RequestHandler):
@@ -33,14 +35,22 @@ class RejectHandler(webapp.RequestHandler):
             return
         
         template_values = {
-                'key' : key,
-                'h' : hash,
-                'group' : tr.group,
-                'username' : user.nickname(),
-                'transactionDescription': descriptionOfTransaction(tr, user, lang),
-                'transactionIsBenefical': transactionIsBenefical(tr, user),
-                'alreadyRejected': tr.isRejected,
-            }
+            'key' : key,
+            'h' : hash,
+            'group' : tr.group,
+            'username' : user.nickname(),
+            'transactionDescription': descriptionOfTransaction(tr, user, lang),
+            'transactionIsBenefical': transactionIsBenefical(tr, user),
+            'alreadyRejected': tr.isRejected,
+            
+            # i18n
+            'YouAreRejecting': _('You are rejecting a transaction that says that', lang),
+            'ButThatTransaccionWasAlreadyRejected': _('But that transaccion was already rejected.', lang),
+            'Why': _('Please enter the reason why you are rejecting it', lang),
+            'RejectTransaction': _('Reject transaction', lang),
+        }
+        
+        addMasterKeys(template_values, lang)
                    
         path = os.path.join(os.path.dirname(__file__), 'reject.html')
         self.response.out.write(template.render(path, template_values))
@@ -56,6 +66,7 @@ class CommitRejectHandler(webapp.RequestHandler):
         hash = self.request.get('h')
         reason = self.request.get('reason').strip()
         user = users.get_current_user()
+        lang = getLanguage(self, user)
         
         # Check that all is ok
         tr = isValidTransaction(key, hash, user)
@@ -130,7 +141,7 @@ class CommitRejectHandler(webapp.RequestHandler):
         message = createRejectionMail(me, someone, tr, reason, balanceBefore, balanceNow, mailBody, someoneLang)
         sendEmail(message)
         
-        location = '/group?group=%s&msg=%s' % (tr.group.key(), 'You rejected the transaction')
+        location = '/group?group=%s&msg=%s' % (tr.group.key(), _('You rejected the transaction', lang))
         redirectPage(self,location)
         
 def isValidTransaction(key, hash, user):

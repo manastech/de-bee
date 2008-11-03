@@ -51,6 +51,7 @@ class IndexHandler(webapp.RequestHandler):
             'YouOweNobody': _('You owe nobody, and nobody owes you. Hurray!', lang),
             'GoToGroup': _('Go to group', lang),
             'SelectGroup': _('select group', lang),
+            'CreateGroup': _('Create Group', lang),
         }
         
         addMasterKeys(model, lang)

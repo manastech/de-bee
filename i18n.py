@@ -66,7 +66,7 @@ def _initializeLanguageData(language):
     lines = readFile('locale/%s.properties' % language).split('\n')
     for line in lines:
         [key, value] = line.split(':=', 1)
-        props[key] = value.strip()
+        props[key] = value
     languageData[language] = props
     
 def addMasterKeys(model, lang):

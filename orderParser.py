@@ -1,13 +1,5 @@
-#class Member:
-#	
-#	user = None
-#
-#class User:
-#	
-#	em = None
-#		
-#	def nickname(self):
-#		return self.em
+from i18n import getLanguage
+from i18n import _
 
 class Debt:
 
@@ -33,6 +25,7 @@ class OrderParser:
 		return None
 	
 	def parse(self, members, string):
+		pays = _('Pays', self.lang).lower()
 		lines = string.split("\n")
 		
 		transaction = Transaction()
@@ -51,27 +44,27 @@ class OrderParser:
 			firstSplits = line.split(':');
 			
 			if len(firstSplits) > 2:
-				transaction.error = "Error in line %s: more than one colon (:) found" % linnum;
+				transaction.error = self.error(linnum, _('more than one colon (:) found', self.lang))
 				return transaction
 			
 			if len(firstSplits) < 2:
-				transaction.error = "Error in line %s: expecting colon (:)" % linnum;
+				transaction.error = self.error(linnum, _('expecting colon (:)', self.lang))
 				return transaction
 			
 			if firstSplits[0].strip().lower() == "cancel":
 				if transaction.cancel:
-					transaction.error = "Error in line %s: cancel has already been specified " % linnum;
+					transaction.error = self.error(linnum, _('cancel has already been specified', self.lang))
 					return transaction
 				transaction.cancel = True
-			elif firstSplits[0].strip().lower() == "pays":
+			elif firstSplits[0].strip().lower() == pays:
 				if transaction.payer:
-					transaction.error = "Error in line %s: payer has already been specified (%s)" % (linnum, transaction.payer.userNick);
+					transaction.error = self.error(linnum, _('payer has already been specified (%s)', self.lang) % transaction.payer.userNick)
 					return transaction
 				
 				name = firstSplits[1].strip()
 				member = self.getMember(members, name)
 				if not member:
-					transaction.error = "Error in line %s: member %s not found" % (linnum, name);
+					transaction.error = self.error(linnum, _('member %s not found', self.lang) % name);
 					return transaction
 				transaction.payer = member
 			else:
@@ -83,23 +76,23 @@ class OrderParser:
 					
 					member = self.getMember(members, name)
 					if not member:
-						transaction.error = "Error in line %s: member %s not found" % (linnum, name);
+						transaction.error = self.error(linnum, _('member %s not found', self.lang) % name);
 						return transaction
 					
 					secondSplits = firstSplits[1].split('$')
 					
 					if len(secondSplits) < 2:
-						transaction.error = "Error in line %s: expecting dollar ($) for ammount of money" % linnum;
+						transaction.error = self.error(linnum, _('expecting dollar ($) for amount of money', self.lang))
 						return transaction
 					
 					if len(secondSplits) > 2:
-						transaction.error = "Error in line %s: more than two dollars ($) found" % linnum;
+						transaction.error = self.error(linnum, _('more than two dollars ($) found', self.lang))
 						return transaction
 					
 					reason = secondSplits[0].strip()
 					money = float(secondSplits[1])
 					if money == 0 or money < 0:
-						transaction.error = "Error in line %s: invalid ammount of money (%s)" % (linnum, secondSplits[1].strip());
+						transaction.error = self.error(linnum, _('invalid ammount of money (%s)', self.lang) % secondSplits[1].strip());
 						return transaction
 					
 					money = money / total
@@ -116,15 +109,21 @@ class OrderParser:
 					debts.append(debt)
 					
 		if not transaction.payer:
-			transaction.error = "And who pays? (Pays: ...)"
+			transaction.error = _('And who pays? (Pays: ...)', self.lang)
 			return transaction
 		
 		if len(debts) == 0:
-			transaction.error = "And what did the buy? (Someone: ...)"
+			transaction.error = _('And what did the buy? (Someone: ...)', self.lang)
 			return transaction
 		
 		transaction.debts = debts
 		return transaction
+	
+	def error(self, line, msg):
+		txt = _('Error in line %s', self.lang) % line
+		txt += ': '
+		txt += msg
+		return txt
 	
 def is_numeric(char):
 	return '0' <= ord(char) and ord(char) <= '9'
@@ -160,45 +159,3 @@ def quantity(string):
 		return [quantity, string]
 	else:
 		return [1, string]
-	
-if __name__ == '__main__':
-	parser = OrderParser()
-	
-	u1 = User()
-	u1.em = 'uno'
-	
-	u2 = User()
-	u2.em = 'dos'
-	
-	u3 = User()
-	u3.em = 'tres'
-	
-	u4 = User()
-	u4.em = 'cuatro'
-	
-	m1 = Member()
-	m1.user = u1
-	
-	m2 = Member()
-	m2.user = u2
-	
-	m3 = Member()
-	m3.user = u3
-	
-	m4 = Member()
-	m4.user = u4
-	
-	members = [m1, m2, m3, m4]
-	
-	transaction = parser.parse(members, "Pays: uno\ndos: algo $5\ntres, cuatro: algo mas $12\nuno: foo, bar, baz $20")
-	
-	print '======================'
-	
-	if transaction.error:
-		print transaction.error
-	else:
-		print "Payer: %s" % transaction.payer.userNick
-		print "Cancel: %s" % transaction.cancel
-		for debt in transaction.debts:
-			print "%s bought '%s' for $%s" % (debt.member.userNick, debt.reason, debt.money)
-	

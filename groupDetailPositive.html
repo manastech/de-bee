@@ -1,14 +1,14 @@
 <div class="benefical">
 {% if hasMoreThanOneBalanceItem %}
-	This group owes you a total of ${{ balance }}:<br>
+	{{balanceDesc}}:<br>
 	<ul>
 	{% for i in balanceItems %}
-		<li>{{ i.user }} owes you $ {{ i.amount }}</li>
+		<li>{{i}}</li>
 	{% endfor %}
 	</ul>
 {% else %}
 	{% for i in balanceItems %}
-		{{ i.user }} owes you $ {{ i.amount }}
+		{{i}} {{InThisGroup}}.
 	{% endfor %}
 {% endif %}
 </div>

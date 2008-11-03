@@ -76,7 +76,7 @@
 				<label style="font-size:12">{{Name}}:</label> 
 				<br />
 				<input type="text" value="" name="name"/>
-				<input style="vertical-align:middle" type="image" src="/images/{{lang}}/Button_CreateGroup.gif" alt="Create Group" title="Create Group">
+				<input style="vertical-align:middle" type="image" src="/images/{{lang}}/Button_CreateGroup.gif" alt="{{CreateGroup}}" title="{{CreateGroup}}">
 			</form>
 		</div>
 		
@@ -85,7 +85,7 @@
 				indice = select.selectedIndex;
 				value = select.options[indice].value;
 				if ( value.length > 0 ) {
-					form.submit();				
+					form.submit();
 				} else {
 					return false;
 				}

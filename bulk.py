@@ -17,6 +17,7 @@ from util import UrlBuilder
 from orderParser import OrderParser
 from orderParser import quantity
 from i18n import getLanguage
+from i18n import _
 
 class BulkHandler(webapp.RequestHandler):
 	
@@ -26,7 +27,8 @@ class BulkHandler(webapp.RequestHandler):
 			
 		rejectPath = UrlBuilder(self.request).buildUrl('/reject')
 		
-		user = users.get_current_user();
+		user = users.get_current_user()
+		lang = getLanguage(self, user)
 		group = Group.get(self.request.get("group"))
 		
 		creatorMember = Membership.gql("WHERE group = :1 AND user = :2", group, user)[0]
@@ -37,6 +39,7 @@ class BulkHandler(webapp.RequestHandler):
 		members = group.memberships
 		
 		parser = OrderParser()
+		parser.lang = lang
 		transaction = parser.parse(members, command)
 		
 		if transaction.error:
@@ -113,6 +116,7 @@ class BulkSummaryHandler(webapp.RequestHandler):
 			return
 			
 		user = users.get_current_user();
+		lang = getLanguage(self, user)
 		group = Group.get(self.request.get("group"))
 		
 		creatorMember = Membership.gql("WHERE group = :1 AND user = :2", group, user)[0]
@@ -123,6 +127,7 @@ class BulkSummaryHandler(webapp.RequestHandler):
 		members = group.memberships
 		
 		parser = OrderParser()
+		parser.lang = lang
 		transaction = parser.parse(members, command)
 		
 		if transaction.error:
@@ -146,6 +151,7 @@ class BulkSummaryHandler(webapp.RequestHandler):
 			result += ' - %s %s\\n' % (cantidad, comida)
 			
 		result += '\\n';
-		result += 'Total: $%s'% total;
+		result += _('Total', lang)
+		result += ': $%s'% total;
 		
 		alertMessage(self, result)

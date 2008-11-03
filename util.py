@@ -30,9 +30,9 @@ def niceDate(t, lang):
     if now.year == t.year:
         if now.month == t.month and now.day == t.day:
             return t.strftime(str(_('Today at %H:%S', lang)))
-        return t.strftime("On %b %d")
+        return t.strftime(str(_('On %b %d', lang)))
     else:
-        return t.strftime("On %D")
+        return t.strftime(str(_('On %D', lang)))
     
 # Returns a membership amongst the given ones, where the user
 # is the given one. Return None if no one is found.
@@ -119,6 +119,14 @@ def descriptionOfTotalBalance(balance, lang):
         return _('You owe a total of $%s', lang) % -balance
     else:
         return _('They owe you a total of $%s', lang) % balance
+    
+def descriptionOfTotalBalanceInThisGroup(balance, lang):
+    if balance == 0.0:
+        return _('You owe nobody, and nobody owes you in this group. Hurray!', lang)
+    elif balance < 0.0:
+        return _('You owe a total of $%s in this group', lang) % -balance
+    else:
+        return _('They owe you a total of $%s in this group', lang) % balance
 
 def descriptionOfBalanceInGroup(membership, link, lang):
     if membership.balance < 0.0:
@@ -127,3 +135,11 @@ def descriptionOfBalanceInGroup(membership, link, lang):
         return _('They owe you $%(amount)s in <a href="%(link)s">%(group)s</a>', lang) % {'amount': membership.balance, 'group': membership.groupNick, 'link': link}
     else:
         raise "Don't invoke this method with m.balance == 0.0"
+    
+def descriptionOfGeneralBalance(member, lang):
+    if member.balance == 0.0:
+        return _('%s owes no one, and no one owes him/her', lang) % member.userNick
+    elif member.balance > 0.0:
+        return _('%(user)s has $%(amount)s of credit', lang) % {'user': member.userNick, 'amount': member.balance}
+    else:
+        return _('%(user)s owes $%(amount)s', lang) % {'user': member.userNick, 'amount': -member.balance}

@@ -1,8 +1,8 @@
 {% extends "master.html" %}
 {% block top %}
 	<div style="text-align: right"> 
-	<span id="hello">Hello</span> <span id="username">{{username}}!</span><br>  
-	<a href="{{signout_url}}" id="logout">Logout</a>
+	<span id="hello">{{Hello}}</span> <span id="username">{{username}}!</span><br>  
+	<a href="{{signout_url}}" id="logout">{{Logout}}</a>
 	</div>
 {% endblock %}
 {% block navigation %}
@@ -18,7 +18,7 @@
 {% block content %}
 	<h3>Group {{ group.name }}</h3>
 	
-	<p>You are rejecting a transaction that says that:</p>
+	<p>{{YouAreRejecting}}:</p>
 	
 	{% if transactionIsBenefical %}
 		<p class="benefical">{{transactionDescription}}</p>
@@ -27,7 +27,7 @@
 	{% endif %}
 	
 	{% if alreadyRejected %}
-		<p>But that transaccion was already rejected.</p> 
+		<p>{{ButThatTransaccionWasAlreadyRejected}}</p> 
 	{% else %}
 
 		<p>
@@ -36,13 +36,13 @@
 		<input type="hidden" name="h" value="{{h}}" />
 		<table>
 			<tr>
-				<td>Please enter the reason why you are rejecting it:</td>
+				<td>{{Why}}:</td>
 			</tr>
 			<tr>
 				<td><textarea name="reason" rows="5" cols="60"></textarea></td>
 			</tr>
 			<tr>
-				<td align="right"><input type="submit" value="Reject transaction" /></td>
+				<td align="right"><input type="submit" value="{{RejectTransaction}}" /></td>
 			</tr>
 		</table>
 		</form>

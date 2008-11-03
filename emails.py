@@ -9,6 +9,8 @@ actionTxt = {}
 actionHtml = {}
 rejectionTxt = {}
 rejectionHtml = {}
+bulkTxt = {}
+bulkHtml = {}
 
 def someoneOwedYou(lang, reject = False):
     if reject:
@@ -43,7 +45,7 @@ def someonePayedYou(lang, reject = False):
     else:
         return {
                 'txt': _('%(user)s said that he/she paid you $%(amount)s because of %(reason)s.', lang),
-                'html': _('<b>%(user)s</b> said that <b style="color:#5C0101">he/she paid you $%(amount)s</b> because of %s.', lang) 
+                'html': _('<b>%(user)s</b> said that <b style="color:#5C0101">he/she paid you $%(amount)s</b> because of %(reason)s.', lang) 
                 }
     
 def youPayedSomeone(lang, reject = False):
@@ -113,8 +115,16 @@ def createBulkMail(transaction, creatorMember, balanceBefore, balanceNow, lang):
                     to = transaction.payer.user.email(), 
                     subject = transactionNoticeSubject(transaction.payer, lang))
     
-    message.body = readFile('texts/%s/creator_says_you_payed_for_them.txt' % lang) % (transaction.payer.userNick, creatorMember.userNick, debtorsTxt, total, descriptionOfBalance(balanceBefore, True, lang), transaction.payer.groupNick, descriptionOfBalance(balanceNow, False, lang))
-    message.html = readFile('texts/%s/creator_says_you_payed_for_them.html' % lang) % (transaction.payer.userNick, creatorMember.userNick, debtorsHtml, total, descriptionOfBalanceHtml(balanceBefore, True, lang), transaction.payer.groupNick, descriptionOfBalanceHtml(balanceNow, False, lang))
+    global bulkTxt
+    if not (lang in bulkTxt):
+        bulkTxt[lang] = readFile('texts/%s/creator_says_you_payed_for_them.txt' % lang)
+        
+    global bulkHtml
+    if not (lang in bulkHtml):
+        bulkHtml[lang] = readFile('texts/%s/creator_says_you_payed_for_them.html' % lang)  
+    
+    message.body = bulkTxt[lang] % (transaction.payer.userNick, creatorMember.userNick, debtorsTxt, total, descriptionOfBalance(balanceBefore, True, lang), transaction.payer.groupNick, descriptionOfBalance(balanceNow, False, lang))
+    message.html = bulkHtml[lang] % (transaction.payer.userNick, creatorMember.userNick, debtorsHtml, total, descriptionOfBalanceHtml(balanceBefore, True, lang), transaction.payer.groupNick, descriptionOfBalanceHtml(balanceNow, False, lang))
     return message
 
 def actionMessageTxt(me, someone, amount, reason, balanceBefore, balanceNow, rejectUrl, body, lang):

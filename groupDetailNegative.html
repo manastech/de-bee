@@ -1,14 +1,14 @@
 <div class="detrimental">
 {% if hasMoreThanOneBalanceItem %}
-	You owe a total of ${{ balance }}:<br>
+	{{balanceDesc}}:<br>
 	<ul>
 	{% for i in balanceItems %}
-		<li>$ {{ i.amount }} to {{ i.user }}</li>
+		<li>{{i}}</li>
 	{% endfor %}	
 	</ul>
 {% else %}
 	{% for i in balanceItems %}
-		You owe $ {{ i.amount }} to {{ i.user }}
+		{{i}} {{InThisGroup}}.
 	{% endfor %}
 {% endif %}
 </div>

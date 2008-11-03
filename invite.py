@@ -13,6 +13,9 @@ from io import readFile
 from emails import DeBeeEmail
 from cgi import escape
 from hashlib import sha224
+from i18n import getLanguage
+from i18n import addMasterKeys
+from i18n import _
 import os
 
 class GroupInvitation:
@@ -38,6 +41,7 @@ class InviteHandler(webapp.RequestHandler):
             return
         
         user = users.get_current_user()
+        lang = getLanguage(self, user)
         groupKey = self.request.get('group')
         group = Group.get(groupKey)
         invitationText = self.request.get('invitationText')
@@ -48,15 +52,15 @@ class InviteHandler(webapp.RequestHandler):
         # Check that all emails are valid
         for email in emails:
         	if not mail.is_email_valid(email.strip()):
-        		alertMessage(self, '%s is not a valid email address' % email)
+        		alertMessage(self, _('%s is not a valid email address', lang) % email)
         		return
         
         for email in emails:
-            self.sendInvitation(user, email.strip(), group, invitationText, urlBuilder)
+            self.sendInvitation(user, email.strip(), group, invitationText, urlBuilder, lang)
             
-        redirectPage(self, "/group?group=%s&msg=%s" % (groupKey, escape("Your invite has been sent!")))
+        redirectPage(self, "/group?group=%s&msg=%s" % (groupKey, escape(_('Your invite has been sent!', lang))))
         
-    def sendInvitation(self, fromUser, toEmail, toGroup, customInvitationText, urlBuilder):
+    def sendInvitation(self, fromUser, toEmail, toGroup, customInvitationText, urlBuilder, lang):
         invitation = GroupInvitation(toGroup, toEmail, urlBuilder)
         plainUrl = invitation.getUrl()
         subject = "De-Bee: You are invited to %s group!" % toGroup.name
@@ -73,8 +77,8 @@ class InviteHandler(webapp.RequestHandler):
             plainInvitationText = ''
             htmlInvitationText = ''
         
-        invitationText = readFile('texts/invitation.txt')
-        invitationHtml = readFile('texts/invitation.html')
+        invitationText = readFile('texts/%s/invitation.txt' % lang)
+        invitationHtml = readFile('texts/%s/invitation.html' % lang)
         
         membersText = ''
         membersHtml = '<ul>'
@@ -102,24 +106,37 @@ class AcceptInvitationHandler(webapp.RequestHandler):
     @login_required
     def get(self):
         user = users.get_current_user()
-        group = Group.get(self.request.get("group"))
-        email = self.request.get("user")
-        invitation = GroupInvitation(group, email, UrlBuilder(self.request))
+        lang = getLanguage(self, user)
+        groupKey = self.request.get("group")
+        try:
+            group = Group.get(groupKey)
+            email = self.request.get("user")
+            invitation = GroupInvitation(group, email, UrlBuilder(self.request))
         
-        # Verificar que la invitacion es valida (coinciden los hashes)
-        isValidInvitation = invitation.makeHash() == self.request.get("hash")
-        
-        # Verificar que el usuario logueado coincide con el mail de la invitacion
-        isValidUser = user.email().lower() == email.lower()
+            # Verificar que la invitacion es valida (coinciden los hashes)
+            isValidInvitation = invitation.makeHash() == self.request.get("hash")
+            
+            # Verificar que el usuario logueado coincide con el mail de la invitacion
+            isValidUser = user.email().lower() == email.lower()
+        except:
+            group = None
+            isValidInvitation = False
+            isValidUser = False
         
         if not isValidInvitation or not isValidUser:
             template_values = {
                 'isValidInvitation': isValidInvitation,
                 'isValidUser': isValidUser,
                 'group': group,
-                'currentUser': user,
+                'username': user.nickname(),
                 'signout_url': users.create_logout_url("/"),
+                
+                # i18n
+                'ThisInvitationIsNotForYou': _('This invitation is not for you.', lang),
+                'TheInvitationIsInvalid': _('The invitation is invalid.', lang)
             }
+            
+            addMasterKeys(template_values, lang)
             
             path = os.path.join(os.path.dirname(__file__), 'acceptInvitationError.html')
             self.response.out.write(template.render(path, template_values))
@@ -132,7 +149,7 @@ class AcceptInvitationHandler(webapp.RequestHandler):
         # Just redirect to the group page with an appropriate message.
         if not isMember:
             
-            msg = 'You are now a member of %s group' % group.name
+            msg = _('You are now a member of %s group', lang) % group.name
              
             # Join the user into the group. If later she finds out she has two
             # groups with the same name, she'll already know she can change the name
@@ -146,6 +163,6 @@ class AcceptInvitationHandler(webapp.RequestHandler):
                 ).put()
                 
         else:
-            msg = 'You are already a member of this group'
+            msg = _('You are already a member of this group', lang)
         
         self.redirect('/group?group=%s&msg=%s' % (group.key(), msg))

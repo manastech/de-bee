@@ -2,8 +2,8 @@
 
 {% block top %} 
 	<div style="text-align: right"> 
-	<font size="5">{{currentUser.nickname}}</font><br>  
-	(<a href="{{signout_url}}">sign out</a>)
+	<span id="hello">{{Hello}}</span> <span id="username">{{username}}!</span><br>  
+	<a href="{{signout_url}}" id="logout">{{Logout}}</a>
 	</div>
 {% endblock %}
 {% block navigation %}
@@ -21,10 +21,10 @@
 
 {% if isValidInvitation %}
 	{% if not isValidUser %}
-		This invitation is not for you.
+		{{ThisInvitationIsNotForYou}}
 	{% endif %}
 {% else %}
-	Invitation is invalid
+	{{TheInvitationIsInvalid}}
 {% endif %}
 
 {% endblock %}

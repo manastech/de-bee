@@ -161,16 +161,15 @@ function getCurrentSuggestions() {
 	
 	while(pos >= 0) {
 		if (text[pos] == ':') {
-			if (pos >= 4 && 
-				text[pos - 4].toLowerCase() == 'p' && 
-				text[pos - 3].toLowerCase() == 'a' && 
-				text[pos - 2].toLowerCase() == 'y' && 
-				text[pos - 1].toLowerCase() == 's') {
+			if (pos >= paga[0].length) {
+				for(var i = 0; i < paga[0].length; i++) {
+					if (text[pos - (paga[0].length - i)].toLowerCase() != paga[0][i].toLowerCase()) {
+						ignore = empty;
+						return comidas;
+					}
+				}
 				ignore = empty;
 				return miembros;
-			} else {
-				ignore = empty;
-				return comidas;
 			}
 		} else if (text[pos] == '\n') {
 			computeIgnore();
