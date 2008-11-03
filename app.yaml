@@ -13,5 +13,9 @@ handlers:
 - url: /scripts
   static_dir: scripts
   
+- url: /who.*
+  script: who.py
+  login: admin
+  
 - url: .*
   script: main.py

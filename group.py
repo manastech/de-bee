@@ -133,6 +133,7 @@ class GroupHandler(webapp.RequestHandler):
             'NameByWhichYouWantOthersToSeeYouInThisGroup': _('Name by which you want others to see you in this group', lang),
             'CantUnsubscribe': _('At this moment you can not unsuscribe from this group, nobody must owe you and you must owe no one, your balance in the group must be zero.', lang),
             'IfYouWantToLeave': _('If you want to leave this group, click this button', lang),
+            'NoTransactionsToShow': _('No transactions to show.', lang),
         }
         
         addMasterKeys(template_values, lang)
