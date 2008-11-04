@@ -106,7 +106,7 @@ class BulkHandler(webapp.RequestHandler):
 			message = createBulkMail(transaction, creatorMember, payersBalanceBefore, payersBalanceNow, creatorLang)
 			sendEmail(message)
 				
-		location = '/group?group=%s&msg=%s' % (group.key(), 'Debts saved!')
+		location = '/group?group=%s&msg=%s' % (group.key(), _('Debts saved!', lang))
 		redirectPage(self,location)
 		
 class BulkSummaryHandler(webapp.RequestHandler):
