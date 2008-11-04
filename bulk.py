@@ -102,9 +102,9 @@ class BulkHandler(webapp.RequestHandler):
 		
 		# Now try send email to the payer with a summary
 		if not creatorMember.user == transaction.payer.user:
-		    creatorLang = getLanguage(self, creatorMember.user)
-		    message = createBulkMail(transaction, creatorMember, payersBalanceBefore, payersBalanceNow, creatorLang)
-		    sendEmail(message)
+			creatorLang = getLanguage(self, creatorMember.user)
+			message = createBulkMail(transaction, creatorMember, payersBalanceBefore, payersBalanceNow, creatorLang)
+			sendEmail(message)
 				
 		location = '/group?group=%s&msg=%s' % (group.key(), 'Debts saved!')
 		redirectPage(self,location)

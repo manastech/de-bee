@@ -4,6 +4,7 @@ from google.appengine.ext import webapp
 from ajax import redirectPage
 from io import readFile
 
+
 availableLanguages = ['es', 'en']
 languageData = {}
 
@@ -66,7 +67,7 @@ def _initializeLanguageData(language):
     lines = readFile('locale/%s.properties' % language).split('\n')
     for line in lines:
         [key, value] = line.split(':=', 1)
-        props[key] = value
+        props[key] = value.strip()
     languageData[language] = props
     
 def addMasterKeys(model, lang):

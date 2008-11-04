@@ -16,6 +16,7 @@ from util import UrlBuilder
 from util import descriptionOfTransaction
 from i18n import getLanguage
 from i18n import _
+from cgi import escape
 
 class ActionHandler(webapp.RequestHandler):
     
