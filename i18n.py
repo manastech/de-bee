@@ -55,7 +55,7 @@ def _(key, language):
     
     # Return value, or key if value is empty
     value = languageData[language][key]
-    if value == "":
+    if value.strip() == '':
         value = key
     return value
 
