@@ -137,7 +137,7 @@
 #groupBalanceButton
 {
 	background: url(/images/en/s_balance_OFF.gif) no-repeat;
-	width: 87px;
+	width: 117px;
 	height: 49px;
 	display: block;
 	float: left;
@@ -153,27 +153,5 @@
 #groupBalanceButton.active
 {
 	background: url(/images/en/s_balance_ON.gif) no-repeat;
-	outline: none;
-}
-
-#groupBulkButton
-{
-	background: url(/images/en/s_Bulk_OFF.gif) no-repeat;
-	width: 150px;
-	height: 49px;
-	display: block;
-	float: left;
-	margin-left: 10px;
-}
-
-#groupBulkButton:hover
-{
-	background: url(/images/en/s_Bulk_OVER.gif) no-repeat;
-	outline: none;
-}
-
-#groupBulkButton.active
-{
-	background: url(/images/en/s_Bulk_ON.gif) no-repeat;
 	outline: none;
 }

@@ -49,7 +49,7 @@
 #groupHomeButton
 {
 	background: url(/images/es/s_Actions_OFF.gif) no-repeat;
-	width: 150px;
+	width: 120px;
 	height: 49px;
 	display: block;
 	float: left;
@@ -71,7 +71,7 @@
 #groupInviteButton
 {
 	background: url(/images/es/s_InvitePeople_OFF.gif) no-repeat;
-	width: 224px;
+	width: 94px;
 	height: 49px;
 	display: block;
 	float: left;
@@ -93,7 +93,7 @@
 #groupHistoryButton
 {
 	background: url(/images/es/s_History_OFF.gif) no-repeat;
-	width: 134px;
+	width: 114px;
 	height: 49px;
 	display: block;
 	float: left;
@@ -115,7 +115,7 @@
 #groupPropertiesButton
 {
 	background: url(/images/es/s_properties_OFF.gif) no-repeat;
-	width: 167px;
+	width: 127px;
 	height: 49px;
 	display: block;
 	float: left;
@@ -137,7 +137,7 @@
 #groupBalanceButton
 {
 	background: url(/images/es/s_balance_OFF.gif) no-repeat;
-	width: 87px;
+	width: 117px;
 	height: 49px;
 	display: block;
 	float: left;
@@ -153,27 +153,5 @@
 #groupBalanceButton.active
 {
 	background: url(/images/es/s_balance_ON.gif) no-repeat;
-	outline: none;
-}
-
-#groupBulkButton
-{
-	background: url(/images/es/s_Bulk_OFF.gif) no-repeat;
-	width: 150px;
-	height: 49px;
-	display: block;
-	float: left;
-	margin-left: 10px;
-}
-
-#groupBulkButton:hover
-{
-	background: url(/images/es/s_Bulk_OVER.gif) no-repeat;
-	outline: none;
-}
-
-#groupBulkButton.active
-{
-	background: url(/images/es/s_Bulk_ON.gif) no-repeat;
 	outline: none;
 }

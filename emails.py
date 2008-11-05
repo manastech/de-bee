@@ -102,7 +102,7 @@ def createBulkMail(transaction, creatorMember, balanceBefore, balanceNow, lang):
     total = 0.0
     
     for debt in transaction.debts:
-    	if creatorMember.user != debt.member.user:
+    	if transaction.payer.user != debt.member.user:
 	        debtorsTxt += itemTxt % (debt.money, debt.member.userNick, debt.reason)
 	        debtorsHtml += itemHtml % (debt.money, debt.member.userNick, debt.reason)
 	        total += debt.money
