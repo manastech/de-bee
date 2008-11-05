@@ -2,6 +2,7 @@ from model import Membership
 from datetime import datetime
 from re import compile
 from i18n import _
+import locale
 
 class UrlBuilder:
     def __init__(self, webrequest):
@@ -26,13 +27,18 @@ def membershipsOfUser(user):
 
 # Returns a date formatted nicely, comparing it to the current date.
 def niceDate(t, lang):
-    now = datetime.now()
-    if now.year == t.year:
-        if now.month == t.month and now.day == t.day:
-            return t.strftime(str(_('Today at %H:%S', lang)))
-        return t.strftime(str(_('On %b %d', lang)))
-    else:
-        return t.strftime(str(_('On %D', lang)))
+	try:
+		locale.setlocale(locale.LC_ALL, lang)
+	except:
+		localeNotSupported = True
+	
+	now = datetime.now()
+	if now.year == t.year:
+	    if now.month == t.month and now.day == t.day:
+	        return t.strftime(str(_('Today at %H:%S', lang)))
+	    return t.strftime(str(_('On %b %d', lang)))
+	else:
+		return t.strftime(str(_('On %D', lang)))
     
 # Returns a membership amongst the given ones, where the user
 # is the given one. Return None if no one is found.
