@@ -1,0 +1,40 @@
+<a href="javascript:whatIsCowFor()">{{WhatsThisFor}}</a>
+
+<div id="whatIsCowFor" style="display:none; margin-top:4px">
+{{WhatIsCowFor}}
+</div>
+
+<table style="margin:0px; padding:0px">
+	<tr>
+		<td>
+		<form name="ejecutarVaquita" action="/cow" target="logic" method="post">
+		<input type="hidden" name="group" value="{{userMembership.group.key}}" />
+		<table>
+			<tr>
+				<td colspan="2">
+				<div><textarea id="cow" name="cow" rows="6"
+					style="width: 500px" onKeyDown="return cowKeyDown(event);"
+					onKeyUp="return cowKeyUp(event);" onFocus="cowEvaluateShowSuggestions()"
+					onBlur="cowHideSuggestions()"></textarea></div>
+				<div id="cowPopup"
+					style="display: none; position: absolute; border: 1px solid black; background-color: #DDDDDD; width: 500px; overflow: auto;">
+				</td>
+			</tr>
+			<tr>
+				<td align="right">
+					<input type="submit" value="{{ViewSummary}}" onclick="javascript:this.form.action='/cowSummary'" style="margin-right:10px">
+					<input type="submit" value="{{Save}}" onclick="javascript:this.form.action='/cow'">
+				</td>
+			</tr>
+		</table>
+		</form>
+		</td>
+		<td width="8">&nbsp;</td>
+		<td valign="baseline" style="font-size:14px">
+		<strong>{{Example}}</strong>:<br />
+		<span style="font-family: courier new">
+		{{CowExample}}
+		</span>
+		</td>
+	</tr>
+</table>

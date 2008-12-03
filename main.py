@@ -11,6 +11,8 @@ from invite import AcceptInvitationHandler
 from action import ActionHandler
 from bulk import BulkHandler
 from bulk import BulkSummaryHandler
+from cow import CowHandler
+from cow import CowSummaryHandler
 from reject import RejectHandler
 from reject import CommitRejectHandler
 from unsubscribe import UnsubscribeHandler
@@ -27,6 +29,8 @@ def main():
                     ('/action', ActionHandler),
                     ('/bulk', BulkHandler),
                     ('/bulkSummary', BulkSummaryHandler),
+                    ('/cow', CowHandler),
+                    ('/cowSummary', CowSummaryHandler),
                     ('/unsubscribe', UnsubscribeHandler),
                     ('/reject', RejectHandler),
                     ('/commitReject', CommitRejectHandler),

@@ -4,10 +4,12 @@ var textareaName = 'comando';
 var textHeight = 20;
 var suggestionsPerPage = 5;
 var paga = new Array('{{Pays}}');
+var razon = new Array('{{Reason}}');
 var miembros = new Array( {{ autocompleteMembers }} );
 miembros.sort();
 var comidas = new Array();
 comidas.sort();
+var precios = new Array();
 
 function whatIsBulkFor() {
 	document.getElementById("whatIsBulkFor").style.display = "";
@@ -29,9 +31,9 @@ function whatIsBulkFor() {
 			<tr>
 				<td colspan="2">
 				<div><textarea id="comando" name="command" rows="6"
-					style="width: 500px" onKeyDown="return keyDown(event);"
-					onKeyUp="return keyUp(event);" onFocus="evaluateShowSuggestions()"
-					onBlur="hideSuggestions()"></textarea></div>
+					style="width: 500px" onKeyDown="return bulkKeyDown(event);"
+					onKeyUp="return bulkKeyUp(event);" onFocus="bulkEvaluateShowSuggestions()"
+					onBlur="bulkHideSuggestions()"></textarea></div>
 				<div id="comandoPopup"
 					style="display: none; position: absolute; border: 1px solid black; background-color: #DDDDDD; width: 500px; overflow: auto;">
 				</td>

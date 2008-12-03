@@ -6,13 +6,14 @@
 	<link href="images/favicon.png" rel="icon" type="image/png" />
 	<script type="text/javascript" src="scripts/{{lang}}/preload.js"></script>
 	<script type="text/javascript" src="scripts/preload.js"></script>
+	<script type="text/javascript" src="scripts/utils.js"></script>
 	<script type="text/javascript" src="scripts/autocomplete.js"></script>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<title>De-Bee</title>
 </head>
 <body>
 	<!-- Ajax hack iframe -->
-	<iframe name="logic" style="display: none"></iframe>
+	<iframe name="logic" style="display: "></iframe>
 	<div id="container">
 		<div id="header">
 			<div id="logo"><a href="http://www.de-bee.com" style="text-decoration: none"><img src="images/De-Bee_logo.gif" alt="" border="0"/></a></div>
@@ -62,5 +63,13 @@
 		</div>
 	</div>
 	
+	<script type="text/javascript">
+	var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+	document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+	</script>
+	<script type="text/javascript">
+	var pageTracker = _gat._getTracker("UA-6218168-1");
+	pageTracker._trackPageview();
+	</script>
 </body>
 </html>

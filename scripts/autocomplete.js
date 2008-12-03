@@ -1,14 +1,3 @@
-var KEY_DOWN = 40;
-var KEY_UP = 38;
-var KEY_RIGHT = 39;
-var KEY_LEFT = 37;
-var KEY_ENTER = 13;
-var KEY_SPACE = 32;
-var KEY_COMMA = 188;
-var KEY_COLON = 59;
-var KEY_ESC = 27;
-var KEY_DOLLAR = 52;
-
 // Define these
 // var popupName;
 // var textareaName;
@@ -22,13 +11,66 @@ var index = 0;
 var numberOfSuggestions;
 var selectedSuggestion;
 var currentSuggestions;
+var replaceKind;
 
 var empty = new Array();
 var ignore = new Array();
+var currentFunction;
+
+function bulk() {
+	currentFunction = 'bulk';
+	popupName = 'comandoPopup';
+	textareaName = 'comando';
+}
+
+function cow() {
+	currentFunction = 'cow';
+	popupName = 'cowPopup';
+	textareaName = 'cow';
+}
+
+function bulkKeyDown(event) {
+	bulk();
+	return keyDown(event);
+}
+
+function bulkKeyUp(event) {
+	bulk();
+	return keyUp(event);
+}
+
+function cowKeyDown(event) {
+	cow();
+	return keyDown(event);
+}
+
+function cowKeyUp(event) {
+	cow();
+	return keyUp(event);
+}
+
+function bulkEvaluateShowSuggestions() {
+	bulk();
+	return evaluateShowSuggestions();
+}
+
+function bulkHideSuggestions() {
+	bulk();
+	return hideSuggestions();
+}
+
+function cowEvaluateShowSuggestions() {
+	cow();
+	return evaluateShowSuggestions();
+}
+
+function cowHideSuggestions() {
+	cow();
+	return hideSuggestions();
+}
 
 function keyDown(event) {
 	var popup = document.getElementById(popupName);
-	
 	switch(event.keyCode) {
 	case KEY_DOWN:
 		if (index < numberOfSuggestions - 1) {
@@ -72,7 +114,7 @@ function keyUp(event) {
 	case KEY_ENTER:
 	//case KEY_SPACE:
 	case KEY_COMMA:
-	case KEY_COLON:		
+	case KEY_COLON:
 		if (popup.style.display != 'none') {
 			replace(event.keyCode);
 			if (event.keyCode == KEY_ENTER) {
@@ -159,29 +201,46 @@ function getCurrentSuggestions() {
 	
 	pos--;
 	
+	if (currentFunction == 'bulk') {
+		thepaga = paga;
+	} else {
+		thepaga = razon;
+	}
+	
 	while(pos >= 0) {
 		if (text[pos] == ':') {
-			if (pos >= paga[0].length) {
-				for(var i = 0; i < paga[0].length; i++) {
-					if (text[pos - (paga[0].length - i)].toLowerCase() != paga[0][i].toLowerCase()) {
+			if (pos >= thepaga[0].length) {
+				for(var i = 0; i < thepaga[0].length; i++) {
+					if (text[pos - (thepaga[0].length - i)].toLowerCase() != thepaga[0][i].toLowerCase()) {
 						ignore = empty;
+						replaceKind = 'comidas';
 						return comidas;
 					}
 				}
+				
+				if (currentFunction == 'cow') {
+					replaceKind = 'empty';
+					return empty;
+				}
+				
 				ignore = empty;
+				replaceKind = 'miembrosEnPaga';
 				return miembros;
 			}
 		} else if (text[pos] == '\n') {
 			computeIgnore();
+			replaceKind = 'miembros';
 			return miembros;
 		} else if (text[pos] == '$') {
+			replaceKind = 'empty';
 			return empty;
 		}
 		pos--;
 	}
 	
 	ignore = empty;
-	return paga;
+	replaceKind = 'paga';
+	return thepaga;
 }
 
 function computeIgnore() {
@@ -302,6 +361,13 @@ function replace(keyCode) {
 	var replacement = selectedSuggestion;
 	if (keyCode == KEY_SPACE) {
 		replacement += ' ';
+	} else if (keyCode == KEY_ENTER) {
+		if (replaceKind == 'paga' || replaceKind == 'miembros') {
+			replacement += ': ';
+		}
+		if (replaceKind == 'miembros' && currentFunction == 'cow') {
+			replacement += '$';
+		}	
 	} else if (keyCode == KEY_COMMA) {
 		replacement += ', ';
 	} else if (keyCode == KEY_COLON) {
@@ -325,60 +391,4 @@ function getPrefix() {
 		pos--;
 	}
 	return prefix;
-}
-
-function getCaret(node) {
-	return node.selectionStart;
-}
-
-function setCaret(node, pos) {
-	node.selectionStart = pos;
-	node.selectionEnd = pos;
-}
-
-function startsWith(string, prefix) {
-	if (prefix.length > string.length) {
-		return false;
-	}
-	
-	for(var i = 0; i < prefix.length; i++) {
-		if (string[i] != prefix[i]) {
-			return false;
-		}
-	}
-	
-	return true;
-}
-
-function contains(haystack, needle) {
-	for(var i = 0; i < haystack.length; i++) {
-		if (haystack[i].toLowerCase() == needle.toLowerCase()) {
-			return true;
-		}
-	}
-	return false;
-}
-
-function isWhitespace(c) {
-	return c == ' ' || c == '\n' || c == '\t';
-}
-
-function trim(cadena) {
-	for(var i=0; i<cadena.length; )
-	{
-		if(isWhitespace(cadena.charAt(i)))
-			cadena=cadena.substring(i+1, cadena.length);
-		else
-			break;
-	}
-
-	for(var i=cadena.length-1; i>=0; i=cadena.length-1)
-	{
-		if(isWhitespace(cadena.charAt(i)))
-			cadena=cadena.substring(0,i);
-		else
-			break;
-	}
-	
-	return cadena;
 }

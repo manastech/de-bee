@@ -146,6 +146,10 @@ class GroupHandler(webapp.RequestHandler):
             'Example': _('Example', lang),
             'BulkExample': _('BulkExample', lang),
             'InThisGroup': _('in this group', lang),
+            'ADinnerOut': _('A dinner out', lang),
+            'WhatIsCowFor': _('WhatIsCowFor', lang),
+            'CowExample': _('CowExample', lang),
+            'Reason': _('Reason', lang),
         }
         
         addMasterKeys(template_values, lang)
