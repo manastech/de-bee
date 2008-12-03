@@ -45,6 +45,8 @@ class CowHandler(webapp.RequestHandler):
 		if transaction.error:
 			alertMessage(self, transaction.error)
 			return
+		
+		result = transaction.getResult()
 				
 		location = '/group?group=%s&msg=%s' % (group.key(), _('Debts saved!', lang))
 		redirectPage(self,location)
@@ -83,6 +85,19 @@ class CowSummaryHandler(webapp.RequestHandler):
 		msg += ': $%s\\n\\n'% result.each;
 		
 		for debt in result.debts:
-			msg += '%s owes %s $%s\\n' % (debt.fromMember.userNick, debt.toMember.userNick, debt.money)
+			i = 0
+			for singleDebt in debt.singleDebts:
+				if i == 0:
+					msg += _('%(from)s owes %(to)s $%(amount)s', lang) % { 'from': debt.fromMember.userNick, 'to': singleDebt.toMember.userNick, 'amount': singleDebt.money }
+				elif i < len(debt.singleDebts) - 1:
+					msg += ', '
+					msg += _('%(to)s $%(amount)s', lang) % { 'to': singleDebt.toMember.userNick, 'amount': singleDebt.money }
+				else:
+					msg += ' '
+					msg += _('and', lang)
+					msg += ' '
+					msg += _('%(to)s $%(amount)s', lang) % { 'from': debt.fromMember.userNick, 'to': singleDebt.toMember.userNick, 'amount': singleDebt.money }
+				msg += '\\n'
+				i = i + 1
 			
 		alertMessage(self, msg)

@@ -1,11 +1,15 @@
 from i18n import getLanguage
 from i18n import _
 
+class SingleDebt:
+	
+	toMember = None
+	money = None
+
 class Debt:
 	
 	fromMember = None
-	toMember = None
-	money = None
+	singleDebts = []
 
 class Collaboration:
 
@@ -38,10 +42,14 @@ class Transaction:
 		each = total / len(self.collaborations)
 		
 		debts = []
+		firstIndexWasIncremented = True
 		firstIndex = 0
-		lastIndex = len(self.collaborations) - 1
+		lastIndex = len(self.collaborations) - 1		
 		
 		while firstIndex < lastIndex:
+			fiwi = firstIndexWasIncremented
+			firstIndexWasIncremented = False
+			
 			first = self.collaborations[firstIndex]
 			last = self.collaborations[lastIndex]
 			
@@ -49,17 +57,24 @@ class Transaction:
 				if last.money > each:
 					diff = min(each, min(each - first.money, last.money - each))
 					
-					debt = Debt()
-					debt.fromMember = first.member
-					debt.toMember = last.member
-					debt.money = diff
-					debts.append(debt)
+					if fiwi:
+						debt = Debt()
+						debt.singleDebts = []
+						debt.fromMember = first.member
+						debts.append(debt)
+					
+					singleDebt = SingleDebt()
+					singleDebt.toMember = last.member
+					singleDebt.money = diff
+					
+					debt.singleDebts.append(singleDebt)
 					
 					first.money = first.money + diff
 					last.money = last.money - diff
 					
 					if first.money == each:
 						firstIndex = firstIndex + 1
+						firstIndexWasIncremented = True
 					if last.money == each:
 						lastIndex = lastIndex - 1
 					
@@ -67,6 +82,7 @@ class Transaction:
 					lastIndex = lastIndex + 1 
 			else:
 				firstIndex = firstIndex + 1
+				firstIndexWasIncremented = True
 				
 		result = Result()
 		result.total = total

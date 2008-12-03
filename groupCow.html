@@ -1,4 +1,10 @@
-<a href="javascript:whatIsCowFor()">{{WhatsThisFor}}</a>
+<script>
+function whatIsCowFor() {
+	document.getElementById("whatIsCowFor").style.display = "";
+}
+</script>
+
+<h3>{{ADinnerOut}} (<a href="javascript:whatIsCowFor()">?</a>)</h3>
 
 <div id="whatIsCowFor" style="display:none; margin-top:4px">
 {{WhatIsCowFor}}

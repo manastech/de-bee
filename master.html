@@ -4,7 +4,8 @@
 	<link href="stylesheets/styles.css" rel="stylesheet" type="text/css" />
 	<link href="stylesheets/{{lang}}/styles.css" rel="stylesheet" type="text/css" />
 	<link href="images/favicon.png" rel="icon" type="image/png" />
-	<script type="text/javascript" src="scripts/{{lang}}/preload.js"></script>
+	<script type="text/javascript" src="scripts/jquery.js"></script>
+	<script type="text/javascript" src="scripts/{{lang}}/preload.js"></script>	
 	<script type="text/javascript" src="scripts/preload.js"></script>
 	<script type="text/javascript" src="scripts/utils.js"></script>
 	<script type="text/javascript" src="scripts/autocomplete.js"></script>
@@ -37,7 +38,7 @@
 			{% block top %}
 				<img src="images/{{lang}}/Welcome.gif" alt="" />
 				<a href="{{ loginurl }}"><img src="images/{{lang}}/Button_Login.gif" alt="" border="0" /></a>
-				<br>({{YouNeedAGoogleAccount}})
+				<!--<br>({{YouNeedAGoogleAccount}})-->
 			{% endblock %}
 			</div>
 		</div>
