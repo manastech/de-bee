@@ -55,36 +55,36 @@ def descriptionOfTransaction(tr, user, lang):
     message = ''
     if (tr.type == 'debt'):
          if (tr.fromUser == user):
-             message = _('You owed %(user)s $%(amount)s', lang) % {'user': tr.toMember.userNick, 'amount': tr.amount}
+             message = _('You owed %(user)s $%(amount)s', lang) % {'user': tr.toMember.userNick, 'amount': round(tr.amount, 2)}
          else:
-             message = _('%(user)s owed you $%(amount)s', lang) % {'user': tr.fromMember.userNick, 'amount': tr.amount}
+             message = _('%(user)s owed you $%(amount)s', lang) % {'user': tr.fromMember.userNick, 'amount': round(tr.amount, 2)}
     if (tr.type == 'payment'):
          if (tr.fromUser == user):
-             message = _('You paid %(user)s $%(amount)s', lang) % {'user': tr.toMember.userNick, 'amount': tr.amount}
+             message = _('You paid %(user)s $%(amount)s', lang) % {'user': tr.toMember.userNick, 'amount': round(tr.amount, 2)}
          else:
-             message = _('%(user)s paid you $%(amount)s', lang) % {'user': tr.fromMember.userNick, 'amount': tr.amount}
+             message = _('%(user)s paid you $%(amount)s', lang) % {'user': tr.fromMember.userNick, 'amount': round(tr.amount, 2)}
     if (tr.type == 'rejectedDebt'):
         if (tr.creator == user):
             if tr.fromUser == user:
-                message = _('You rejected that you owed %(user)s $%(amount)s', lang) % {'user': tr.toMember.userNick, 'amount': tr.amount}
+                message = _('You rejected that you owed %(user)s $%(amount)s', lang) % {'user': tr.toMember.userNick, 'amount': round(tr.amount, 2)}
             else:
-                message = _('You rejected that %(user)s owed you $%(amount)s', lang) % {'user': tr.toMember.userNick, 'amount': tr.amount}
+                message = _('You rejected that %(user)s owed you $%(amount)s', lang) % {'user': tr.toMember.userNick, 'amount': round(tr.amount, 2)}
         else:
             if tr.fromUser == user:
-                message = _('%(user)s rejected that you owed him/her $%(amount)s', lang) % {'user': tr.fromMember.userNick, 'amount': tr.amount}
+                message = _('%(user)s rejected that you owed him/her $%(amount)s', lang) % {'user': tr.fromMember.userNick, 'amount': round(tr.amount, 2)}
             else:
-                message = _('%(user)s rejected that he/she owed you $%(amount)s', lang) % {'user': tr.fromMember.userNick, 'amount': tr.amount}
+                message = _('%(user)s rejected that he/she owed you $%(amount)s', lang) % {'user': tr.fromMember.userNick, 'amount': round(tr.amount, 2)}
     if (tr.type == "rejectedPayment"):
         if (tr.creator == user):
             if tr.fromUser == user:
-                message = _('You rejected that you paid %(user)s $%(amount)s', lang) % {'user': tr.toMember.userNick, 'amount': tr.amount}
+                message = _('You rejected that you paid %(user)s $%(amount)s', lang) % {'user': tr.toMember.userNick, 'amount': round(tr.amount, 2)}
             else:
-                message = _('You rejected from %(user)s a payment of $%(amount)s', lang) % {'user': tr.toMember.userNick, 'amount': tr.amount}
+                message = _('You rejected from %(user)s a payment of $%(amount)s', lang) % {'user': tr.toMember.userNick, 'amount': round(tr.amount, 2)}
         else:
             if tr.fromUser == user:
-                message = _('%(user)s rejected that you paid him/her $%(amount)s', lang) % {'user': tr.fromMember.userNick, 'amount': tr.amount}
+                message = _('%(user)s rejected that you paid him/her $%(amount)s', lang) % {'user': tr.fromMember.userNick, 'amount': round(tr.amount, 2)}
             else:
-                message = _('%(user)s rejected that he/she paid you $%(amount)s', lang) % {'user': tr.fromMember.userNick, 'amount': tr.amount}
+                message = _('%(user)s rejected that he/she paid you $%(amount)s', lang) % {'user': tr.fromMember.userNick, 'amount': round(tr.amount, 2)}
     if len(tr.reason) > 0:
          message += ' '
          message += _('due to %s', lang) % tr.reason
@@ -107,38 +107,38 @@ def descriptionOfBalance(balance, before, lang):
         if balance == 0.0:
             return _('you owed no one, and no one owed you', lang)
         elif balance > 0.0:
-            return _('they owed you $%s', lang) % abs(balance)
+            return _('they owed you $%s', lang) % round(abs(balance), 2)
         else:
-            return _('you owed $%s', lang) % abs(balance)
+            return _('you owed $%s', lang) % round(abs(balance), 2)
     else:
         if balance == 0.0:
             return _('you owe no one, and no one owes you', lang)
         elif balance > 0.0:
-            return _('they owe you $%s', lang) % abs(balance)
+            return _('they owe you $%s', lang) % round(abs(balance), 2)
         else:
-            return _('you owe $%s', lang) % abs(balance)
+            return _('you owe $%s', lang) % round(abs(balance), 2)
 
 def descriptionOfTotalBalance(balance, lang):
     if balance == 0.0:
         return _('You owe nobody, and nobody owes you. Hurray!', lang)
     elif balance < 0.0:
-        return _('You owe a total of $%s', lang) % -balance
+        return _('You owe a total of $%s', lang) % round(-balance, 2)
     else:
-        return _('They owe you a total of $%s', lang) % balance
+        return _('They owe you a total of $%s', lang) % round(balance, 2)
     
 def descriptionOfTotalBalanceInThisGroup(balance, lang):
     if balance == 0.0:
         return _('You owe nobody, and nobody owes you in this group. Hurray!', lang)
     elif balance < 0.0:
-        return _('You owe a total of $%s in this group', lang) % -balance
+        return _('You owe a total of $%s in this group', lang) % round(-balance, 2)
     else:
-        return _('They owe you a total of $%s in this group', lang) % balance
+        return _('They owe you a total of $%s in this group', lang) % round(balance, 2)
 
 def descriptionOfBalanceInGroup(membership, link, lang):
     if membership.balance < 0.0:
-        return _('You owe $%(amount)s in <a href="%(link)s">%(group)s</a>', lang) % {'amount': -membership.balance, 'group': membership.groupNick, 'link': link}
+        return _('You owe $%(amount)s in <a href="%(link)s">%(group)s</a>', lang) % {'amount': round(-membership.balance, 2), 'group': membership.groupNick, 'link': link}
     elif membership.balance > 0.0:
-        return _('They owe you $%(amount)s in <a href="%(link)s">%(group)s</a>', lang) % {'amount': membership.balance, 'group': membership.groupNick, 'link': link}
+        return _('They owe you $%(amount)s in <a href="%(link)s">%(group)s</a>', lang) % {'amount': round(membership.balance, 2), 'group': membership.groupNick, 'link': link}
     else:
         raise "Don't invoke this method with m.balance == 0.0"
     
@@ -146,6 +146,6 @@ def descriptionOfGeneralBalance(member, lang):
     if member.balance == 0.0:
         return _('%s owes no one, and no one owes him/her', lang) % member.userNick
     elif member.balance > 0.0:
-        return _('%(user)s has $%(amount)s of credit', lang) % {'user': member.userNick, 'amount': member.balance}
+        return _('%(user)s has $%(amount)s of credit', lang) % {'user': member.userNick, 'amount': round(member.balance, 2)}
     else:
-        return _('%(user)s owes $%(amount)s', lang) % {'user': member.userNick, 'amount': -member.balance}
+        return _('%(user)s owes $%(amount)s', lang) % {'user': member.userNick, 'amount': round(-member.balance, 2)}

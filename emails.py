@@ -105,8 +105,8 @@ def createBulkMail(transaction, creatorMember, balanceBefore, balanceNow, lang):
     
     for debt in transaction.debts:
     	if transaction.payer.user != debt.member.user:
-	        debtorsTxt += itemTxt % (debt.money, debt.member.userNick, debt.reason)
-	        debtorsHtml += itemHtml % (debt.money, debt.member.userNick, debt.reason)
+	        debtorsTxt += itemTxt % (round(debt.money, 2), debt.member.userNick, debt.reason)
+	        debtorsHtml += itemHtml % (round(debt.money, 2), debt.member.userNick, debt.reason)
 	        total += debt.money
         
     debtorsHtml += '</ul>'
@@ -125,8 +125,8 @@ def createBulkMail(transaction, creatorMember, balanceBefore, balanceNow, lang):
     if not (lang in bulkHtml):
         bulkHtml[lang] = readFile('texts/%s/creator_says_you_payed_for_them.html' % lang)  
     
-    message.body = bulkTxt[lang] % (transaction.payer.userNick, creatorMember.userNick, debtorsTxt, total, descriptionOfBalance(balanceBefore, True, lang), transaction.payer.groupNick, descriptionOfBalance(balanceNow, False, lang))
-    message.html = bulkHtml[lang] % (transaction.payer.userNick, creatorMember.userNick, debtorsHtml, total, descriptionOfBalanceHtml(balanceBefore, True, lang), transaction.payer.groupNick, descriptionOfBalanceHtml(balanceNow, False, lang))
+    message.body = bulkTxt[lang] % (transaction.payer.userNick, creatorMember.userNick, debtorsTxt, round(total, 2), descriptionOfBalance(balanceBefore, True, lang), transaction.payer.groupNick, descriptionOfBalance(balanceNow, False, lang))
+    message.html = bulkHtml[lang] % (transaction.payer.userNick, creatorMember.userNick, debtorsHtml, round(total, 2), descriptionOfBalanceHtml(balanceBefore, True, lang), transaction.payer.groupNick, descriptionOfBalanceHtml(balanceNow, False, lang))
     return message
 
 def createCowMail(creatorMember, transaction, result, toMember, balanceBefore, balanceNow, lang):
@@ -169,8 +169,8 @@ def createCowMail(creatorMember, transaction, result, toMember, balanceBefore, b
                 mem = _('You', lang)
             else:
                 mem = col.member.userNick
-            contributorsTxt += ' * %s: $%s\n' % (mem, col.money)
-            contributorsHtml += '<li>%s: $%s</li>' % (mem, col.money)
+            contributorsTxt += ' * %s: $%s\n' % (mem, round(col.money, 2))
+            contributorsHtml += '<li>%s: $%s</li>' % (mem, round(col.money, 2))
             
     contributorsHtml += '</ul>'
             
