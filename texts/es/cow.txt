@@ -1,0 +1,15 @@
+Hola %s!
+
+%s dijo que compartiste %s con %s por $%s, son $%s por persona.
+
+Los contribuyentes fueron:
+
+%s
+Decidí que: 
+
+%s
+
+Antes de esta transacción %s en %s, ahora %s.
+
+Saludos,
+De-Bee

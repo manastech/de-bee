@@ -11,6 +11,8 @@ rejectionTxt = {}
 rejectionHtml = {}
 bulkTxt = {}
 bulkHtml = {}
+cowTxt = {}
+cowHtml = {}
 
 def someoneOwedYou(lang, reject = False):
     if reject:
@@ -125,6 +127,90 @@ def createBulkMail(transaction, creatorMember, balanceBefore, balanceNow, lang):
     
     message.body = bulkTxt[lang] % (transaction.payer.userNick, creatorMember.userNick, debtorsTxt, total, descriptionOfBalance(balanceBefore, True, lang), transaction.payer.groupNick, descriptionOfBalance(balanceNow, False, lang))
     message.html = bulkHtml[lang] % (transaction.payer.userNick, creatorMember.userNick, debtorsHtml, total, descriptionOfBalanceHtml(balanceBefore, True, lang), transaction.payer.groupNick, descriptionOfBalanceHtml(balanceNow, False, lang))
+    return message
+
+def createCowMail(creatorMember, transaction, result, toMember, balanceBefore, balanceNow, lang):
+    message = mail.EmailMessage(
+                    sender = DeBeeEmail,
+                    to = toMember.user.email(),
+                    subject = transactionNoticeSubject(toMember, lang))
+    
+    global cowTxt
+    if not (lang in cowTxt):
+        cowTxt[lang] = readFile('texts/%s/cow.txt' % lang)
+        
+    global cowHtml
+    if not (lang in cowHtml):
+        cowHtml[lang] = readFile('texts/%s/cow.html' % lang)
+        
+    otherMembers = []
+    for member, balance in result.balanceChange.iteritems():
+         if member.user != toMember.user:
+             otherMembers.append(member)
+             
+    others = ''
+    i = 0
+    for member in otherMembers:
+        if i == len(otherMembers) - 1:
+            others += ' '
+            others += _('and', lang)
+            others += ' '
+        elif i != 0:
+            others += ', '        
+        others += member.userNick
+        i = i + 1
+    
+    contributorsTxt = ''
+    contributorsHtml = '<ul>'
+    
+    for col in transaction.collaborations:
+        if col.money > 0:
+            if col.member.user == toMember.user:
+                mem = _('You', lang)
+            else:
+                mem = col.member.userNick
+            contributorsTxt += ' * %s: $%s\n' % (mem, col.money)
+            contributorsHtml += '<li>%s: $%s</li>' % (mem, col.money)
+            
+    contributorsHtml += '</ul>'
+            
+    decisionTxt = ''
+    decisionHtml = '<ul>'
+            
+    for debt in result.debts:
+        i = 0
+        msg = ''
+        for singleDebt in debt.singleDebts:
+            tuple = { 'from': debt.fromMember.userNick, 'to': singleDebt.toMember.userNick, 'amount': round(singleDebt.money, 2) }
+            if i == 0:
+                if debt.fromMember.user == toMember.user:
+                    msg += _('You owe %(to)s $%(amount)s', lang) % tuple
+                elif singleDebt.toMember.user == toMember.user:
+                    msg += _('%(from)s owes you $%(amount)s', lang) % tuple
+                else:
+                    msg += _('%(from)s owes %(to)s $%(amount)s', lang) % tuple
+            elif i < len(debt.singleDebts) - 1:
+                msg += ', '
+                if singleDebt.toMember.user == toMember.user:
+                    msg += _('you $%(amount)s', lang) % tuple
+                else:
+                    msg += _('%(to)s $%(amount)s', lang) % tuple
+            else:
+                msg += ' '
+                msg += _('and', lang)
+                msg += ' '
+                if singleDebt.toMember.user == toMember.user:
+                    msg += _('you $%(amount)s', lang) % tuple
+                else:
+                    msg += _('%(to)s $%(amount)s', lang) % tuple
+            i = i + 1
+        decisionTxt += ' * %s\n' % msg
+        decisionHtml += '<li>%s</li>' % msg
+        
+    decisionHtml += '</ul>'
+        
+    message.body = cowTxt[lang] % (toMember.userNick, creatorMember.userNick, transaction.reason, others, round(result.total, 2), round(result.each, 2), contributorsTxt, decisionTxt, descriptionOfBalance(balanceBefore, True, lang), toMember.groupNick, descriptionOfBalance(balanceNow, False, lang))
+    message.html = cowHtml[lang] % (toMember.userNick, creatorMember.userNick, transaction.reason, others, round(result.total, 2), round(result.each, 2), contributorsHtml, decisionHtml, descriptionOfBalanceHtml(balanceBefore, True, lang), toMember.groupNick, descriptionOfBalanceHtml(balanceNow, False, lang))    
     return message
 
 def actionMessageTxt(me, someone, amount, reason, balanceBefore, balanceNow, rejectUrl, body, lang):

@@ -7,11 +7,7 @@ from ajax import redirectPage
 from model import Membership
 from model import Transaction
 from model import Group
-from emails import youOwedSomeone
-from emails import creatorSaysYouOwedSomeone
-from emails import createActionMail
-from emails import createThirdPartyActionMail
-from emails import createBulkMail
+from emails import createCowMail
 from emails import sendEmail
 from util import UrlBuilder
 from cowParser import CowParser
@@ -47,6 +43,39 @@ class CowHandler(webapp.RequestHandler):
 			return
 		
 		result = transaction.getResult()
+		
+		# Update balance and send mails
+		for member, balance in result.balanceChange.iteritems():
+			
+			# Don't send mail to the creator of this mail
+			if member.user == creatorMember.user:
+				continue
+			
+			balanceBefore = member.balance
+			balanceNow = member.balance + balance
+			
+			# Balance
+			member.balance += balance
+			member.put()
+			
+			# Email
+			message = createCowMail(creatorMember, transaction, result, member, balanceBefore, balanceNow, lang)
+			sendEmail(message)
+			
+		# Create transactions
+		for debt in result.debts:
+			for singleDebt in debt.singleDebts:
+				tr = Transaction(
+					group = group,
+					creatorMember = creatorMember, 
+					fromMember = debt.fromMember,
+					toMember = singleDebt.toMember,
+					type = 'debt',
+					amount = singleDebt.money, 
+					reason = transaction.reason,
+					isRejected = False
+				)
+				tr.put()
 				
 		location = '/group?group=%s&msg=%s' % (group.key(), _('Debts saved!', lang))
 		redirectPage(self,location)
@@ -82,22 +111,35 @@ class CowSummaryHandler(webapp.RequestHandler):
 		msg += _('Total', lang)
 		msg += ': $%s\\n'% result.total;
 		msg += _('Each', lang)
-		msg += ': $%s\\n\\n'% result.each;
+		msg += ': $%s\\n\\n'% round(result.each, 2);
 		
 		for debt in result.debts:
 			i = 0
+			msg += ' - '
 			for singleDebt in debt.singleDebts:
+				tuple = { 'from': debt.fromMember.userNick, 'to': singleDebt.toMember.userNick, 'amount': round(singleDebt.money, 2) }
 				if i == 0:
-					msg += _('%(from)s owes %(to)s $%(amount)s', lang) % { 'from': debt.fromMember.userNick, 'to': singleDebt.toMember.userNick, 'amount': singleDebt.money }
+					if debt.fromMember.user == creatorMember.user:
+						msg += _('You owe %(to)s $%(amount)s', lang) % tuple
+					elif singleDebt.toMember.user == creatorMember.user:
+						msg += _('%(from)s owes you $%(amount)s', lang) % tuple
+					else:
+						msg += _('%(from)s owes %(to)s $%(amount)s', lang) % tuple
 				elif i < len(debt.singleDebts) - 1:
 					msg += ', '
-					msg += _('%(to)s $%(amount)s', lang) % { 'to': singleDebt.toMember.userNick, 'amount': singleDebt.money }
+					if singleDebt.toMember.user == creatorMember.user:
+						msg += _('you $%(amount)s', lang) % tuple
+					else:
+						msg += _('%(to)s $%(amount)s', lang) % tuple
 				else:
 					msg += ' '
 					msg += _('and', lang)
 					msg += ' '
-					msg += _('%(to)s $%(amount)s', lang) % { 'from': debt.fromMember.userNick, 'to': singleDebt.toMember.userNick, 'amount': singleDebt.money }
-				msg += '\\n'
+					if singleDebt.toMember.user == creatorMember.user:
+						msg += _('you $%(amount)s', lang) % tuple
+					else:
+						msg += _('%(to)s $%(amount)s', lang) % tuple
 				i = i + 1
-			
+			msg += '\\n'
+		
 		alertMessage(self, msg)

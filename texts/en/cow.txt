@@ -1,0 +1,15 @@
+Hi %s!
+
+%s said that you shared %s with %s for $%s, so it's $%s each.
+
+The contributors were:
+
+%s
+I decided that: 
+
+%s
+
+Before this transaction %s in %s, now %s.
+
+Yours,
+De-Bee

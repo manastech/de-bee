@@ -21,6 +21,7 @@ class Result:
 	total = None
 	each = None
 	debts = []
+	balanceChange = {}
 		
 class Transaction:
 	
@@ -36,22 +37,29 @@ class Transaction:
 		return total
 	
 	def getResult(self):
-		self.collaborations.sort(cmp = compareCollaborations)
+		collaborationsCopy = []
+		for c in self.collaborations:
+			cc = Collaboration()
+			cc.member = c.member
+			cc.money = c.money
+			collaborationsCopy.append(cc)
+		
+		collaborationsCopy.sort(cmp = compareCollaborations)
 		
 		total = self.getTotal()
-		each = total / len(self.collaborations)
+		each = total / len(collaborationsCopy)
 		
 		debts = []
 		firstIndexWasIncremented = True
 		firstIndex = 0
-		lastIndex = len(self.collaborations) - 1		
+		lastIndex = len(collaborationsCopy) - 1		
 		
 		while firstIndex < lastIndex:
 			fiwi = firstIndexWasIncremented
 			firstIndexWasIncremented = False
 			
-			first = self.collaborations[firstIndex]
-			last = self.collaborations[lastIndex]
+			first = collaborationsCopy[firstIndex]
+			last = collaborationsCopy[lastIndex]
 			
 			if first.money < each:
 				if last.money > each:
@@ -88,6 +96,20 @@ class Transaction:
 		result.total = total
 		result.each = each
 		result.debts = debts
+		
+		result.balanceChange = {}
+		for debt in debts:
+			for singleDebt in debt.singleDebts:
+				if not debt.fromMember in result.balanceChange:
+					result.balanceChange[debt.fromMember] = -singleDebt.money
+				else:
+					result.balanceChange[debt.fromMember] -= singleDebt.money
+					
+				if not singleDebt.toMember in result.balanceChange:
+					result.balanceChange[singleDebt.toMember] = singleDebt.money
+				else:
+					result.balanceChange[singleDebt.toMember] += singleDebt.money
+		
 		return result
 		
 def compareCollaborations(c1, c2):
