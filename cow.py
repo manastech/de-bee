@@ -46,11 +46,6 @@ class CowHandler(webapp.RequestHandler):
 		
 		# Update balance and send mails
 		for member, balance in result.balanceChange.iteritems():
-			
-			# Don't send mail to the creator of this mail
-			if member.user == creatorMember.user:
-				continue
-			
 			balanceBefore = member.balance
 			balanceNow = member.balance + balance
 			
@@ -58,9 +53,10 @@ class CowHandler(webapp.RequestHandler):
 			member.balance += balance
 			member.put()
 			
-			# Email
-			message = createCowMail(creatorMember, transaction, result, member, balanceBefore, balanceNow, lang)
-			sendEmail(message)
+			# Send mail, but not to the creator of this mail
+			if member.user != creatorMember.user:
+				message = createCowMail(creatorMember, transaction, result, member, balanceBefore, balanceNow, lang)
+				sendEmail(message)
 			
 		# Create transactions
 		for debt in result.debts:
