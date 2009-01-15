@@ -1,3 +1,5 @@
+var preloadedImages = new Array();
+
 if (document.images) {
 	preloadTabImages("home");
 	preloadTabImages("mygroups");
