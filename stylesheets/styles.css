@@ -150,6 +150,23 @@ hd3
 	margin-bottom:20px;
 }
 
+#social {
+	margin:8px auto 30px auto;
+	width:1000px;
+	text-align:right;
+	vertical-align:bottom;
+	font-size:11px;
+	}
+	
+	#social a{
+		color:#000000;
+		text-decoration:none;
+		}
+	#social a:hover{
+		color:#003366;
+		text-decoration:underline;
+		}
+
 .benefical 
 {
 	color: #005E00;
