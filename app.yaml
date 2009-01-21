@@ -17,5 +17,9 @@ handlers:
   script: who.py
   login: admin
   
+- url: /what.*
+  script: what.py
+  login: admin
+  
 - url: .*
   script: main.py
