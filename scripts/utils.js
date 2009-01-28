@@ -10,12 +10,51 @@ var KEY_ESC = 27;
 var KEY_DOLLAR = 52;
 
 function getCaret(node) {
-	return node.selectionStart;
+	var start = 0;
+	if (document.selection) {
+		start = getRangeOffsetIE(node, document.selection.createRange());
+	} else {
+		start = node.selectionStart;
+	}
+	return start;
 }
 
+function getRangeOffsetIE( node, r ) {
+  var end = Math.abs( r.duplicate().moveEnd('character', -1000000) );
+  // find the anchor element's offset
+  var range = r.duplicate();
+  r.collapse( false );
+  var parentElm = range.parentElement();
+  var children = parentElm.getElementsByTagName('*');
+  for (var i = children.length - 1; i >= 0; i--) {
+    range.moveToElementText( children[i] );
+    if ( range.inRange(r) ) {
+      parentElm = children[i];
+      break;
+    }
+  }
+  range.moveToElementText( parentElm );
+  var toReturn = end - Math.abs( range.moveStart('character', -1000000) );
+  
+  for(var i = toReturn; i >= 0; i--) {
+    if (node.value.charCodeAt(i) == 13 || node.value.charCodeAt(i + 1) == 13) {
+      toReturn++;
+    }
+  }
+  
+  return toReturn;
+}
+
+
 function setCaret(node, pos) {
-	node.selectionStart = pos;
-	node.selectionEnd = pos;
+	if (node.createTextRange) {
+		var range = node.createTextRange(); 
+        range.move("character", pos); 
+        range.select(); 
+	} else {
+		node.selectionStart = pos;
+		node.selectionEnd = pos;
+	}
 }
 
 function startsWith(string, prefix) {
@@ -24,7 +63,7 @@ function startsWith(string, prefix) {
 	}
 	
 	for(var i = 0; i < prefix.length; i++) {
-		if (string[i] != prefix[i]) {
+		if (string.charAt(i) != prefix.charAt(i)) {
 			return false;
 		}
 	}
@@ -42,7 +81,7 @@ function contains(haystack, needle) {
 }
 
 function isWhitespace(c) {
-	return c == ' ' || c == '\n' || c == '\t';
+	return c == ' ' || c == '\n' || c == '\t' || c == '\r';
 }
 
 function trim(cadena) {

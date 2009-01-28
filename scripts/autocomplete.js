@@ -117,7 +117,7 @@ function keyUp(event) {
 	case KEY_COLON:
 		if (popup.style.display != 'none') {
 			replace(event.keyCode);
-			if (event.keyCode == KEY_ENTER) {
+			if (event.keyCode == KEY_ENTER && replaceKind != 'paga' && replaceKind != 'miembrosEnPaga') {
 				popup.style.display = 'none';
 			} else {
 				evaluateShowSuggestions();
@@ -143,7 +143,7 @@ function keyUp(event) {
 }
 
 function evaluateShowSuggestions() {
-	index = 0;		
+	index = 0;
 	currentSuggestions = getCurrentSuggestions();
 	showSuggestions();
 }
@@ -160,7 +160,7 @@ function showSuggestions() {
 	popup.innerHTML = '';
 	
 	numberOfSuggestions = 0;
-	for(var i = 0; i < currentSuggestions.length; i++) {
+	for(var i = 0; i < currentSuggestions.length; i++) {   
 		if (prefix.length < currentSuggestions[i].length && startsWith(currentSuggestions[i].toLowerCase(), prefix) && !contains(ignore, currentSuggestions[i])) {
 			var s = currentSuggestions[i];
 			if (currentSuggestions == comidas) {
@@ -194,10 +194,10 @@ function getCurrentSuggestions() {
 	var node = document.getElementById(textareaName);
 	var pos = getCaret(node);
 	var text = node.value;
-	
-	if (pos != text.length && !isWhitespace(text[pos])) {
-		return empty;
-	}
+
+	//if (pos != text.length && !isWhitespace(text.charAt(pos))) {
+	//	return empty;
+	//}
 	
 	pos--;
 	
@@ -208,10 +208,10 @@ function getCurrentSuggestions() {
 	}
 	
 	while(pos >= 0) {
-		if (text[pos] == ':') {
+		if (text.charAt(pos) == ':') {
 			if (pos >= thepaga[0].length) {
 				for(var i = 0; i < thepaga[0].length; i++) {
-					if (text[pos - (thepaga[0].length - i)].toLowerCase() != thepaga[0][i].toLowerCase()) {
+					if (text.charAt(pos - (thepaga[0].length - i)).toLowerCase() != thepaga[0].charAt(i).toLowerCase()) {
 						ignore = empty;
 						replaceKind = 'comidas';
 						return comidas;
@@ -227,11 +227,11 @@ function getCurrentSuggestions() {
 				replaceKind = 'miembrosEnPaga';
 				return miembros;
 			}
-		} else if (text[pos] == '\n') {
+		} else if (text.charAt(pos) == '\n' || text.charCodeAt(pos) == 13 || text.charCodeAt(pos) == 10) {
 			computeIgnore();
 			replaceKind = 'miembros';
 			return miembros;
-		} else if (text[pos] == '$') {
+		} else if (text.charAt(pos) == '$') {
 			replaceKind = 'empty';
 			return empty;
 		}
@@ -251,12 +251,12 @@ function computeIgnore() {
 	
 	var last = 0;
 	for(var i = 0; i < text.length; i++) {
-		if (text[i] == ':') {
+		if (text.charAt(i) == ':') {
 			ignore.push(trim(text.substring(last, i)));
-		} else if (text[i] == ',') {
+		} else if (text.charAt(i) == ',') {
 			ignore.push(trim(text.substring(last, i)));
 			last = i + 1;
-		} else if (text[i] == '\n') {
+		} else if (text.charAt(i) == '\n') {
 			last = i + 1;
 		}
 	}
@@ -271,8 +271,8 @@ function appendPrice() {
 	
 	var items = new Array();
 	var last = pos;
-	while(pos >= 0 && text[pos] != ':') {
-		if (text[pos] == ',') {
+	while(pos >= 0 && text.charAt(pos) != ':') {
+		if (text.charAt(pos) == ',') {
 			items.push(trim(text.substring(pos + 1, last)));	
 			last = pos;
 		}
@@ -307,8 +307,8 @@ function calculatePrice(item) {
 	var down = 0;
 	
 	while(item.length > 0) {
-		if ('0' <= item[0] && item[0] <= '9') {
-			up = 10 * up + parseInt(item[0]);
+		if ('0' <= item.charAt(0) && item.charAt(0) <= '9') {
+			up = 10 * up + parseInt(item.charAt(0));
 			item = item.substring(1);
 		} else {
 			break;
@@ -316,13 +316,13 @@ function calculatePrice(item) {
 	}
 	
 	var symbol = 0;
-	if (item.length > 0 && (item[0] == '.' || item[0] == '/')) {
-		symbol = item[0];
+	if (item.length > 0 && (item.charAt(0) == '.' || item.charAt(0) == '/')) {
+		symbol = item.charAt(0);
 		item = item.substring(1);
 		
 		while(item.length > 0) {
-			if ('0' <= item[0] && item[0] <= '9') {
-				down = 10 * down + parseInt(item[0]);
+			if ('0' <= item.charAt(0) && item.charAt(0) <= '9') {
+				down = 10 * down + parseInt(item.charAt(0));
 				item = item.substring(1);
 			} else {
 				break;
@@ -352,13 +352,15 @@ function replace(keyCode) {
 	var node = document.getElementById(textareaName);
 	var originalPos = getCaret(node);
 	var pos = originalPos - 1;
+	
 	var text = node.value;
 	
-	while(pos >= 0 && !isWhitespace(text[pos])) {
+	while(pos >= 0 && !isWhitespace(text.charAt(pos))) {
 		pos--;
 	}
 	
 	var replacement = selectedSuggestion;
+	
 	if (keyCode == KEY_SPACE) {
 		replacement += ' ';
 	} else if (keyCode == KEY_ENTER) {
@@ -367,7 +369,12 @@ function replace(keyCode) {
 		}
 		if (replaceKind == 'miembros' && currentFunction == 'cow') {
 			replacement += '$';
-		}	
+		}
+		if (replaceKind == 'miembrosEnPaga') {
+			if (!document.selection) {
+				replacement += '\n';
+			}
+		}
 	} else if (keyCode == KEY_COMMA) {
 		replacement += ', ';
 	} else if (keyCode == KEY_COLON) {
@@ -383,12 +390,14 @@ function replace(keyCode) {
 function getPrefix() {
 	var node = document.getElementById(textareaName);
 	var pos = getCaret(node) - 1;
+	
 	var text = node.value;
 	var prefix = '';
 	
-	while(pos >= 0 && !isWhitespace(text[pos])) {
-		prefix = text[pos] + prefix;
+	while(pos >= 0 && !isWhitespace(text.charAt(pos))) {
+		prefix = text.charAt(pos) + prefix;
 		pos--;
 	}
+	
 	return prefix;
 }
