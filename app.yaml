@@ -21,5 +21,9 @@ handlers:
   script: what.py
   login: admin
   
+- url: /transactions.*
+  script: transactions.py
+  login: admin
+  
 - url: .*
   script: main.py

@@ -78,7 +78,7 @@ class IndexHandler(webapp.RequestHandler):
     total = 0
     items = []
     for m in memberships:
-        if m.balance == 0.0:
+        if abs(m.balance) <= 1e-07:
             continue
         
         link = '/group?group=%s' % m.group.key()
@@ -89,7 +89,7 @@ class IndexHandler(webapp.RequestHandler):
             })
     
     return {
-            'isZero': total == 0.0, 
+            'isZero': abs(total) <= 1e-07, 
             'isOweToSelf' : total > 0.0, 
             'items' : items,
             'desc': descriptionOfTotalBalance(total, lang),

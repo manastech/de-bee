@@ -164,7 +164,7 @@ class GroupHandler(webapp.RequestHandler):
     #  > 0: the group members owe the user
     #  < 0: the user owe the group members 
     def getBalance(self, userMembership, groupMemberships, lang):
-        if userMembership.balance == 0.0:
+        if abs(userMembership.balance) <= 1e-07:
             return [0, []]
         
         if userMembership.balance > 0.0:
@@ -178,11 +178,11 @@ class GroupHandler(webapp.RequestHandler):
         result = []
             
         for member in groupMemberships:
-            if balance <= 0.0:
+            if balance <= 1e-07:
                 break
             
             amount = min(balance, member.balance * -sign)
-            tuple = {'user': member.userNick, 'amount': amount}
+            tuple = {'user': member.userNick, 'amount': round(amount, 2)}
             
             if sign == 1:
                 result.append(_('%(user)s owes you $%(amount)s', lang) % tuple)
