@@ -150,6 +150,7 @@ class GroupHandler(webapp.RequestHandler):
             'WhatIsCowFor': _('WhatIsCowFor', lang),
             'CowExample': _('CowExample', lang),
             'Reason': _('Reason', lang),
+            'Reject': _('Reject', lang),
         }
         
         addMasterKeys(template_values, lang)
@@ -218,7 +219,9 @@ class GroupHandler(webapp.RequestHandler):
             message = '%s %s' % (niceDate(tr.date, lang), message)
             messages.append({
                 'message': message, 
-                'benefical': transactionIsBenefical(tr, userMembership.user)
+                'benefical': transactionIsBenefical(tr, userMembership.user),
+                'isRejectable': tr.isRejectable,
+                'rejectUrl': '/reject?key=' + str(tr.key()) + '&h=' + tr.hash +'&cancel=1&trcount=' + str(transactionCount)
                 })
              
         return messages

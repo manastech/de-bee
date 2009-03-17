@@ -68,10 +68,10 @@ def descriptionOfTransaction(tr, user, lang):
             if tr.fromUser == user:
                 message = _('You rejected that you owed %(user)s $%(amount)s', lang) % {'user': tr.toMember.userNick, 'amount': round(tr.amount, 2)}
             else:
-                message = _('You rejected that %(user)s owed you $%(amount)s', lang) % {'user': tr.toMember.userNick, 'amount': round(tr.amount, 2)}
+                message = _('You rejected that %(user)s owed you $%(amount)s', lang) % {'user': tr.fromMember.userNick, 'amount': round(tr.amount, 2)}
         else:
             if tr.fromUser == user:
-                message = _('%(user)s rejected that you owed him/her $%(amount)s', lang) % {'user': tr.fromMember.userNick, 'amount': round(tr.amount, 2)}
+                message = _('%(user)s rejected that you owed him/her $%(amount)s', lang) % {'user': tr.toMember.userNick, 'amount': round(tr.amount, 2)}
             else:
                 message = _('%(user)s rejected that he/she owed you $%(amount)s', lang) % {'user': tr.fromMember.userNick, 'amount': round(tr.amount, 2)}
     if (tr.type == "rejectedPayment"):
@@ -79,10 +79,10 @@ def descriptionOfTransaction(tr, user, lang):
             if tr.fromUser == user:
                 message = _('You rejected that you paid %(user)s $%(amount)s', lang) % {'user': tr.toMember.userNick, 'amount': round(tr.amount, 2)}
             else:
-                message = _('You rejected from %(user)s a payment of $%(amount)s', lang) % {'user': tr.toMember.userNick, 'amount': round(tr.amount, 2)}
+                message = _('You rejected from %(user)s a payment of $%(amount)s', lang) % {'user': tr.fromMember.userNick, 'amount': round(tr.amount, 2)}
         else:
             if tr.fromUser == user:
-                message = _('%(user)s rejected that you paid him/her $%(amount)s', lang) % {'user': tr.fromMember.userNick, 'amount': round(tr.amount, 2)}
+                message = _('%(user)s rejected that you paid him/her $%(amount)s', lang) % {'user': tr.toMember.userNick, 'amount': round(tr.amount, 2)}
             else:
                 message = _('%(user)s rejected that he/she paid you $%(amount)s', lang) % {'user': tr.fromMember.userNick, 'amount': round(tr.amount, 2)}
     if len(tr.reason) > 0:

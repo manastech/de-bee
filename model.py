@@ -73,6 +73,10 @@ class Transaction(db.Model):
 			return None
 		
 	@property
+	def isRejectable(self):
+		return (self.type == "debt" or self.type == "payment") and not(self.isRejected)
+		
+	@property
 	def hash(self):
 		m = sha224()
 		m.update(str(self.key()))

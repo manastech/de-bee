@@ -25,6 +25,8 @@ class RejectHandler(webapp.RequestHandler):
     def get(self):
         key = self.request.get('key')
         hash = self.request.get('h')
+        cancel = self.request.get('cancel')
+        trCount = self.request.get('trcount')
         user = users.get_current_user()
         lang = getLanguage(self, user)
         
@@ -38,6 +40,8 @@ class RejectHandler(webapp.RequestHandler):
             'key' : key,
             'h' : hash,
             'group' : tr.group,
+            'showCancel' : cancel,
+            'trCount' : trCount,
             'username' : user.nickname(),
             'transactionDescription': descriptionOfTransaction(tr, user, lang),
             'transactionIsBenefical': transactionIsBenefical(tr, user),
@@ -48,6 +52,7 @@ class RejectHandler(webapp.RequestHandler):
             'ButThatTransaccionWasAlreadyRejected': _('But that transaccion was already rejected.', lang),
             'Why': _('Please enter the reason why you are rejecting it', lang),
             'RejectTransaction': _('Reject transaction', lang),
+            'Cancel': _('Cancel', lang)
         }
         
         addMasterKeys(template_values, lang)

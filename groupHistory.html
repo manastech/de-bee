@@ -17,10 +17,15 @@
 	<ul>
 		{% for tr in transactions %}
 			{% if tr.benefical %}
-				<li class="benefical">{{tr.message}}</li>
+				<li class="benefical">{{tr.message}}
 			{% else %}
-				<li class="detrimental">{{tr.message}}</li>
+				<li class="detrimental">{{tr.message}}
 			{% endif %}
+			
+			{% if tr.isRejectable %}
+				<a href="{{ tr.rejectUrl }}">{{ Reject }}</a>
+			{% endif %}
+				</li>
 		{% endfor %}
 	</ul>
 
