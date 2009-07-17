@@ -75,7 +75,8 @@ class Transaction:
 					singleDebt.toMember = last.member
 					singleDebt.money = diff
 					
-					debt.singleDebts.append(singleDebt)
+					if round(singleDebt.money, 2) > 0:
+					    debt.singleDebts.append(singleDebt)
 					
 					first.money = first.money + diff
 					last.money = last.money - diff
