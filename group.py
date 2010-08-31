@@ -84,7 +84,7 @@ class GroupHandler(webapp.RequestHandler):
             'balance': userMembership.balance * balanceSign,
             'balancePositive': balanceSign > 0,
             'balanceDesc': descriptionOfTotalBalanceInThisGroup(userMembership.balance, lang),
-            'balanceIsZero': balanceSign == 0,
+            'balanceIsZero': balanceSign <= 1e7,
             'hasMoreThanOneBalanceItem': len(balance) > 1,
             'balanceItems': balance,
             'hasGroupMemberships': len(groupMemberships) > 0,
