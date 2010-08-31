@@ -76,15 +76,16 @@ class GroupHandler(webapp.RequestHandler):
         groupMemberships = self.excludeMembership(groupMemberships, user)
         
         message = self.request.get("msg")
+        bal = userMembership.balance * balanceSign
 
         template_values = {
             'username': user.nickname(),
             'signout_url': users.create_logout_url("/"),
             'goToHistoryTab': self.request.get("goToHistoryTab"),
-            'balance': userMembership.balance * balanceSign,
+            'balance': bal,
             'balancePositive': balanceSign > 0,
             'balanceDesc': descriptionOfTotalBalanceInThisGroup(userMembership.balance, lang),
-            'balanceIsZero': balanceSign <= 1e7,
+            'balanceIsZero': abs(userMembership.balance) <= 1e-07,
             'hasMoreThanOneBalanceItem': len(balance) > 1,
             'balanceItems': balance,
             'hasGroupMemberships': len(groupMemberships) > 0,
