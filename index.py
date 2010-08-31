@@ -21,6 +21,7 @@ class IndexHandler(webapp.RequestHandler):
         lang = getLanguage(self, user)
         
         userMemberships = membershipsOfUser(user)
+        
         userMemberships.sort(cmp = compareMembershipsByGroupNick)
         
         hasUserMemberships = len(userMemberships) > 0

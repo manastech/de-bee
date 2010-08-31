@@ -34,7 +34,7 @@ class UnsubscribeHandler(webapp.RequestHandler):
             return
         
         membership = memberships.get()
-        if not membership.balance == 0.0:
+        if not abs(membership.balance) <= 1e-07:
             error = _('You cannot leave this group, your balance must be zero.', lang)
             alertMessage(self,error)
             return

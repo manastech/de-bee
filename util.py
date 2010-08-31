@@ -27,10 +27,13 @@ def membershipsOfUser(user):
 
 # Returns a date formatted nicely, comparing it to the current date.
 def niceDate(t, lang):
-	try:
-		locale.setlocale(locale.LC_ALL, lang)
-	except:
-		localeNotSupported = True
+
+    # This is currently not working in Google App Engine, we don't know why
+    # ---------------------------------------------------------------------
+	# try:
+	# 	locale.setlocale(locale.LC_ALL, lang)
+	# except:
+	# 	localeNotSupported = True
 	
 	now = datetime.now()
 	if now.year == t.year:

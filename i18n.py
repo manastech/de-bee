@@ -17,7 +17,10 @@ def getDefaultLanguage(handler):
     
     global availableLanguages
     
-    langs = handler.request.headers['Accept-Language'].split(',')
+    langs = ['en']
+    if 'Accept-Language' in handler.request.headers:
+        langs = handler.request.headers['Accept-Language'].split(',')
+    
     for lang in langs:
         for availableLang in availableLanguages:
             if lang == availableLang:
