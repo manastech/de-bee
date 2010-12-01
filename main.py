@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-
 from google.appengine.ext import webapp
 from wsgiref.handlers import CGIHandler
 from index import IndexHandler
